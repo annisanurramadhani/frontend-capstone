@@ -1,0 +1,698 @@
+// masuk_view.dart
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../controllers/masuk_controller.dart';
+
+class MasukView
+    extends GetView<MasukController> {
+
+  const MasukView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    final size =
+        MediaQuery.of(context).size;
+
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+
+      body: Stack(
+        children: [
+
+          // BACKGROUND
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/images/masuk.png",
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+
+          // OVERLAY
+          Container(
+            color: Colors.white
+                .withOpacity(0.15),
+          ),
+
+          SafeArea(
+            child: SingleChildScrollView(
+              physics:
+                  const BouncingScrollPhysics(),
+
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight:
+                      size.height,
+                ),
+
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(
+                    horizontal:
+                        size.width * 0.08,
+
+                    vertical: 24,
+                  ),
+
+                  child: Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment
+                            .start,
+
+                    children: [
+
+                      SizedBox(
+                        height:
+                            size.height *
+                                0.02,
+                      ),
+
+                      // BACK
+                      IconButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+
+                        icon: const Icon(
+                          Icons
+                              .arrow_back_ios_new,
+
+                          color:
+                              Color(
+                            0xFF5A3116,
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height:
+                            size.height *
+                                0.02,
+                      ),
+
+                      // LOGO
+                      Center(
+                        child: Container(
+                          width:
+                              size.width *
+                                  0.22,
+
+                          height:
+                              size.width *
+                                  0.22,
+
+                          decoration:
+                              BoxDecoration(
+                            color: Colors
+                                .white
+                                .withOpacity(
+                              0.85,
+                            ),
+
+                            shape:
+                                BoxShape
+                                    .circle,
+                          ),
+
+                          child: Icon(
+                            Icons
+                                .grid_view_rounded,
+
+                            size:
+                                size.width *
+                                    0.11,
+
+                            color:
+                                const Color(
+                              0xFF8B5E3C,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height:
+                            size.height *
+                                0.03,
+                      ),
+
+                      // TITLE
+                      Center(
+                        child: Text(
+                          "Masuk",
+
+                          style:
+                              TextStyle(
+                            fontSize:
+                                size.width *
+                                    0.09,
+
+                            fontWeight:
+                                FontWeight
+                                    .bold,
+
+                            color:
+                                const Color(
+                              0xFF3E2723,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 12,
+                      ),
+
+                      Center(
+                        child: Text(
+                          "Masuk untuk mulai belajar anyaman bambu.",
+
+                          textAlign:
+                              TextAlign
+                                  .center,
+
+                          style:
+                              TextStyle(
+                            fontSize:
+                                size.width *
+                                    0.042,
+
+                            color:
+                                Colors
+                                    .brown,
+
+                            height: 1.6,
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height:
+                            size.height *
+                                0.05,
+                      ),
+
+                      // FORM
+                      Container(
+                        width:
+                            double.infinity,
+
+                        padding:
+                            EdgeInsets.all(
+                          size.width *
+                              0.06,
+                        ),
+
+                        decoration:
+                            BoxDecoration(
+                          color: Colors
+                              .white
+                              .withOpacity(
+                            0.90,
+                          ),
+
+                          borderRadius:
+                              BorderRadius.circular(
+                            30,
+                          ),
+                        ),
+
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment
+                                  .start,
+
+                          children: [
+
+                            // EMAIL
+                            buildTitle(
+                              "Email",
+                              size,
+                            ),
+
+                            const SizedBox(
+                              height: 12,
+                            ),
+
+                            TextField(
+                              controller:
+                                  controller
+                                      .emailController,
+
+                              keyboardType:
+                                  TextInputType
+                                      .emailAddress,
+
+                              decoration:
+                                  inputDecoration(
+                                hint:
+                                    "Masukkan email",
+
+                                icon:
+                                    Icons.email_outlined,
+                              ),
+                            ),
+
+                            const SizedBox(
+                              height: 25,
+                            ),
+
+                            // PASSWORD
+                            buildTitle(
+                              "Kata Sandi",
+                              size,
+                            ),
+
+                            const SizedBox(
+                              height: 12,
+                            ),
+
+                            Obx(
+                              () => TextField(
+                                controller:
+                                    controller
+                                        .passwordController,
+
+                                obscureText:
+                                    controller
+                                        .isPasswordHidden
+                                        .value,
+
+                                decoration:
+                                    inputDecoration(
+                                  hint:
+                                      "Masukkan kata sandi",
+
+                                  icon:
+                                      Icons.lock_outline,
+
+                                  suffix:
+                                      IconButton(
+                                    onPressed:
+                                        controller
+                                            .togglePassword,
+
+                                    icon:
+                                        Icon(
+                                      controller
+                                              .isPasswordHidden
+                                              .value
+                                          ? Icons
+                                              .visibility_off_outlined
+                                          : Icons
+                                              .visibility_outlined,
+
+                                      color:
+                                          Colors
+                                              .brown,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(
+                              height: 14,
+                            ),
+
+                            // LUPA PASSWORD
+                            Align(
+                              alignment:
+                                  Alignment
+                                      .centerRight,
+
+                              child:
+                                  GestureDetector(
+                                onTap:
+                                    controller
+                                        .lupaPassword,
+
+                                child:
+                                    const Text(
+                                  "Lupa kata sandi?",
+
+                                  style:
+                                      TextStyle(
+                                    color:
+                                        Color(
+                                      0xFF5A3116,
+                                    ),
+
+                                    fontWeight:
+                                        FontWeight
+                                            .bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(
+                              height:
+                                  size.height *
+                                      0.04,
+                            ),
+
+                            // BUTTON MASUK
+                            SizedBox(
+                              width:
+                                  double.infinity,
+
+                              height: 58,
+
+                              child: Obx(
+                                () => ElevatedButton(
+                                  onPressed:
+                                      controller
+                                              .isLoading
+                                              .value
+                                          ? null
+                                          : controller
+                                              .masuk,
+
+                                  style:
+                                      ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        const Color(
+                                      0xFF8B5E3C,
+                                    ),
+
+                                    elevation:
+                                        0,
+
+                                    shape:
+                                        RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(
+                                        18,
+                                      ),
+                                    ),
+                                  ),
+
+                                  child:
+                                      controller
+                                              .isLoading
+                                              .value
+                                          ? const CircularProgressIndicator(
+                                              color:
+                                                  Colors.white,
+                                            )
+                                          : Text(
+                                              "Masuk",
+
+                                              style:
+                                                  TextStyle(
+                                                fontSize:
+                                                    size.width *
+                                                        0.05,
+
+                                                fontWeight:
+                                                    FontWeight.bold,
+
+                                                color:
+                                                    Colors.white,
+                                              ),
+                                            ),
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(
+                              height:
+                                  size.height *
+                                      0.04,
+                            ),
+
+                            // DIVIDER
+                            Row(
+                              children: [
+
+                                Expanded(
+                                  child: Divider(
+                                    color: Colors
+                                        .brown
+                                        .shade200,
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(
+                                    horizontal:
+                                        14,
+                                  ),
+
+                                  child: Text(
+                                    "atau",
+
+                                    style:
+                                        TextStyle(
+                                      fontSize:
+                                          size.width *
+                                              0.038,
+
+                                      color:
+                                          Colors
+                                              .brown,
+                                    ),
+                                  ),
+                                ),
+
+                                Expanded(
+                                  child: Divider(
+                                    color: Colors
+                                        .brown
+                                        .shade200,
+                                  ),
+                                ),
+
+                              ],
+                            ),
+
+                            SizedBox(
+                              height:
+                                  size.height *
+                                      0.04,
+                            ),
+
+                            // GOOGLE
+                            SizedBox(
+                              width:
+                                  double.infinity,
+
+                              height: 58,
+
+                              child:
+                                  OutlinedButton(
+                                onPressed:
+                                    controller
+                                        .masukDenganGoogle,
+
+                                style:
+                                    OutlinedButton.styleFrom(
+                                  backgroundColor:
+                                      Colors.white,
+
+                                  side:
+                                      BorderSide(
+                                    color: Colors
+                                        .brown
+                                        .shade200,
+                                  ),
+
+                                  shape:
+                                      RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(
+                                      18,
+                                    ),
+                                  ),
+                                ),
+
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.center,
+
+                                  children: [
+
+                                    Image.asset(
+                                      "assets/icons/google.png",
+
+                                      width:
+                                          24,
+                                    ),
+
+                                    const SizedBox(
+                                      width:
+                                          14,
+                                    ),
+
+                                    Text(
+                                      "Masuk dengan Google",
+
+                                      style:
+                                          TextStyle(
+                                        fontSize:
+                                            size.width *
+                                                0.042,
+
+                                        fontWeight:
+                                            FontWeight.bold,
+
+                                        color:
+                                            const Color(
+                                          0xFF3E2723,
+                                        ),
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(
+                              height:
+                                  size.height *
+                                      0.04,
+                            ),
+
+                            // DAFTAR
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment
+                                      .center,
+
+                              children: [
+
+                                Text(
+                                  "Belum punya akun? ",
+
+                                  style:
+                                      TextStyle(
+                                    fontSize:
+                                        size.width *
+                                            0.038,
+
+                                    color:
+                                        Colors
+                                            .brown,
+                                  ),
+                                ),
+
+                                GestureDetector(
+                                  onTap:
+                                      controller
+                                          .goToDaftar,
+
+                                  child:
+                                      Text(
+                                    "Daftar",
+
+                                    style:
+                                        TextStyle(
+                                      fontSize:
+                                          size.width *
+                                              0.038,
+
+                                      fontWeight:
+                                          FontWeight
+                                              .bold,
+
+                                      color:
+                                          const Color(
+                                        0xFF5A3116,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(
+                        height:
+                            size.height *
+                                0.05,
+                      ),
+
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
+
+  Widget buildTitle(
+    String title,
+    Size size,
+  ) {
+
+    return Text(
+      title,
+
+      style: TextStyle(
+        fontSize:
+            size.width * 0.043,
+
+        fontWeight:
+            FontWeight.w600,
+      ),
+    );
+  }
+
+  InputDecoration inputDecoration({
+    required String hint,
+    required IconData icon,
+    Widget? suffix,
+  }) {
+
+    return InputDecoration(
+      hintText: hint,
+
+      prefixIcon: Icon(
+        icon,
+        color: Colors.brown,
+      ),
+
+      suffixIcon: suffix,
+
+      filled: true,
+
+      fillColor: Colors.white,
+
+      contentPadding:
+          const EdgeInsets.symmetric(
+        vertical: 18,
+      ),
+
+      border: OutlineInputBorder(
+        borderRadius:
+            BorderRadius.circular(
+          18,
+        ),
+
+        borderSide:
+            BorderSide.none,
+      ),
+    );
+  }
+}
