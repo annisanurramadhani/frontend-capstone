@@ -1,115 +1,92 @@
-// password_baru_controller.dart
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../data/services/auth_service.dart';
 import '../../../routes/app_pages.dart';
 
-class PasswordBaruController
-    extends GetxController {
+class PasswordBaruController extends GetxController {
+  final passwordBaruController = TextEditingController();
+  final konfirmasiPasswordController = TextEditingController();
 
-  final passwordBaruController =
-      TextEditingController();
+  RxBool isPasswordHidden = true.obs;
+  RxBool isKonfirmasiPasswordHidden = true.obs;
+  RxBool isLoading = false.obs;
 
-  final konfirmasiPasswordController =
-      TextEditingController();
+  late String email;
+  late String otp;
 
-  RxBool isPasswordHidden =
-      true.obs;
-
-  RxBool isKonfirmasiPasswordHidden =
-      true.obs;
-
-  RxBool isLoading =
-      false.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    email = Get.arguments['email'];
+    otp = Get.arguments['otp'];
+  }
 
   void togglePassword() {
-
-    isPasswordHidden.value =
-        !isPasswordHidden.value;
+    isPasswordHidden.value = !isPasswordHidden.value;
   }
 
   void toggleKonfirmasiPassword() {
-
-    isKonfirmasiPasswordHidden.value =
-        !isKonfirmasiPasswordHidden
-            .value;
+    isKonfirmasiPasswordHidden.value = !isKonfirmasiPasswordHidden.value;
   }
 
-  Future<void>
-      simpanPasswordBaru() async {
-
+  Future<void> simpanPasswordBaru() async {
     try {
-
       isLoading.value = true;
 
-      if (passwordBaruController
-          .text
-          .isEmpty) {
-
-        Get.snackbar(
-          "Peringatan",
-          "Password baru wajib diisi",
-        );
-
+      // VALIDASI PASSWORD
+      if (passwordBaruController.text.isEmpty) {
+        Get.snackbar("Peringatan", "Password baru wajib diisi");
         return;
       }
 
-      if (konfirmasiPasswordController
-              .text !=
-          passwordBaruController
-              .text) {
-
-        Get.snackbar(
-          "Peringatan",
-          "Konfirmasi password tidak cocok",
-        );
-
+      // VALIDASI MINIMAL PASSWORD
+      if (passwordBaruController.text.length < 6) {
+        Get.snackbar("Peringatan", "Password minimal 6 karakter");
         return;
       }
 
-      // API BACKEND
-      // reset password
+      // VALIDASI KONFIRMASI
+      if (konfirmasiPasswordController.text != passwordBaruController.text) {
+        Get.snackbar("Peringatan", "Konfirmasi password tidak cocok");
+        return;
+      }
 
-      await Future.delayed(
-        const Duration(
-          seconds: 1,
-        ),
+      // API RESET PASSWORD
+      final response = await AuthService.resetPassword(
+        email,
+        otp,
+        passwordBaruController.text,
       );
 
-      Get.snackbar(
-        "Berhasil",
-        "Password berhasil diperbarui",
-        backgroundColor:
-            Colors.green,
-        colorText:
-            Colors.white,
-      );
+      print(response);
 
-      Get.offAllNamed(
-        Routes.MASUK,
-      );
+      // SUCCESS
+      if (response['success'] == true) {
+        Get.snackbar(
+          "Berhasil",
+          response['message'],
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        //LANGSUNG PINDAH TANPA CLEAR & DELAY
+        // onClose() akan otomatis dispose controller
+        Get.offAllNamed(Routes.MASUK);
+      } else {
+        Get.snackbar("Error", response['message']);
+      }
     } catch (e) {
-
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
+      Get.snackbar("Error", e.toString());
     } finally {
-
       isLoading.value = false;
     }
   }
 
   @override
   void onClose() {
-
-    passwordBaruController
-        .dispose();
-
-    konfirmasiPasswordController
-        .dispose();
-
+    passwordBaruController.dispose();
+    konfirmasiPasswordController.dispose();
     super.onClose();
   }
 }

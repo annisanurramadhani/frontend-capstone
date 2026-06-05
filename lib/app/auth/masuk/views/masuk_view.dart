@@ -5,77 +5,55 @@ import 'package:get/get.dart';
 
 import '../controllers/masuk_controller.dart';
 
-class MasukView
-    extends GetView<MasukController> {
-
-  const MasukView({
-    super.key,
-  });
+class MasukView extends GetView<MasukController> {
+  const MasukView({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    final size =
-        MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
 
       body: Stack(
         children: [
-
           // BACKGROUND
           Container(
             width: double.infinity,
             height: double.infinity,
+
             decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  "assets/images/masuk.png",
-                ),
-                fit: BoxFit.cover,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+
+                colors: [Color(0xFFF5E6D3), Color(0xFFD7A97B)],
               ),
             ),
           ),
 
           // OVERLAY
-          Container(
-            color: Colors.white
-                .withOpacity(0.15),
-          ),
+          Container(color: Colors.white.withValues(alpha: 0.15)),
 
           SafeArea(
             child: SingleChildScrollView(
-              physics:
-                  const BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
 
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight:
-                      size.height,
-                ),
+                constraints: BoxConstraints(minHeight: size.height),
 
                 child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(
-                    horizontal:
-                        size.width * 0.08,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.08,
 
                     vertical: 24,
                   ),
 
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment
-                            .start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
 
                     children: [
-
-                      SizedBox(
-                        height:
-                            size.height *
-                                0.02,
-                      ),
+                      SizedBox(height: size.height * 0.02),
 
                       // BACK
                       IconButton(
@@ -84,577 +62,344 @@ class MasukView
                         },
 
                         icon: const Icon(
-                          Icons
-                              .arrow_back_ios_new,
+                          Icons.arrow_back_ios_new,
 
-                          color:
-                              Color(
-                            0xFF5A3116,
-                          ),
+                          color: Color(0xFF5A3116),
                         ),
                       ),
 
-                      SizedBox(
-                        height:
-                            size.height *
-                                0.02,
-                      ),
+                      SizedBox(height: size.height * 0.02),
 
                       // LOGO
                       Center(
                         child: Container(
-                          width:
-                              size.width *
-                                  0.22,
+                          width: size.width * 0.22,
 
-                          height:
-                              size.width *
-                                  0.22,
+                          height: size.width * 0.22,
 
-                          decoration:
-                              BoxDecoration(
-                            color: Colors
-                                .white
-                                .withOpacity(
-                              0.85,
-                            ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.85),
 
-                            shape:
-                                BoxShape
-                                    .circle,
+                            shape: BoxShape.circle,
                           ),
 
                           child: Icon(
-                            Icons
-                                .grid_view_rounded,
+                            Icons.grid_view_rounded,
 
-                            size:
-                                size.width *
-                                    0.11,
+                            size: size.width * 0.11,
 
-                            color:
-                                const Color(
-                              0xFF8B5E3C,
-                            ),
+                            color: const Color(0xFF8B5E3C),
                           ),
                         ),
                       ),
 
-                      SizedBox(
-                        height:
-                            size.height *
-                                0.03,
-                      ),
+                      SizedBox(height: size.height * 0.03),
 
                       // TITLE
                       Center(
                         child: Text(
                           "Masuk",
 
-                          style:
-                              TextStyle(
-                            fontSize:
-                                size.width *
-                                    0.09,
+                          style: TextStyle(
+                            fontSize: size.width * 0.09,
 
-                            fontWeight:
-                                FontWeight
-                                    .bold,
+                            fontWeight: FontWeight.bold,
 
-                            color:
-                                const Color(
-                              0xFF3E2723,
-                            ),
+                            color: const Color(0xFF3E2723),
                           ),
                         ),
                       ),
 
-                      const SizedBox(
-                        height: 12,
-                      ),
+                      const SizedBox(height: 12),
 
                       Center(
                         child: Text(
                           "Masuk untuk mulai belajar anyaman bambu.",
 
-                          textAlign:
-                              TextAlign
-                                  .center,
+                          textAlign: TextAlign.center,
 
-                          style:
-                              TextStyle(
-                            fontSize:
-                                size.width *
-                                    0.042,
+                          style: TextStyle(
+                            fontSize: size.width * 0.042,
 
-                            color:
-                                Colors
-                                    .brown,
+                            color: Colors.brown,
 
                             height: 1.6,
                           ),
                         ),
                       ),
 
-                      SizedBox(
-                        height:
-                            size.height *
-                                0.05,
-                      ),
+                      SizedBox(height: size.height * 0.05),
 
                       // FORM
                       Container(
-                        width:
-                            double.infinity,
+                        width: double.infinity,
 
-                        padding:
-                            EdgeInsets.all(
-                          size.width *
-                              0.06,
-                        ),
+                        padding: EdgeInsets.all(size.width * 0.06),
 
-                        decoration:
-                            BoxDecoration(
-                          color: Colors
-                              .white
-                              .withOpacity(
-                            0.90,
-                          ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.90),
 
-                          borderRadius:
-                              BorderRadius.circular(
-                            30,
-                          ),
+                          borderRadius: BorderRadius.circular(30),
                         ),
 
                         child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment
-                                  .start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
 
                           children: [
-
                             // EMAIL
-                            buildTitle(
-                              "Email",
-                              size,
-                            ),
+                            buildTitle("Email", size),
 
-                            const SizedBox(
-                              height: 12,
-                            ),
+                            const SizedBox(height: 12),
 
                             TextField(
-                              controller:
-                                  controller
-                                      .emailController,
+                              controller: controller.emailController,
 
-                              keyboardType:
-                                  TextInputType
-                                      .emailAddress,
+                              keyboardType: TextInputType.emailAddress,
 
-                              decoration:
-                                  inputDecoration(
-                                hint:
-                                    "Masukkan email",
+                              decoration: inputDecoration(
+                                hint: "Masukkan email",
 
-                                icon:
-                                    Icons.email_outlined,
+                                icon: Icons.email_outlined,
                               ),
                             ),
 
-                            const SizedBox(
-                              height: 25,
-                            ),
+                            const SizedBox(height: 25),
 
                             // PASSWORD
-                            buildTitle(
-                              "Kata Sandi",
-                              size,
-                            ),
+                            buildTitle("Kata Sandi", size),
 
-                            const SizedBox(
-                              height: 12,
-                            ),
+                            const SizedBox(height: 12),
 
                             Obx(
                               () => TextField(
-                                controller:
-                                    controller
-                                        .passwordController,
+                                controller: controller.passwordController,
 
-                                obscureText:
-                                    controller
-                                        .isPasswordHidden
-                                        .value,
+                                obscureText: controller.isPasswordHidden.value,
 
-                                decoration:
-                                    inputDecoration(
-                                  hint:
-                                      "Masukkan kata sandi",
+                                decoration: inputDecoration(
+                                  hint: "Masukkan kata sandi",
 
-                                  icon:
-                                      Icons.lock_outline,
+                                  icon: Icons.lock_outline,
 
-                                  suffix:
-                                      IconButton(
-                                    onPressed:
-                                        controller
-                                            .togglePassword,
+                                  suffix: IconButton(
+                                    onPressed: controller.togglePassword,
 
-                                    icon:
-                                        Icon(
-                                      controller
-                                              .isPasswordHidden
-                                              .value
-                                          ? Icons
-                                              .visibility_off_outlined
-                                          : Icons
-                                              .visibility_outlined,
+                                    icon: Icon(
+                                      controller.isPasswordHidden.value
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
 
-                                      color:
-                                          Colors
-                                              .brown,
+                                      color: Colors.brown,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
 
-                            const SizedBox(
-                              height: 14,
-                            ),
+                            const SizedBox(height: 14),
 
                             // LUPA PASSWORD
                             Align(
-                              alignment:
-                                  Alignment
-                                      .centerRight,
+                              alignment: Alignment.centerRight,
 
-                              child:
-                                  GestureDetector(
-                                onTap:
-                                    controller
-                                        .lupaPassword,
+                              child: GestureDetector(
+                                onTap: controller.lupaPassword,
 
-                                child:
-                                    const Text(
+                                child: const Text(
                                   "Lupa kata sandi?",
 
-                                  style:
-                                      TextStyle(
-                                    color:
-                                        Color(
-                                      0xFF5A3116,
-                                    ),
+                                  style: TextStyle(
+                                    color: Color(0xFF5A3116),
 
-                                    fontWeight:
-                                        FontWeight
-                                            .bold,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                             ),
 
-                            SizedBox(
-                              height:
-                                  size.height *
-                                      0.04,
-                            ),
+                            SizedBox(height: size.height * 0.04),
 
                             // BUTTON MASUK
                             SizedBox(
-                              width:
-                                  double.infinity,
+                              width: double.infinity,
 
                               height: 58,
 
                               child: Obx(
                                 () => ElevatedButton(
-                                  onPressed:
-                                      controller
-                                              .isLoading
-                                              .value
-                                          ? null
-                                          : controller
-                                              .masuk,
+                                  onPressed: controller.isLoading.value
+                                      ? null
+                                      : controller.masuk,
 
-                                  style:
-                                      ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        const Color(
-                                      0xFF8B5E3C,
-                                    ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF8B5E3C),
 
-                                    elevation:
-                                        0,
+                                    elevation: 0,
 
-                                    shape:
-                                        RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(
-                                        18,
-                                      ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18),
                                     ),
                                   ),
 
-                                  child:
-                                      controller
-                                              .isLoading
-                                              .value
-                                          ? const CircularProgressIndicator(
-                                              color:
-                                                  Colors.white,
-                                            )
-                                          : Text(
-                                              "Masuk",
+                                  child: controller.isLoading.value
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                      : Text(
+                                          "Masuk",
 
-                                              style:
-                                                  TextStyle(
-                                                fontSize:
-                                                    size.width *
-                                                        0.05,
+                                          style: TextStyle(
+                                            fontSize: size.width * 0.05,
 
-                                                fontWeight:
-                                                    FontWeight.bold,
+                                            fontWeight: FontWeight.bold,
 
-                                                color:
-                                                    Colors.white,
-                                              ),
-                                            ),
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),
 
-                            SizedBox(
-                              height:
-                                  size.height *
-                                      0.04,
-                            ),
+                            SizedBox(height: size.height * 0.04),
 
                             // DIVIDER
                             Row(
                               children: [
-
                                 Expanded(
-                                  child: Divider(
-                                    color: Colors
-                                        .brown
-                                        .shade200,
-                                  ),
+                                  child: Divider(color: Colors.brown.shade200),
                                 ),
 
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(
-                                    horizontal:
-                                        14,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
                                   ),
 
                                   child: Text(
                                     "atau",
 
-                                    style:
-                                        TextStyle(
-                                      fontSize:
-                                          size.width *
-                                              0.038,
+                                    style: TextStyle(
+                                      fontSize: size.width * 0.038,
 
-                                      color:
-                                          Colors
-                                              .brown,
+                                      color: Colors.brown,
                                     ),
                                   ),
                                 ),
 
                                 Expanded(
-                                  child: Divider(
-                                    color: Colors
-                                        .brown
-                                        .shade200,
-                                  ),
+                                  child: Divider(color: Colors.brown.shade200),
                                 ),
-
                               ],
                             ),
 
-                            SizedBox(
-                              height:
-                                  size.height *
-                                      0.04,
-                            ),
+                            SizedBox(height: size.height * 0.04),
 
                             // GOOGLE
                             SizedBox(
-                              width:
-                                  double.infinity,
+                              width: double.infinity,
 
                               height: 58,
 
-                              child:
-                                  OutlinedButton(
-                                onPressed:
-                                    controller
-                                        .masukDenganGoogle,
+                              child: OutlinedButton(
+                                onPressed: controller.masukDenganGoogle,
 
-                                style:
-                                    OutlinedButton.styleFrom(
-                                  backgroundColor:
-                                      Colors.white,
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor: Colors.white,
 
-                                  side:
-                                      BorderSide(
-                                    color: Colors
-                                        .brown
-                                        .shade200,
+                                  side: BorderSide(
+                                    color: Colors.brown.shade200,
                                   ),
 
-                                  shape:
-                                      RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(
-                                      18,
-                                    ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
                                   ),
                                 ),
 
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
 
                                   children: [
-
                                     Image.asset(
-                                      "assets/icons/google.png",
+                                      "assets/image/google.png",
 
-                                      width:
-                                          24,
+                                      width: 24,
                                     ),
 
-                                    const SizedBox(
-                                      width:
-                                          14,
-                                    ),
+                                    const SizedBox(width: 14),
 
                                     Text(
                                       "Masuk dengan Google",
 
-                                      style:
-                                          TextStyle(
-                                        fontSize:
-                                            size.width *
-                                                0.042,
+                                      style: TextStyle(
+                                        fontSize: size.width * 0.042,
 
-                                        fontWeight:
-                                            FontWeight.bold,
+                                        fontWeight: FontWeight.bold,
 
-                                        color:
-                                            const Color(
-                                          0xFF3E2723,
-                                        ),
+                                        color: const Color(0xFF3E2723),
                                       ),
                                     ),
-
                                   ],
                                 ),
                               ),
                             ),
 
-                            SizedBox(
-                              height:
-                                  size.height *
-                                      0.04,
-                            ),
+                            SizedBox(height: size.height * 0.04),
 
                             // DAFTAR
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .center,
+                              mainAxisAlignment: MainAxisAlignment.center,
 
                               children: [
-
                                 Text(
                                   "Belum punya akun? ",
 
-                                  style:
-                                      TextStyle(
-                                    fontSize:
-                                        size.width *
-                                            0.038,
+                                  style: TextStyle(
+                                    fontSize: size.width * 0.038,
 
-                                    color:
-                                        Colors
-                                            .brown,
+                                    color: Colors.brown,
                                   ),
                                 ),
 
                                 GestureDetector(
-                                  onTap:
-                                      controller
-                                          .goToDaftar,
+                                  onTap: controller.goToDaftar,
 
-                                  child:
-                                      Text(
+                                  child: Text(
                                     "Daftar",
 
-                                    style:
-                                        TextStyle(
-                                      fontSize:
-                                          size.width *
-                                              0.038,
+                                    style: TextStyle(
+                                      fontSize: size.width * 0.038,
 
-                                      fontWeight:
-                                          FontWeight
-                                              .bold,
+                                      fontWeight: FontWeight.bold,
 
-                                      color:
-                                          const Color(
-                                        0xFF5A3116,
-                                      ),
+                                      color: const Color(0xFF5A3116),
                                     ),
                                   ),
                                 ),
-
                               ],
                             ),
-
                           ],
                         ),
                       ),
 
-                      SizedBox(
-                        height:
-                            size.height *
-                                0.05,
-                      ),
-
+                      SizedBox(height: size.height * 0.05),
                     ],
                   ),
                 ),
               ),
             ),
           ),
-
         ],
       ),
     );
   }
 
-  Widget buildTitle(
-    String title,
-    Size size,
-  ) {
-
+  Widget buildTitle(String title, Size size) {
     return Text(
       title,
 
       style: TextStyle(
-        fontSize:
-            size.width * 0.043,
+        fontSize: size.width * 0.043,
 
-        fontWeight:
-            FontWeight.w600,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -664,14 +409,10 @@ class MasukView
     required IconData icon,
     Widget? suffix,
   }) {
-
     return InputDecoration(
       hintText: hint,
 
-      prefixIcon: Icon(
-        icon,
-        color: Colors.brown,
-      ),
+      prefixIcon: Icon(icon, color: Colors.brown),
 
       suffixIcon: suffix,
 
@@ -679,19 +420,12 @@ class MasukView
 
       fillColor: Colors.white,
 
-      contentPadding:
-          const EdgeInsets.symmetric(
-        vertical: 18,
-      ),
+      contentPadding: const EdgeInsets.symmetric(vertical: 18),
 
       border: OutlineInputBorder(
-        borderRadius:
-            BorderRadius.circular(
-          18,
-        ),
+        borderRadius: BorderRadius.circular(18),
 
-        borderSide:
-            BorderSide.none,
+        borderSide: BorderSide.none,
       ),
     );
   }

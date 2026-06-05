@@ -1,152 +1,108 @@
-// daftar_controller.dart
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../data/services/auth_service.dart';
 import '../../../routes/app_pages.dart';
 
-class DaftarController
-    extends GetxController {
+class DaftarController extends GetxController {
+  final namaController = TextEditingController();
 
-  final namaController =
-      TextEditingController();
+  final emailController = TextEditingController();
 
-  final emailController =
-      TextEditingController();
+  final passwordController = TextEditingController();
 
-  final passwordController =
-      TextEditingController();
+  final konfirmasiPasswordController = TextEditingController();
 
-  final konfirmasiPasswordController =
-      TextEditingController();
+  RxBool isPasswordHidden = true.obs;
 
-  RxBool isPasswordHidden =
-      true.obs;
+  RxBool isKonfirmasiPasswordHidden = true.obs;
 
-  RxBool isKonfirmasiPasswordHidden =
-      true.obs;
-
-  RxBool isLoading =
-      false.obs;
+  RxBool isLoading = false.obs;
 
   void togglePassword() {
-
-    isPasswordHidden.value =
-        !isPasswordHidden.value;
+    isPasswordHidden.value = !isPasswordHidden.value;
   }
 
   void toggleKonfirmasiPassword() {
-
-    isKonfirmasiPasswordHidden.value =
-        !isKonfirmasiPasswordHidden
-            .value;
+    isKonfirmasiPasswordHidden.value = !isKonfirmasiPasswordHidden.value;
   }
 
   Future<void> daftar() async {
-
     try {
-
       isLoading.value = true;
 
-      // VALIDASI
-      if (namaController.text
-          .trim()
-          .isEmpty) {
-
-        Get.snackbar(
-          "Peringatan",
-          "Nama lengkap wajib diisi",
-        );
+      // VALIDASI NAMA
+      if (namaController.text.trim().isEmpty) {
+        Get.snackbar("Peringatan", "Nama lengkap wajib diisi");
 
         return;
       }
 
-      if (emailController.text
-          .trim()
-          .isEmpty) {
-
-        Get.snackbar(
-          "Peringatan",
-          "Email wajib diisi",
-        );
+      // VALIDASI EMAIL
+      if (!emailController.text.trim().contains("@")) {
+        Get.snackbar("Peringatan", "Format email tidak valid");
 
         return;
       }
 
-      if (passwordController.text
-          .isEmpty) {
-
-        Get.snackbar(
-          "Peringatan",
-          "Password wajib diisi",
-        );
+      // VALIDASI PASSWORD
+      if (passwordController.text.length < 6) {
+        Get.snackbar("Peringatan", "Password minimal 6 karakter");
 
         return;
       }
 
-      if (konfirmasiPasswordController
-              .text !=
-          passwordController.text) {
-
-        Get.snackbar(
-          "Peringatan",
-          "Konfirmasi password tidak cocok",
-        );
+      // VALIDASI PASSWORD COCOK
+      if (konfirmasiPasswordController.text != passwordController.text) {
+        Get.snackbar("Peringatan", "Konfirmasi password tidak cocok");
 
         return;
       }
 
-      // API BACKEND
-      // nanti sambungkan backend
+      // REGISTER API
+      final response = await AuthService.register(
+        namaController.text.trim(),
 
-      await Future.delayed(
-        const Duration(
-          seconds: 1,
-        ),
+        emailController.text.trim(),
+
+        passwordController.text,
       );
 
-      Get.snackbar(
-        "Berhasil",
-        "Akun berhasil dibuat",
-        backgroundColor:
-            Colors.green,
-        colorText:
-            Colors.white,
-      );
+      // SUCCESS
+      if (response['success'] == true) {
+        Get.snackbar(
+          "Berhasil",
+          response['message'],
 
-      Get.offNamed(
-        Routes.MASUK,
-      );
+          backgroundColor: Colors.green,
+
+          colorText: Colors.white,
+        );
+
+        Get.offNamed(Routes.MASUK);
+      } else {
+        Get.snackbar("Error", response['message']);
+      }
     } catch (e) {
-
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
+      Get.snackbar("Error", e.toString());
     } finally {
-
       isLoading.value = false;
     }
   }
 
   void goToLogin() {
-
-    Get.toNamed(
-      Routes.MASUK,
-    );
+    Get.toNamed(Routes.MASUK);
   }
 
   @override
   void onClose() {
-
     namaController.dispose();
 
     emailController.dispose();
 
     passwordController.dispose();
 
-    konfirmasiPasswordController
-        .dispose();
+    konfirmasiPasswordController.dispose();
 
     super.onClose();
   }
