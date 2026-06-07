@@ -1,19 +1,34 @@
-// belajar_anyaman_controller.dart
-
 import 'package:get/get.dart';
 
-import '../../../../routes/app_pages.dart';
-class BelajarAnyamanController
-    extends GetxController {
+import '../../../../data/services/pengguna_service.dart';
 
-  void kembali() {
-    Get.back();
+class BelajarAnyamanController extends GetxController {
+  RxBool isLoading = false.obs;
+
+  RxList videos = [].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    getVideos();
   }
 
-  void keMateriAnyaman() {
+  Future<void> getVideos() async {
+    try {
+      isLoading.value = true;
 
-    Get.toNamed(
-      Routes.MATERI_ANYAMAN,
-    );
+      final response = await PenggunaService.getTutorialVideos();
+
+      if (response['success'] == true) {
+        videos.value = response['videos'];
+      } else {
+        Get.snackbar("Error", response['message']);
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

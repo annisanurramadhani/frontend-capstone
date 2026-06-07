@@ -1,10 +1,10 @@
-// daftar_pengrajin_view.dart
-
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
+import '../../profil_pengrajin/views/profil_pengrajin_view.dart';
+
 import '../controllers/daftar_pengrajin_controller.dart';
-import '../../../../global_widgets/custom_navbar.dart';
 
 class DaftarPengrajinView extends GetView<DaftarPengrajinController> {
   const DaftarPengrajinView({super.key});
@@ -15,225 +15,167 @@ class DaftarPengrajinView extends GetView<DaftarPengrajinController> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFDF8F3),
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF3E2723)),
+        ),
+        title: const Text(
+          "Daftar Pengrajin",
+          style: TextStyle(
+            color: Color(0xFF3E2723),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-      // DAFTAR PENGRAJIN
-      bottomNavigationBar: const CustomNavbar(currentIndex: 1),
+        if (controller.pengrajin.isEmpty) {
+          return const Center(child: Text("Belum ada pengrajin"));
+        }
 
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(size.width * 0.055),
+        return ListView.builder(
+          padding: const EdgeInsets.all(20),
+          itemCount: controller.pengrajin.length,
+          itemBuilder: (context, index) {
+            final item = controller.pengrajin[index];
 
-          child: Column(
-            children: [
-              SizedBox(height: size.height * 0.01),
-
-              // HEADER
-              Row(
+            return Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
                 children: [
-                  IconButton(
-                    onPressed: controller.kembali,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // FOTO - test pakai Image.network
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child:
+                            item["photo"] != null &&
+                                item["photo"].toString().isNotEmpty
+                            ? Image.network(
+                                "http://10.223.117.201:3000/uploads/${item['photo']}",
+                                width: 76,
+                                height: 76,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stack) {
+                                  print("ERROR FOTO: $error");
+                                  return _fotoDefault();
+                                },
+                              )
+                            : _fotoDefault(),
+                      ),
 
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
+                      const SizedBox(width: 18),
 
-                      color: Color(0xFF5A3116),
-                    ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item["name"] ?? "-",
+                              style: TextStyle(
+                                fontSize: size.width * 0.05,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF3E2723),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "Pengalaman: ${item["pengalaman"] ?? "-"}",
+                              style: TextStyle(
+                                fontSize: size.width * 0.038,
+                                color: Colors.brown,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  "${item["rating"] ?? "-"}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
 
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        "Daftar Pengrajin",
+                  const SizedBox(height: 18),
 
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.to(
+                          () => const ProfilPengrajinView(),
+                          arguments: item,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF5A3116),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: const Text(
+                        "Lihat Profil",
                         style: TextStyle(
-                          fontSize: size.width * 0.07,
-
                           fontWeight: FontWeight.bold,
-
-                          color: const Color(0xFF3E2723),
+                          fontSize: 15,
                         ),
                       ),
                     ),
                   ),
-
-                  const SizedBox(width: 48),
                 ],
               ),
+            );
+          },
+        );
+      }),
+    );
+  }
 
-              SizedBox(height: size.height * 0.03),
-
-              // SEARCH
-              TextField(
-                decoration: InputDecoration(
-                  hintText: "Cari pengrajin...",
-
-                  prefixIcon: const Icon(Icons.search, color: Colors.brown),
-
-                  filled: true,
-
-                  fillColor: Colors.white,
-
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-
-              SizedBox(height: size.height * 0.03),
-
-              // LIST
-              Expanded(
-                child: Obx(() {
-                  if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (controller.pengrajinList.isEmpty) {
-                    return const Center(
-                      child: Text("Data pengrajin belum tersedia"),
-                    );
-                  }
-
-                  return ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-
-                    itemCount: controller.pengrajinList.length,
-
-                    itemBuilder: (context, index) {
-                      final data = controller.pengrajinList[index];
-
-                      return GestureDetector(
-                        onTap: () {
-                          controller.keProfilPengrajin(data);
-                        },
-
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 20),
-
-                          padding: const EdgeInsets.all(16),
-
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-
-                            borderRadius: BorderRadius.circular(28),
-                          ),
-
-                          child: Row(
-                            children: [
-                              // FOTO
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-
-                                child: Image.asset(
-                                  data["foto"],
-
-                                  width: 110,
-                                  height: 130,
-
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-
-                              const SizedBox(width: 18),
-
-                              // CONTENT
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                                  children: [
-                                    Text(
-                                      data["nama"],
-
-                                      style: TextStyle(
-                                        fontSize: size.width * 0.055,
-
-                                        fontWeight: FontWeight.bold,
-
-                                        color: const Color(0xFF3E2723),
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 10),
-
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.location_on_outlined,
-
-                                          size: 20,
-
-                                          color: Colors.brown,
-                                        ),
-
-                                        const SizedBox(width: 6),
-
-                                        Expanded(
-                                          child: Text(
-                                            data["lokasi"],
-
-                                            style: TextStyle(
-                                              fontSize: size.width * 0.038,
-
-                                              color: Colors.brown,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    const SizedBox(height: 10),
-
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.star_rounded,
-
-                                          color: Colors.orange,
-
-                                          size: 22,
-                                        ),
-
-                                        const SizedBox(width: 6),
-
-                                        Text(
-                                          data["rating"],
-
-                                          style: TextStyle(
-                                            fontSize: size.width * 0.04,
-
-                                            fontWeight: FontWeight.bold,
-
-                                            color: const Color(0xFF3E2723),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              const Icon(
-                                Icons.arrow_forward_ios,
-
-                                size: 18,
-
-                                color: Color(0xFF5A3116),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }),
-              ),
-            ],
-          ),
-        ),
+  Widget _fotoDefault() {
+    return Container(
+      width: 76,
+      height: 76,
+      decoration: const BoxDecoration(
+        color: Color(0xFFF3EAE0),
+        shape: BoxShape.circle,
       ),
+      child: const Icon(Icons.person, color: Color(0xFF5A3116), size: 38),
     );
   }
 }

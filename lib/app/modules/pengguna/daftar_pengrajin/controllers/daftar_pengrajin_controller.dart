@@ -1,17 +1,11 @@
-// daftar_pengrajin_controller.dart
-
 import 'package:get/get.dart';
 
-import '../../../../routes/app_pages.dart';
+import '../../../../data/services/pengguna_service.dart';
 
-class DaftarPengrajinController
-    extends GetxController {
+class DaftarPengrajinController extends GetxController {
+  RxBool isLoading = false.obs;
 
-  RxBool isLoading =
-      false.obs;
-
-  RxList<dynamic> pengrajinList =
-      <dynamic>[].obs;
+  RxList pengrajin = [].obs;
 
   @override
   void onInit() {
@@ -21,82 +15,30 @@ class DaftarPengrajinController
   }
 
   Future<void> getPengrajin() async {
-
     try {
-
       isLoading.value = true;
 
-      // API BACKEND
-      // ambil data pengrajin dari backend
+      final start = DateTime.now();
 
-      await Future.delayed(
-        const Duration(
-          milliseconds: 500,
-        ),
-      );
+      final response = await PenggunaService.getPengrajin();
 
-      pengrajinList.assignAll([
-        {
-          "id": 1,
-          "nama":
-              "Ibu Sari",
-          "lokasi":
-              "Jepara, Jawa Tengah",
-          "rating":
-              "4.9",
-          "foto":
-              "assets/images/pengrajin1.jpg",
-        },
+      print(DateTime.now().difference(start));
 
-        {
-          "id": 2,
-          "nama":
-              "Pak Budi",
-          "lokasi":
-              "Tasikmalaya",
-          "rating":
-              "4.8",
-          "foto":
-              "assets/images/pengrajin2.jpg",
-        },
+      print(response);
 
-        {
-          "id": 3,
-          "nama":
-              "Bu Rina",
-          "lokasi":
-              "Bali",
-          "rating":
-              "5.0",
-          "foto":
-              "assets/images/pengrajin3.jpg",
-        },
-
-      ]);
+      if (response['success'] == true) {
+        pengrajin.assignAll(
+          List<Map<String, dynamic>>.from(response['pengrajin']),
+        );
+      } else {
+        Get.snackbar("Error", response['message']);
+      }
     } catch (e) {
+      print(e);
 
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
+      Get.snackbar("Error", e.toString());
     } finally {
-
       isLoading.value = false;
     }
-  }
-
-  void kembali() {
-
-    Get.back();
-  }
-
-  void keProfilPengrajin(
-    dynamic data,
-  ) {
-
-    Get.toNamed(
-      Routes.PROFIL_PENGRAJIN,
-      arguments: data,
-    );
   }
 }

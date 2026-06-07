@@ -1,10 +1,12 @@
-// belajar_anyaman_view.dart
-
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
+import '../detail_video/views/detail_video_view.dart';
+
 import '../controllers/belajar_anyaman_controller.dart';
-import '../../../../global_widgets/custom_navbar.dart';
+
+import '../../../../data/providers/api_provider.dart';
 
 class BelajarAnyamanView extends GetView<BelajarAnyamanController> {
   const BelajarAnyamanView({super.key});
@@ -16,159 +18,190 @@ class BelajarAnyamanView extends GetView<BelajarAnyamanController> {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
 
-      bottomNavigationBar: const CustomNavbar(currentIndex: 1),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFDF8F3),
 
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.all(size.width * 0.055),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: controller.kembali,
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Color(0xFF5A3116),
-                    ),
-                  ),
-                ],
-              ),
+        elevation: 0,
 
-              SizedBox(height: size.height * 0.01),
+        centerTitle: true,
 
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      "Belajar Anyaman",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: size.width * 0.085,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF3E2723),
-                      ),
-                    ),
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
 
-                    const SizedBox(height: 12),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF3E2723)),
+        ),
 
-                    Text(
-                      "Pelajari teknik anyaman dari dasar hingga mahir.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: size.width * 0.043,
-                        color: Colors.brown,
-                        height: 1.6,
-                      ),
+        title: const Text(
+          "Belajar Anyaman",
+
+          style: TextStyle(
+            color: Color(0xFF3E2723),
+
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+
+      body: Obx(() {
+        // LOADING
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        // DATA KOSONG
+        if (controller.videos.isEmpty) {
+          return const Center(child: Text("Belum ada video tutorial"));
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(20),
+
+          itemCount: controller.videos.length,
+
+          itemBuilder: (context, index) {
+            final video = controller.videos[index];
+
+            return GestureDetector(
+              onTap: () {
+                Get.to(() => const DetailVideoView(), arguments: video);
+              },
+
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 22),
+
+                decoration: BoxDecoration(
+                  color: Colors.white,
+
+                  borderRadius: BorderRadius.circular(24),
+
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+
+                      blurRadius: 10,
+
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-              ),
 
-              SizedBox(height: size.height * 0.05),
-
-              Text(
-                "Materi",
-                style: TextStyle(
-                  fontSize: size.width * 0.07,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF3E2723),
-                ),
-              ),
-
-              SizedBox(height: size.height * 0.03),
-
-              materiCard(
-                nomor: "1",
-                title: "Pengenalan Anyaman",
-                subtitle: "Mengenal alat, bahan, dan dasar anyaman bambu.",
-                durasi: "15 Menit",
-                image: "assets/images/materi1.jpg",
-              ),
-
-              const SizedBox(height: 20),
-
-              materiCard(
-                nomor: "2",
-                title: "Teknik Dasar Anyaman",
-                subtitle: "Belajar teknik dasar seperti silang dan lilit.",
-                durasi: "25 Menit",
-                image: "assets/images/materi2.jpg",
-              ),
-
-              const SizedBox(height: 20),
-
-              materiCard(
-                nomor: "3",
-                title: "Pola Anyaman",
-                subtitle: "Belajar membuat pola anyaman lebih kompleks.",
-                durasi: "40 Menit",
-                image: "assets/images/materi3.jpg",
-              ),
-
-              const SizedBox(height: 20),
-
-              materiCard(
-                nomor: "4",
-                title: "Finishing & Perawatan",
-                subtitle: "Teknik finishing agar produk lebih awet.",
-                durasi: "20 Menit",
-                image: "assets/images/materi4.jpg",
-              ),
-
-              SizedBox(height: size.height * 0.04),
-
-              // Tips
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(size.width * 0.05),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: Row(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+
                   children: [
-                    Container(
-                      width: 65,
-                      height: 65,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFF3EAE0),
-                        shape: BoxShape.circle,
+                    // THUMBNAIL
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(24),
                       ),
-                      child: const Icon(
-                        Icons.lightbulb_outline,
-                        size: 34,
-                        color: Color(0xFF5A3116),
+
+                      child: Image.network(
+                        "${ApiProvider.baseUrl}/uploads/${video["thumbnail"]}",
+
+                        width: double.infinity,
+
+                        height: 210,
+
+                        fit: BoxFit.cover,
+
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: double.infinity,
+
+                            height: 210,
+
+                            color: Colors.grey[300],
+
+                            child: const Center(
+                              child: Icon(Icons.broken_image, size: 55),
+                            ),
+                          );
+                        },
                       ),
                     ),
 
-                    const SizedBox(width: 16),
+                    Padding(
+                      padding: const EdgeInsets.all(18),
 
-                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+
                         children: [
                           Text(
-                            "Tips Belajar",
+                            video["title"],
+
+                            maxLines: 2,
+
+                            overflow: TextOverflow.ellipsis,
+
                             style: TextStyle(
                               fontSize: size.width * 0.055,
+
                               fontWeight: FontWeight.bold,
+
                               color: const Color(0xFF3E2723),
                             ),
                           ),
 
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 10),
 
                           Text(
-                            "Pelajari materi secara berurutan agar lebih mudah dipahami.",
+                            "Pelajari teknik anyaman bambu menggunakan tutorial interaktif.",
+
+                            maxLines: 2,
+
+                            overflow: TextOverflow.ellipsis,
+
                             style: TextStyle(
-                              fontSize: size.width * 0.04,
+                              fontSize: size.width * 0.038,
+
                               color: Colors.brown,
+
                               height: 1.6,
+                            ),
+                          ),
+
+                          const SizedBox(height: 18),
+
+                          SizedBox(
+                            width: double.infinity,
+
+                            height: 52,
+
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                Get.to(
+                                  () => const DetailVideoView(),
+
+                                  arguments: video,
+                                );
+                              },
+
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF5A3116),
+
+                                foregroundColor: Colors.white,
+
+                                elevation: 0,
+
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                              ),
+
+                              icon: const Icon(Icons.play_arrow),
+
+                              label: const Text(
+                                "Lihat Tutorial",
+
+                                style: TextStyle(
+                                  fontSize: 16,
+
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -177,122 +210,10 @@ class BelajarAnyamanView extends GetView<BelajarAnyamanController> {
                   ],
                 ),
               ),
-
-              SizedBox(height: size.height * 0.06),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget materiCard({
-    required String nomor,
-    required String title,
-    required String subtitle,
-    required String durasi,
-    required String image,
-  }) {
-    return InkWell(
-      onTap: controller.keMateriAnyaman,
-      borderRadius: BorderRadius.circular(24),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(18),
-              child: Image.asset(
-                image,
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
-              ),
-            ),
-
-            const SizedBox(width: 16),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFF3EAE0),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Text(
-                            nomor,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF5A3116),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(width: 12),
-
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF3E2723),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.brown,
-                      height: 1.5,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.access_time,
-                        size: 20,
-                        color: Colors.brown,
-                      ),
-
-                      const SizedBox(width: 8),
-
-                      Text(durasi, style: const TextStyle(color: Colors.brown)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const Icon(
-              Icons.arrow_forward_ios,
-              color: Color(0xFF5A3116),
-              size: 20,
-            ),
-          ],
-        ),
-      ),
+            );
+          },
+        );
+      }),
     );
   }
 }

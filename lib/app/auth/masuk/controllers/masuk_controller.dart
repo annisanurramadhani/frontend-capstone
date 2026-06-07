@@ -1,7 +1,11 @@
+// masuk_controller.dart
+
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import '../../../data/services/auth_service.dart';
+
 import '../../../routes/app_pages.dart';
 
 class MasukController extends GetxController {
@@ -19,6 +23,8 @@ class MasukController extends GetxController {
 
   Future<void> masuk() async {
     try {
+      if (isLoading.value) return;
+
       isLoading.value = true;
 
       // VALIDASI EMAIL
@@ -38,8 +44,11 @@ class MasukController extends GetxController {
       // LOGIN API
       final response = await AuthService.login(
         emailController.text.trim(),
+
         passwordController.text.trim(),
       );
+
+      print(response);
 
       // SUCCESS
       if (response['success'] == true) {
@@ -60,7 +69,6 @@ class MasukController extends GetxController {
     try {
       isLoading.value = true;
 
-      // LOGIN GOOGLE
       await Future.delayed(const Duration(seconds: 1));
 
       Get.offAllNamed(Routes.HALAMAN_UTAMA);
@@ -77,14 +85,5 @@ class MasukController extends GetxController {
 
   void goToDaftar() {
     Get.toNamed(Routes.DAFTAR);
-  }
-
-  @override
-  void onClose() {
-    emailController.dispose();
-
-    passwordController.dispose();
-
-    super.onClose();
   }
 }

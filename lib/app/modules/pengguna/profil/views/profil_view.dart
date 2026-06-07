@@ -1,10 +1,14 @@
 // profil_view.dart
 
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import '../controllers/profil_controller.dart';
+
 import '../../../../global_widgets/custom_navbar.dart';
+
+import '../../../../data/providers/api_provider.dart';
 
 class ProfilView extends GetView<ProfilController> {
   const ProfilView({super.key});
@@ -16,7 +20,6 @@ class ProfilView extends GetView<ProfilController> {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
 
-      // PROFIL
       bottomNavigationBar: const CustomNavbar(currentIndex: 2),
 
       body: SafeArea(
@@ -28,127 +31,143 @@ class ProfilView extends GetView<ProfilController> {
               return const Center(child: CircularProgressIndicator());
             }
 
-            return Column(
-              children: [
-                SizedBox(height: size.height * 0.01),
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: size.height * 0.01),
 
-                // TITLE
-                Center(
-                  child: Text(
-                    "Profil",
+                  // TITLE
+                  Center(
+                    child: Text(
+                      "Profil",
 
-                    style: TextStyle(
-                      fontSize: size.width * 0.08,
+                      style: TextStyle(
+                        fontSize: size.width * 0.08,
 
-                      fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.bold,
 
-                      color: const Color(0xFF3E2723),
+                        color: const Color(0xFF3E2723),
+                      ),
                     ),
                   ),
-                ),
 
-                SizedBox(height: size.height * 0.04),
+                  SizedBox(height: size.height * 0.04),
 
-                // CARD PROFIL
-                Container(
-                  width: double.infinity,
+                  // CARD PROFIL
+                  Container(
+                    width: double.infinity,
 
-                  padding: const EdgeInsets.all(22),
+                    padding: const EdgeInsets.all(22),
 
-                  decoration: BoxDecoration(
-                    color: Colors.white,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
 
-                    borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: size.width * 0.14,
+
+                          backgroundColor: const Color(0xFFF3EAE0),
+
+                          backgroundImage:
+                              controller.user["photo"] != null &&
+                                  controller.user["photo"].toString().isNotEmpty
+                              ? NetworkImage(
+                                  "${ApiProvider.baseUrl}${controller.user["photo"]}",
+                                )
+                              : null,
+
+                          child:
+                              controller.user["photo"] == null ||
+                                  controller.user["photo"].toString().isEmpty
+                              ? Icon(
+                                  Icons.person,
+
+                                  size: size.width * 0.14,
+
+                                  color: const Color(0xFF5A3116),
+                                )
+                              : null,
+                        ),
+
+                        SizedBox(height: size.height * 0.025),
+
+                        Text(
+                          controller.user["name"] ?? "-",
+
+                          style: TextStyle(
+                            fontSize: size.width * 0.065,
+
+                            fontWeight: FontWeight.bold,
+
+                            color: const Color(0xFF3E2723),
+                          ),
+                        ),
+
+                        SizedBox(height: size.height * 0.01),
+
+                        Text(
+                          controller.user["email"] ?? "-",
+
+                          style: TextStyle(
+                            fontSize: size.width * 0.04,
+
+                            color: Colors.brown,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: size.width * 0.14,
+                  SizedBox(height: size.height * 0.03),
 
-                        backgroundColor: const Color(0xFFF3EAE0),
+                  // EDIT PROFIL
+                  menuItem(
+                    icon: Icons.person_outline,
 
-                        child: Icon(
-                          Icons.person,
+                    title: "Edit Profil",
 
-                          size: size.width * 0.14,
+                    subtitle: "Ubah informasi akun",
 
-                          color: const Color(0xFF5A3116),
-                        ),
-                      ),
-
-                      SizedBox(height: size.height * 0.025),
-
-                      Text(
-                        controller.user["nama"] ?? "-",
-
-                        style: TextStyle(
-                          fontSize: size.width * 0.065,
-
-                          fontWeight: FontWeight.bold,
-
-                          color: const Color(0xFF3E2723),
-                        ),
-                      ),
-
-                      SizedBox(height: size.height * 0.01),
-
-                      Text(
-                        controller.user["email"] ?? "-",
-
-                        style: TextStyle(
-                          fontSize: size.width * 0.04,
-
-                          color: Colors.brown,
-                        ),
-                      ),
-                    ],
+                    onTap: controller.keEditProfil,
                   ),
-                ),
 
-                SizedBox(height: size.height * 0.03),
+                  SizedBox(height: size.height * 0.02),
 
-                // EDIT PROFIL
-                menuItem(
-                  icon: Icons.person_outline,
+                  // SERTIFIKAT
+                  menuItem(
+                    icon: Icons.workspace_premium_outlined,
 
-                  title: "Edit Profil",
+                    title: "Sertifikat Saya",
 
-                  subtitle: "Ubah informasi akun",
+                    subtitle: "Lihat sertifikat kelas",
 
-                  onTap: controller.keEditProfil,
-                ),
+                    onTap: controller.keSertifikat,
+                  ),
 
-                SizedBox(height: size.height * 0.02),
+                  SizedBox(height: size.height * 0.02),
 
-                // SERTIFIKAT
-                menuItem(
-                  icon: Icons.workspace_premium_outlined,
+                  // KELUAR
+                  menuItem(
+                    icon: Icons.logout_rounded,
 
-                  title: "Sertifikat Saya",
+                    title: "Keluar",
 
-                  subtitle: "Lihat sertifikat kelas",
+                    subtitle: "Keluar dari akun",
 
-                  onTap: controller.keSertifikat,
-                ),
+                    iconColor: Colors.red,
 
-                SizedBox(height: size.height * 0.02),
+                    textColor: Colors.red,
 
-                // KELUAR
-                menuItem(
-                  icon: Icons.logout_rounded,
+                    onTap: controller.keluar,
+                  ),
 
-                  title: "Keluar",
-
-                  subtitle: "Keluar dari akun",
-
-                  iconColor: Colors.red,
-
-                  textColor: Colors.red,
-
-                  onTap: controller.keluar,
-                ),
-              ],
+                  SizedBox(height: size.height * 0.05),
+                ],
+              ),
             );
           }),
         ),
@@ -189,6 +208,7 @@ class ProfilView extends GetView<ProfilController> {
           children: [
             Container(
               width: 65,
+
               height: 65,
 
               decoration: const BoxDecoration(
