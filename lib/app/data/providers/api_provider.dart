@@ -3,14 +3,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiProvider {
-  // EMULATOR
-  static const String emulatorUrl = "http://10.0.2.2:3000/api/auth";
-
   // HP ASLI
   static const String mobileUrl = "http://192.168.18.72:3000/api/auth";
 
-  // BASE URL
-  static const String baseUrl = mobileUrl;
+  // CHROME / WEB / LOKAL
+  static const String localUrl = "http://localhost:3000/api/auth";
+
+  // PILIH BASE URL
+  //static const String baseUrl = mobileUrl;
+  static const String baseUrl = localUrl;
 
   // LOGIN
   static Future<http.Response> login(String email, String password) async {
