@@ -1,111 +1,90 @@
 // halaman_utama_controller.dart
 
+import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
+
+import '../../../../data/services/auth_service.dart';
 
 import '../../../../routes/app_pages.dart';
 
-class HalamanUtamaController
-    extends GetxController {
-
+class HalamanUtamaController extends GetxController {
   RxBool isLoading = false.obs;
 
-  RxList<dynamic> menuUtama =
-      <dynamic>[].obs;
+  RxString nama = "".obs;
+
+  RxList<Map<String, dynamic>> menuUtama = <Map<String, dynamic>>[].obs;
 
   @override
   void onInit() {
     super.onInit();
 
-    getMenuUtama();
+    getUser();
+
+    loadMenu();
   }
 
-  Future<void> getMenuUtama() async {
-
+  Future<void> getUser() async {
     try {
-
       isLoading.value = true;
 
-      // API BACKEND
-      // nanti ambil dari backend
+      final user = AuthService.getUser();
 
-      await Future.delayed(
-        const Duration(
-          milliseconds: 500,
-        ),
-      );
-
-      menuUtama.assignAll([
-        {
-          "title":
-              "Belajar Anyaman",
-          "icon":
-              "assets/icons/belajar.png",
-          "route":
-              Routes.BELAJAR_ANYAMAN,
-        },
-
-        {
-          "title":
-              "Daftar Pengrajin",
-          "icon":
-              "assets/icons/pengrajin.png",
-          "route":
-              Routes.DAFTAR_PENGRAJIN,
-        },
-
-        {
-          "title":
-              "Produk Anyaman",
-          "icon":
-              "assets/icons/produk.png",
-          "route":
-              Routes.PRODUK_ANYAMAN,
-        },
-
-        {
-          "title":
-              "Jadwal Saya",
-          "icon":
-              "assets/icons/jadwal.png",
-          "route":
-              Routes.JADWAL_SAYA,
-        },
-
-        {
-          "title":
-              "Riwayat Kelas",
-          "icon":
-              "assets/icons/riwayat.png",
-          "route":
-              Routes.RIWAYAT_KELAS,
-        },
-
-        {
-          "title":
-              "Profil",
-          "icon":
-              "assets/icons/profil.png",
-          "route":
-              Routes.PROFIL,
-        },
-
-      ]);
+      nama.value = user["name"] ?? "";
     } catch (e) {
-
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
+      Get.snackbar("Error", e.toString());
     } finally {
-
       isLoading.value = false;
     }
   }
 
-  void pindahHalaman(
-    String route,
-  ) {
+  void loadMenu() {
+    menuUtama.assignAll([
+      {
+        "title": "Belajar Anyaman",
 
+        "icon": Icons.school_outlined,
+
+        "route": Routes.BELAJAR_ANYAMAN,
+      },
+
+      {
+        "title": "Daftar Pengrajin",
+
+        "icon": Icons.groups_outlined,
+
+        "route": Routes.DAFTAR_PENGRAJIN,
+      },
+
+      {
+        "title": "Produk Anyaman",
+
+        "icon": Icons.shopping_bag_outlined,
+
+        "route": Routes.PRODUK_ANYAMAN,
+      },
+
+      {
+        "title": "Jadwal Saya",
+
+        "icon": Icons.calendar_month_outlined,
+
+        "route": Routes.JADWAL_SAYA,
+      },
+
+      {
+        "title": "Riwayat Kelas",
+
+        "icon": Icons.history_outlined,
+
+        "route": Routes.RIWAYAT_KELAS,
+      },
+
+      {"title": "Profil", "icon": Icons.person_outline, "route": Routes.PROFIL},
+    ]);
+  }
+
+  void pindahHalaman(String route) {
     Get.toNamed(route);
   }
 }

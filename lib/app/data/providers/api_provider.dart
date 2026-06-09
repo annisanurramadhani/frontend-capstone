@@ -1,22 +1,29 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ApiProvider {
-  // HP ASLI
-  static const String mobileUrl = "http://192.168.18.72:3000/api/auth";
+  // MOBILE
+  static const String mobileBaseUrl = "http://10.223.117.201:3000";
 
-  // CHROME / WEB / LOKAL
-  static const String localUrl = "http://localhost:3000/api/auth";
+  // WEB
+  static const String webBaseUrl = "http://localhost:3000";
 
-  // PILIH BASE URL
-  //static const String baseUrl = mobileUrl;
-  static const String baseUrl = localUrl;
+  // AUTO BASE URL
+  static String get baseUrl => kIsWeb ? webBaseUrl : mobileBaseUrl;
+
+  // AUTH
+  static String get authUrl => "$baseUrl/api/auth";
+
+  // PENGGUNA
+  static String get penggunaUrl => "$baseUrl/api/pengguna";
 
   // LOGIN
   static Future<http.Response> login(String email, String password) async {
     return await http.post(
-      Uri.parse("$baseUrl/login"),
+      Uri.parse("$authUrl/login"),
 
       headers: {"Content-Type": "application/json"},
 
@@ -27,7 +34,7 @@ class ApiProvider {
   // VERIFY OTP
   static Future<http.Response> verifyOtp(String email, String otp) async {
     return await http.post(
-      Uri.parse("$baseUrl/verify-otp"),
+      Uri.parse("$authUrl/verify-otp"),
 
       headers: {"Content-Type": "application/json"},
 
@@ -38,7 +45,7 @@ class ApiProvider {
   // RESEND OTP
   static Future<http.Response> resendOtp(String email) async {
     return await http.post(
-      Uri.parse("$baseUrl/resend-otp"),
+      Uri.parse("$authUrl/resend-otp"),
 
       headers: {"Content-Type": "application/json"},
 
@@ -53,7 +60,7 @@ class ApiProvider {
     String password,
   ) async {
     return await http.post(
-      Uri.parse("$baseUrl/register"),
+      Uri.parse("$authUrl/register"),
 
       headers: {"Content-Type": "application/json"},
 
@@ -64,7 +71,7 @@ class ApiProvider {
   // REQUEST RESET PASSWORD
   static Future<http.Response> requestResetPassword(String email) async {
     return await http.post(
-      Uri.parse("$baseUrl/request-reset-password"),
+      Uri.parse("$authUrl/request-reset-password"),
 
       headers: {"Content-Type": "application/json"},
 
@@ -79,7 +86,7 @@ class ApiProvider {
     String newPassword,
   ) async {
     return await http.post(
-      Uri.parse("$baseUrl/reset-password"),
+      Uri.parse("$authUrl/reset-password"),
 
       headers: {"Content-Type": "application/json"},
 
@@ -88,6 +95,73 @@ class ApiProvider {
         "otp": otp,
         "newPassword": newPassword,
       }),
+    );
+  }
+
+  // GET PROFILE
+  static Future<http.Response> getProfile(String token) async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/profile"),
+
+      headers: {
+        "Content-Type": "application/json",
+
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  // UPDATE PROFILE
+  static Future<http.Response> updateProfile({
+    required String token,
+    required String name,
+    required String email,
+    required String password,
+    File? photo,
+  }) async {
+    var request = http.MultipartRequest(
+      "PUT",
+
+      Uri.parse("$penggunaUrl/profile"),
+    );
+
+    // HEADER
+    request.headers["Authorization"] = "Bearer $token";
+
+    // FIELD
+    request.fields["name"] = name;
+
+    request.fields["email"] = email;
+
+    if (password.isNotEmpty) {
+      request.fields["password"] = password;
+    }
+
+    // PHOTO
+    if (photo != null) {
+      request.files.add(await http.MultipartFile.fromPath("photo", photo.path));
+    }
+
+    final streamedResponse = await request.send();
+
+    return await http.Response.fromStream(streamedResponse);
+  }
+
+  // GET VIDEO TUTORIAL
+  static Future<http.Response> getTutorialVideos() async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/tutorial-video"),
+
+      headers: {"Content-Type": "application/json"},
+    );
+  }
+
+  // GET PENGRAJIN
+  static Future<http.Response> getPengrajin() async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/pengrajin"),
+
+      headers: {"Content-Type": "application/json"},
     );
   }
 }

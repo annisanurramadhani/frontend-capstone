@@ -10,6 +10,7 @@ abstract class Routes {
 
   static const BELAJAR_ANYAMAN = _Paths.BELAJAR_ANYAMAN;
   static const MATERI_ANYAMAN = _Paths.MATERI_ANYAMAN;
+  static const DETAIL_VIDEO = _Paths.DETAIL_VIDEO;
   static const DAFTAR_PENGRAJIN = _Paths.DAFTAR_PENGRAJIN;
   static const PROFIL_PENGRAJIN = _Paths.PROFIL_PENGRAJIN;
 
@@ -76,7 +77,8 @@ abstract class _Paths {
   static const OTP_LUPA_PASSWORD = '/otp-lupa-password';
   static const PASSWORD_BARU = '/password-baru';
   static const DETAIL_KELAS = '/detail-kelas';
+  static const DETAIL_VIDEO = '/detail-video';
   static const LIHAT_PESANAN = '/lihat-pesanan';
-  
+
   static const RIWAYAT_AKTIVITAS = '/riwayat-aktivitas';
 }

@@ -73,6 +73,8 @@ import '../modules/pengguna/tahapan_kelas/views/tahapan_kelas_view.dart';
 import '../modules/pengguna/riwayat_aktivitas/bindings/riwayat_aktivitas_binding.dart';
 import '../modules/pengguna/riwayat_aktivitas/views/riwayat_aktivitas_view.dart';
 
+import '../modules/pengguna/belajar_anyaman/detail_video/bindings/detail_video_binding.dart';
+import '../modules/pengguna/belajar_anyaman/detail_video/views/detail_video_view.dart';
 // app_pages.dart
 
 part 'app_routes.dart';
@@ -144,6 +146,12 @@ class AppPages {
       name: Routes.MATERI_ANYAMAN,
       page: () => const MateriAnyamanView(),
       binding: MateriAnyamanBinding(),
+    ),
+
+    GetPage(
+      name: Routes.DETAIL_VIDEO,
+      page: () => const DetailVideoView(),
+      binding: DetailVideoBinding(),
     ),
 
     // PENGRAJIN

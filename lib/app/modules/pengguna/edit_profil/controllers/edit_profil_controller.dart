@@ -1,26 +1,31 @@
 // edit_profil_controller.dart
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-class EditProfilController
-    extends GetxController {
+import 'package:image_picker/image_picker.dart';
 
-  RxBool isLoading =
-      false.obs;
+import '../../../../data/services/auth_service.dart';
 
-  RxBool isPasswordHidden =
-      true.obs;
+import '../../../../data/services/pengguna_service.dart';
 
-  final namaController =
-      TextEditingController();
+class EditProfilController extends GetxController {
+  RxBool isLoading = false.obs;
 
-  final emailController =
-      TextEditingController();
+  RxBool isPasswordHidden = true.obs;
 
-  final passwordController =
-      TextEditingController();
+  final namaController = TextEditingController();
+
+  final emailController = TextEditingController();
+
+  final passwordController = TextEditingController();
+
+  Rx<File?> selectedImage = Rx<File?>(null);
+
+  RxString photoUrl = "".obs;
 
   @override
   void onInit() {
@@ -30,91 +35,116 @@ class EditProfilController
   }
 
   Future<void> getProfil() async {
-
     try {
+      final user = AuthService.getUser();
 
-      isLoading.value =
-          true;
+      namaController.text = user["name"] ?? "";
 
-      // API BACKEND
-      // ambil data profil
+      emailController.text = user["email"] ?? "";
 
-      await Future.delayed(
-        const Duration(
-          milliseconds: 500,
-        ),
-      );
-
+      photoUrl.value = user["photo"] ?? "";
     } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
 
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
+  // PILIH FOTO
+  Future<void> pilihFoto() async {
+    try {
+      final picker = ImagePicker();
 
-    } finally {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-      isLoading.value =
-          false;
+      if (pickedFile != null) {
+        selectedImage.value = File(pickedFile.path);
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
     }
   }
 
   void togglePassword() {
-
-    isPasswordHidden.value =
-        !isPasswordHidden.value;
+    isPasswordHidden.value = !isPasswordHidden.value;
   }
 
   void kembali() {
-
     Get.back();
   }
 
-  Future<void>
-      simpanPerubahan() async {
-
+  Future<void> simpanPerubahan() async {
     try {
+      isLoading.value = true;
 
-      isLoading.value =
-          true;
+      // VALIDASI NAMA
+      if (namaController.text.trim().isEmpty) {
+        isLoading.value = false;
 
-      // API BACKEND
-      // update profil user
+        Get.snackbar("Peringatan", "Nama wajib diisi");
 
-      await Future.delayed(
-        const Duration(
-          seconds: 1,
-        ),
+        return;
+      }
+
+      // VALIDASI EMAIL
+      if (emailController.text.trim().isEmpty) {
+        isLoading.value = false;
+
+        Get.snackbar("Peringatan", "Email wajib diisi");
+
+        return;
+      }
+
+      // VALIDASI PASSWORD
+      if (passwordController.text.isNotEmpty &&
+          passwordController.text.length < 6) {
+        isLoading.value = false;
+
+        Get.snackbar("Peringatan", "Password minimal 6 karakter");
+
+        return;
+      }
+
+      // UPDATE PROFILE
+      final response = await PenggunaService.updateProfile(
+        name: namaController.text.trim(),
+
+        email: emailController.text.trim(),
+
+        password: passwordController.text,
+
+        photo: selectedImage.value,
       );
 
-      Get.snackbar(
-        "Berhasil",
-        "Profil berhasil diperbarui",
-      );
+      print(response);
 
+      // SUCCESS
+      if (response['success'] == true) {
+        // UPDATE STORAGE
+        AuthService.box.write("user", response['user']);
+
+        // CLOSE LOADING
+        isLoading.value = false;
+
+        // KEMBALI KE PROFILE
+        Get.back(result: true);
+
+        // SNACKBAR
+        Get.snackbar(
+          "Berhasil",
+          response['message'],
+
+          backgroundColor: Colors.green,
+
+          colorText: Colors.white,
+        );
+      } else {
+        isLoading.value = false;
+
+        Get.snackbar("Error", response['message']);
+      }
     } catch (e) {
+      isLoading.value = false;
 
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
-
-    } finally {
-
-      isLoading.value =
-          false;
+      Get.snackbar("Error", e.toString());
     }
-  }
-
-  @override
-  void onClose() {
-
-    namaController.dispose();
-
-    emailController.dispose();
-
-    passwordController.dispose();
-
-    super.onClose();
   }
 }

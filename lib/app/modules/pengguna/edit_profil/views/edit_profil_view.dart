@@ -1,11 +1,16 @@
 // edit_profil_view.dart
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
 import '../controllers/edit_profil_controller.dart';
+
 import '../../../../global_widgets/custom_navbar.dart';
+
+import '../../../../data/providers/api_provider.dart';
 
 class EditProfilView extends GetView<EditProfilController> {
   const EditProfilView({super.key});
@@ -17,16 +22,13 @@ class EditProfilView extends GetView<EditProfilController> {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
 
-      // EDIT PROFIL
       bottomNavigationBar: const CustomNavbar(currentIndex: 2),
 
       body: SafeArea(
         child: Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
           return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+
             padding: EdgeInsets.all(size.width * 0.055),
 
             child: Column(
@@ -71,38 +73,69 @@ class EditProfilView extends GetView<EditProfilController> {
                 // FOTO
                 Stack(
                   children: [
-                    CircleAvatar(
-                      radius: size.width * 0.16,
+                    Obx(() {
+                      // FOTO PILIHAN
+                      if (controller.selectedImage.value != null) {
+                        return CircleAvatar(
+                          radius: size.width * 0.16,
 
-                      backgroundColor: const Color(0xFFF3EAE0),
+                          backgroundImage: FileImage(
+                            File(controller.selectedImage.value!.path),
+                          ),
+                        );
+                      }
 
-                      child: Icon(
-                        Icons.person,
+                      // FOTO DARI API
+                      if (controller.photoUrl.value.isNotEmpty) {
+                        return CircleAvatar(
+                          radius: size.width * 0.16,
 
-                        size: size.width * 0.16,
+                          backgroundImage: NetworkImage(
+                            "${ApiProvider.baseUrl}${controller.photoUrl.value}",
+                          ),
+                        );
+                      }
 
-                        color: const Color(0xFF5A3116),
-                      ),
-                    ),
+                      // DEFAULT
+                      return CircleAvatar(
+                        radius: size.width * 0.16,
+
+                        backgroundColor: const Color(0xFFF3EAE0),
+
+                        child: Icon(
+                          Icons.person,
+
+                          size: size.width * 0.16,
+
+                          color: const Color(0xFF5A3116),
+                        ),
+                      );
+                    }),
 
                     Positioned(
                       bottom: 0,
+
                       right: 0,
 
-                      child: Container(
-                        width: 50,
-                        height: 50,
+                      child: GestureDetector(
+                        onTap: controller.pilihFoto,
 
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF5A3116),
+                        child: Container(
+                          width: 50,
 
-                          shape: BoxShape.circle,
-                        ),
+                          height: 50,
 
-                        child: const Icon(
-                          Icons.camera_alt_outlined,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF5A3116),
 
-                          color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+
+                          child: const Icon(
+                            Icons.camera_alt_outlined,
+
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -149,7 +182,9 @@ class EditProfilView extends GetView<EditProfilController> {
                   height: 60,
 
                   child: ElevatedButton(
-                    onPressed: controller.simpanPerubahan,
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : controller.simpanPerubahan,
 
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF5A3116),
@@ -159,17 +194,19 @@ class EditProfilView extends GetView<EditProfilController> {
                       ),
                     ),
 
-                    child: Text(
-                      "Simpan Perubahan",
+                    child: controller.isLoading.value
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            "Simpan Perubahan",
 
-                      style: TextStyle(
-                        fontSize: size.width * 0.045,
+                            style: TextStyle(
+                              fontSize: size.width * 0.045,
 
-                        fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.bold,
 
-                        color: Colors.white,
-                      ),
-                    ),
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
 
