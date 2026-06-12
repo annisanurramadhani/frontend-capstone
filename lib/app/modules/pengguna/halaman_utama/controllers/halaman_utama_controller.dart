@@ -64,22 +64,6 @@ class HalamanUtamaController extends GetxController {
         "route": Routes.PRODUK_ANYAMAN,
       },
 
-      {
-        "title": "Jadwal Saya",
-
-        "icon": Icons.calendar_month_outlined,
-
-        "route": Routes.JADWAL_SAYA,
-      },
-
-      {
-        "title": "Riwayat Kelas",
-
-        "icon": Icons.history_outlined,
-
-        "route": Routes.RIWAYAT_KELAS,
-      },
-
       {"title": "Profil", "icon": Icons.person_outline, "route": Routes.PROFIL},
     ]);
   }

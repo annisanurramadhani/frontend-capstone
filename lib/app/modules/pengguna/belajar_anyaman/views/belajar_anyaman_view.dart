@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../detail_video/views/detail_video_view.dart';
+import '../../detail_video/views/detail_video_view.dart';
 
 import '../controllers/belajar_anyaman_controller.dart';
 

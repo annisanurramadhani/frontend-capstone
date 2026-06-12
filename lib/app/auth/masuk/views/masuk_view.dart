@@ -24,16 +24,13 @@ class MasukView extends GetView<MasukController> {
 
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
 
-                colors: [Color(0xFFF5E6D3), Color(0xFFD7A97B)],
+                colors: [Color(0xFFF8EBDD), Color(0xFFE8D2BC)],
               ),
             ),
           ),
-
-          // OVERLAY
-          Container(color: Colors.white.withValues(alpha: 0.15)),
 
           SafeArea(
             child: SingleChildScrollView(
@@ -45,7 +42,6 @@ class MasukView extends GetView<MasukController> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: size.width * 0.08,
-
                     vertical: 24,
                   ),
 
@@ -53,47 +49,63 @@ class MasukView extends GetView<MasukController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
 
                     children: [
-                      SizedBox(height: size.height * 0.02),
+                      SizedBox(height: size.height * 0.01),
 
-                      // BACK
-                      IconButton(
-                        onPressed: () {
-                          Get.back();
-                        },
+                      // HEADER
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Get.back();
+                            },
 
-                        icon: const Icon(
-                          Icons.arrow_back_ios_new,
+                            icon: const Icon(
+                              Icons.arrow_back_ios_new,
 
-                          color: Color(0xFF5A3116),
-                        ),
-                      ),
-
-                      SizedBox(height: size.height * 0.02),
-
-                      // LOGO
-                      Center(
-                        child: Container(
-                          width: size.width * 0.22,
-
-                          height: size.width * 0.22,
-
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.85),
-
-                            shape: BoxShape.circle,
+                              color: Color(0xFF5A3116),
+                            ),
                           ),
 
-                          child: Icon(
-                            Icons.grid_view_rounded,
+                          const Spacer(),
 
-                            size: size.width * 0.11,
+                          // LOGO
+                          Container(
+                            width: size.width * 0.18,
 
-                            color: const Color(0xFF8B5E3C),
+                            height: size.width * 0.18,
+
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+
+                              shape: BoxShape.circle,
+
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+
+                                  blurRadius: 12,
+
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+
+                            child: Icon(
+                              Icons.grid_view_rounded,
+
+                              size: size.width * 0.09,
+
+                              color: const Color(0xFF8B5E3C),
+                            ),
                           ),
-                        ),
+
+                          const Spacer(),
+
+                          const SizedBox(width: 48),
+                        ],
                       ),
 
-                      SizedBox(height: size.height * 0.03),
+                      SizedBox(height: size.height * 0.04),
 
                       // TITLE
                       Center(
@@ -101,7 +113,7 @@ class MasukView extends GetView<MasukController> {
                           "Masuk",
 
                           style: TextStyle(
-                            fontSize: size.width * 0.09,
+                            fontSize: size.width * 0.1,
 
                             fontWeight: FontWeight.bold,
 
@@ -110,8 +122,9 @@ class MasukView extends GetView<MasukController> {
                         ),
                       ),
 
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
 
+                      // SUBTITLE
                       Center(
                         child: Text(
                           "Masuk untuk mulai belajar anyaman bambu.",
@@ -121,9 +134,9 @@ class MasukView extends GetView<MasukController> {
                           style: TextStyle(
                             fontSize: size.width * 0.042,
 
-                            color: Colors.brown,
+                            color: Colors.brown.shade700,
 
-                            height: 1.6,
+                            height: 1.7,
                           ),
                         ),
                       ),
@@ -137,9 +150,19 @@ class MasukView extends GetView<MasukController> {
                         padding: EdgeInsets.all(size.width * 0.06),
 
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.90),
+                          color: Colors.white.withOpacity(0.9),
 
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(32),
+
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+
+                              blurRadius: 20,
+
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
                         ),
 
                         child: Column(
@@ -237,7 +260,7 @@ class MasukView extends GetView<MasukController> {
                                     elevation: 0,
 
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18),
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
                                   ),
 
@@ -310,7 +333,7 @@ class MasukView extends GetView<MasukController> {
                                   ),
 
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
 

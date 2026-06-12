@@ -39,6 +39,11 @@ abstract class Routes {
   static const DETAIL_KELAS = _Paths.DETAIL_KELAS;
   static const LIHAT_PESANAN = _Paths.LIHAT_PESANAN;
   static const RIWAYAT_AKTIVITAS = _Paths.RIWAYAT_AKTIVITAS;
+  
+  static const PEMESANAN_PRODUK = _Paths.PEMESANAN_PRODUK;
+  static const RIWAYAT_PESANAN = _Paths.RIWAYAT_PESANAN;
+  static const DETAIL_PESANAN = _Paths.DETAIL_PESANAN;
+  static const STATUS_PENGIRIMAN = _Paths.STATUS_PENGIRIMAN;
 }
 
 abstract class _Paths {
@@ -81,4 +86,8 @@ abstract class _Paths {
   static const LIHAT_PESANAN = '/lihat-pesanan';
 
   static const RIWAYAT_AKTIVITAS = '/riwayat-aktivitas';
+  static const PEMESANAN_PRODUK = '/pemesanan-produk';
+  static const RIWAYAT_PESANAN = '/riwayat-pesanan';
+  static const DETAIL_PESANAN = '/detail-pesanan';
+  static const STATUS_PENGIRIMAN = '/status-pengiriman';
 }
