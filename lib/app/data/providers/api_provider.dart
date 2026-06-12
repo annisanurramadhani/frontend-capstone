@@ -28,6 +28,10 @@ class ApiProvider {
 
   static String get penggunaUrl => kIsWeb ? webPenggunaUrl : mobilePenggunaUrl;
 
+  // Payment URL
+  static String get paymentUrl =>
+      kIsWeb ? "$webBaseUrl/api/payment" : "$mobileBaseUrl/api/payment";
+
   // LOGIN
   static Future<http.Response> login(String email, String password) async {
     return await http.post(
@@ -169,6 +173,72 @@ class ApiProvider {
     return await http.get(
       Uri.parse("$penggunaUrl/pengrajin"),
       headers: {"Content-Type": "application/json"},
+    );
+  }
+
+  // GET KELAS
+  static Future<http.Response> getKelas() async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/kelas"),
+
+      headers: {"Content-Type": "application/json"},
+    );
+  }
+  // CREATE BOOKING
+
+  static Future<http.Response> createBooking({
+    required Map<String, dynamic> data,
+  }) async {
+    return await http.post(
+      Uri.parse("$penggunaUrl/booking"),
+
+      headers: {"Content-Type": "application/json"},
+
+      body: jsonEncode(data),
+    );
+  }
+
+  static Future<http.Response> checkStatusBayar(String orderId) async {
+    return await http.get(
+      Uri.parse("$baseUrl/api/payment/status/$orderId"),
+      headers: {"Content-Type": "application/json"},
+    );
+  }
+  // GET RIWAYAT BOOKING
+
+  static Future<http.Response> getRiwayatBooking(String token) async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/riwayat-booking"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  // GET JADWAL KELAS
+  static Future<http.Response> getJadwalKelas(String token) async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/jadwal-kelas"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  // CREATE REVIEW
+  static Future<http.Response> createReview({
+    required String token,
+    required Map<String, dynamic> data,
+  }) async {
+    return await http.post(
+      Uri.parse("$penggunaUrl/review"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode(data),
     );
   }
 }

@@ -1,205 +1,141 @@
-// jadwal_saya_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/jadwal_saya_controller.dart';
 import '../../../../global_widgets/custom_navbar.dart';
+import '../controllers/jadwal_saya_controller.dart';
+import '../../../../routes/app_pages.dart';
 
 class JadwalSayaView extends GetView<JadwalSayaController> {
   const JadwalSayaView({super.key});
 
+  Color getStatusColor(String status) {
+    switch (status) {
+      case "terjadwal":
+        return Colors.blue;
+      case "selesai":
+        return Colors.green;
+      default:
+        return Colors.orange;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFFDF8F3),
-
-      // JADWAL SAYA
-      bottomNavigationBar: const CustomNavbar(currentIndex: 0),
-
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(size.width * 0.055),
-
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-
-            children: [
-              Text(
-                "Jadwal Saya",
-
-                style: TextStyle(
-                  fontSize: size.width * 0.09,
-
-                  fontWeight: FontWeight.bold,
-
-                  color: const Color(0xFF3E2723),
-                ),
-              ),
-
-              SizedBox(height: size.height * 0.03),
-
-              Obx(
-                () => Row(
-                  children: [
-                    tabItem(title: "Jadwal", index: 0),
-
-                    tabItem(title: "Riwayat", index: 1),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: size.height * 0.03),
-
-              Expanded(
-                child: Obx(() {
-                  if (controller.selectedTab.value == 0) {
-                    if (controller.jadwalList.isEmpty) {
-                      return emptyState(
-                        icon: Icons.calendar_month_outlined,
-
-                        title: "Belum Ada Jadwal",
-
-                        subtitle:
-                            "Jadwal kelas yang kamu pesan akan muncul di sini.",
-                      );
-                    }
-
-                    return ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-
-                      itemCount: controller.jadwalList.length,
-
-                      itemBuilder: (context, index) {
-                        final data = controller.jadwalList[index];
-
-                        return jadwalCard(data: data);
-                      },
-                    );
-                  }
-
-                  if (controller.riwayatList.isEmpty) {
-                    return emptyState(
-                      icon: Icons.history,
-
-                      title: "Belum Ada Riwayat",
-
-                      subtitle:
-                          "Riwayat kelas yang sudah selesai akan muncul di sini.",
-                    );
-                  }
-
-                  return ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-
-                    itemCount: controller.riwayatList.length,
-
-                    itemBuilder: (context, index) {
-                      final data = controller.riwayatList[index];
-
-                      return jadwalCard(data: data);
-                    },
-                  );
-                }),
-              ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFFDF8F3),
+        bottomNavigationBar: const CustomNavbar(currentIndex: 0),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFFFDF8F3),
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            "Jadwal Saya",
+            style: TextStyle(
+              color: Color(0xFF5A3116),
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+            ),
+          ),
+          iconTheme: const IconThemeData(color: Color(0xFF5A3116)),
+          bottom: const TabBar(
+            labelColor: Color(0xFF5A3116),
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: Color(0xFF5A3116),
+            indicatorWeight: 2.5,
+            labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+            tabs: [
+              Tab(text: "Jadwal"),
+              Tab(text: "Riwayat"),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget jadwalCard({required dynamic data}) {
-    return GestureDetector(
-      onTap: () {
-        controller.lihatDetail(data);
-      },
-
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 22),
-
-        padding: const EdgeInsets.all(18),
-
-        decoration: BoxDecoration(
-          color: Colors.white,
-
-          borderRadius: BorderRadius.circular(28),
-        ),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-
+        body: TabBarView(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    data["nama_kelas"] ?? "",
-
-                    style: const TextStyle(
-                      fontSize: 24,
-
-                      fontWeight: FontWeight.bold,
-
-                      color: Color(0xFF3E2723),
-                    ),
-                  ),
-                ),
-
-                const Icon(
-                  Icons.arrow_forward_ios,
-
-                  color: Color(0xFF5A3116),
-
-                  size: 18,
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 18),
-
-            infoRow(Icons.calendar_month_outlined, data["tanggal"] ?? ""),
-
-            const SizedBox(height: 12),
-
-            infoRow(Icons.access_time, data["jam"] ?? ""),
-
-            const SizedBox(height: 12),
-
-            infoRow(Icons.person_outline, data["pengrajin"] ?? ""),
-
-            const SizedBox(height: 18),
-
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-
-              decoration: BoxDecoration(
-                color: const Color(0xFFF3EAE0),
-
-                borderRadius: BorderRadius.circular(14),
-              ),
-
-              child: Text(
-                data["status"] ?? "",
-
-                style: const TextStyle(
-                  fontSize: 16,
-
-                  fontWeight: FontWeight.bold,
-
-                  color: Color(0xFF5A3116),
-                ),
-              ),
-            ),
+            // ── Tab 1: Jadwal Aktif ──
+            _buildJadwalTab(),
+            // ── Tab 2: Riwayat ──
+            _buildRiwayatTab(),
           ],
         ),
       ),
     );
   }
 
-  Widget emptyState({
+  Widget _buildJadwalTab() {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(
+          child: CircularProgressIndicator(color: Color(0xFF8B5E3C)),
+        );
+      }
+
+      // Filter hanya jadwal yang belum selesai / dibatalkan
+      final activeJadwal = controller.jadwal
+          .where((item) =>
+              item["statusKelas"] != "selesai" &&
+              item["statusKelas"] != "dibatalkan")
+          .toList();
+
+      if (activeJadwal.isEmpty) {
+        return _buildEmptyState(
+          icon: Icons.calendar_month_outlined,
+          title: "Belum Ada Jadwal",
+          subtitle: "Jadwal kelas yang kamu pesan akan muncul di sini.",
+        );
+      }
+
+      return RefreshIndicator(
+        onRefresh: controller.getJadwal,
+        color: const Color(0xFF8B5E3C),
+        child: ListView.builder(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+          itemCount: activeJadwal.length,
+          itemBuilder: (context, index) =>
+              _buildJadwalCard(activeJadwal[index]),
+        ),
+      );
+    });
+  }
+
+  Widget _buildRiwayatTab() {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(
+          child: CircularProgressIndicator(color: Color(0xFF8B5E3C)),
+        );
+      }
+
+      // Filter jadwal yang sudah selesai atau dibatalkan
+      final historyJadwal = controller.jadwal
+          .where((item) =>
+              item["statusKelas"] == "selesai" ||
+              item["statusKelas"] == "dibatalkan")
+          .toList();
+
+      if (historyJadwal.isEmpty) {
+        return _buildEmptyState(
+          icon: Icons.history_outlined,
+          title: "Belum Ada Riwayat",
+          subtitle: "Riwayat kelas yang telah selesai akan muncul di sini.",
+        );
+      }
+
+      return RefreshIndicator(
+        onRefresh: controller.getJadwal,
+        color: const Color(0xFF8B5E3C),
+        child: ListView.builder(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+          itemCount: historyJadwal.length,
+          itemBuilder: (context, index) =>
+              _buildJadwalCard(historyJadwal[index]),
+        ),
+      );
+    });
+  }
+
+  Widget _buildEmptyState({
     required IconData icon,
     required String title,
     required String subtitle,
@@ -207,51 +143,35 @@ class JadwalSayaView extends GetView<JadwalSayaController> {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-
         children: [
           Container(
-            width: 110,
-            height: 110,
-
-            decoration: const BoxDecoration(
-              color: Color(0xFFF3EAE0),
-
+            width: 90,
+            height: 90,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
               shape: BoxShape.circle,
             ),
-
-            child: Icon(icon, size: 50, color: const Color(0xFF5A3116)),
+            child: Icon(icon, size: 42, color: Colors.grey.shade500),
           ),
-
-          const SizedBox(height: 24),
-
+          const SizedBox(height: 20),
           Text(
             title,
-
             style: const TextStyle(
-              fontSize: 28,
-
+              fontSize: 18,
               fontWeight: FontWeight.bold,
-
               color: Color(0xFF3E2723),
             ),
           ),
-
-          const SizedBox(height: 14),
-
+          const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-
+            padding: const EdgeInsets.symmetric(horizontal: 48),
             child: Text(
               subtitle,
-
               textAlign: TextAlign.center,
-
-              style: const TextStyle(
-                fontSize: 18,
-
-                color: Colors.brown,
-
-                height: 1.7,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade600,
+                height: 1.5,
               ),
             ),
           ),
@@ -260,154 +180,151 @@ class JadwalSayaView extends GetView<JadwalSayaController> {
     );
   }
 
-  Widget tabItem({required String title, required int index}) {
-    final isActive = controller.selectedTab.value == index;
-
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          controller.gantiTab(index);
-        },
-
-        child: Column(
-          children: [
-            Text(
-              title,
-
-              style: TextStyle(
-                fontSize: 22,
-
-                fontWeight: FontWeight.bold,
-
-                color: isActive ? const Color(0xFF3E2723) : Colors.grey,
+  Widget _buildJadwalCard(Map<String, dynamic> item) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Nama kelas + badge status
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  item["kelas"]?["namaKelas"] ?? "-",
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF5A3116),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(width: 8),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                decoration: BoxDecoration(
+                  color: getStatusColor(item["statusKelas"] ?? "")
+                      .withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Text(
+                  (item["statusKelas"] ?? "menunggu")
+                      .toString()
+                      .toUpperCase(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                    color: getStatusColor(item["statusKelas"] ?? ""),
+                  ),
+                ),
+              ),
+            ],
+          ),
 
+          const SizedBox(height: 12),
+          const Divider(height: 1, color: Color(0xFFEEE8E0)),
+          const SizedBox(height: 12),
+
+          _buildInfoRow(Icons.person_outline, item["pengrajin"]?["name"] ?? "-"),
+          const SizedBox(height: 8),
+          _buildInfoRow(Icons.calendar_today_outlined, item["tanggal"] ?? "-"),
+          const SizedBox(height: 8),
+          _buildInfoRow(Icons.access_time_outlined, item["jamPelatihan"] ?? "-"),
+          const SizedBox(height: 8),
+          _buildInfoRow(
+            Icons.location_on_outlined,
+            item["lokasi"] ?? "Balai Desa Dukuhsembung",
+            isMultiLine: true,
+          ),
+
+          // Tombol rating / sudah review
+          if (item["statusKelas"] == "selesai" &&
+              (item["sudahReview"] ?? false) == false) ...[
             const SizedBox(height: 14),
-
-            Container(
-              height: 3,
-
-              decoration: BoxDecoration(
-                color: isActive ? const Color(0xFF5A3116) : Colors.transparent,
-
-                borderRadius: BorderRadius.circular(20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Get.toNamed(
+                    Routes.BERI_RATING,
+                    arguments: {
+                      "bookingId": item["id"],
+                      "pengrajinId": item["pengrajin"]["id"],
+                      "pengrajinNama": item["pengrajin"]["name"],
+                    },
+                  );
+                },
+                icon: const Icon(Icons.star, color: Colors.white, size: 18),
+                label: const Text(
+                  "Beri Rating",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFB300),
+                  minimumSize: const Size.fromHeight(44),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
               ),
             ),
           ],
-        ),
+
+          if ((item["sudahReview"] ?? false) == true) ...[
+            const SizedBox(height: 14),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.green.shade50,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.green.shade200),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.check_circle, color: Colors.green, size: 18),
+                  SizedBox(width: 8),
+                  Text(
+                    "Anda sudah memberikan rating",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
 
-  Widget infoRow(IconData icon, String text) {
+  Widget _buildInfoRow(IconData icon, String text, {bool isMultiLine = false}) {
     return Row(
+      crossAxisAlignment:
+          isMultiLine ? CrossAxisAlignment.start : CrossAxisAlignment.center,
       children: [
-        Icon(icon, size: 20, color: Colors.brown),
-
-        const SizedBox(width: 10),
-
+        Icon(icon, size: 16, color: const Color(0xFF8B5E3C)),
+        const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,
-
-            style: const TextStyle(fontSize: 17, color: Colors.black87),
+            style: const TextStyle(fontSize: 13, color: Color(0xFF4A4A4A)),
           ),
         ),
       ],
-    );
-  }
-
-  Widget bottomNavbar() {
-    return Container(
-      height: 85,
-
-      decoration: const BoxDecoration(color: Colors.white),
-
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-        children: [
-          navbarItem(
-            icon: Icons.home_outlined,
-
-            title: "Beranda",
-
-            active: false,
-
-            onTap: controller.keBeranda,
-          ),
-
-          navbarItem(
-            icon: Icons.search,
-
-            title: "Belajar",
-
-            active: false,
-
-            onTap: controller.keCariKelas,
-          ),
-
-          navbarItem(
-            icon: Icons.calendar_month,
-
-            title: "Jadwal",
-
-            active: true,
-
-            onTap: () {},
-          ),
-
-          navbarItem(
-            icon: Icons.person_outline,
-
-            title: "Profil",
-
-            active: false,
-
-            onTap: controller.keProfil,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget navbarItem({
-    required IconData icon,
-    required String title,
-    required bool active,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-
-        children: [
-          Icon(
-            icon,
-
-            size: 28,
-
-            color: active ? const Color(0xFF5A3116) : Colors.grey,
-          ),
-
-          const SizedBox(height: 6),
-
-          Text(
-            title,
-
-            style: TextStyle(
-              fontSize: 15,
-
-              fontWeight: active ? FontWeight.bold : FontWeight.normal,
-
-              color: active ? const Color(0xFF5A3116) : Colors.grey,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

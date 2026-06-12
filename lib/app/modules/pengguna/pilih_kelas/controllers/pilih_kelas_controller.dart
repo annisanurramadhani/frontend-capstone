@@ -1,25 +1,29 @@
 import 'package:get/get.dart';
+
 import '../../../../data/services/pengguna_service.dart';
 
-class RiwayatKelasController extends GetxController {
-  RxBool isLoading = true.obs;
+class PilihKelasController extends GetxController {
+  RxBool isLoading = false.obs;
 
-  RxList bookings = [].obs;
+  RxList kelas = [].obs;
 
   @override
   void onInit() {
     super.onInit();
-    getRiwayat();
+
+    getKelas();
   }
 
-  Future<void> getRiwayat() async {
+  Future<void> getKelas() async {
     try {
       isLoading.value = true;
 
-      final response = await PenggunaService.getRiwayatBooking();
+      final response = await PenggunaService.getKelas();
 
       if (response["success"] == true) {
-        bookings.assignAll(response["bookings"] ?? []);
+        kelas.value = response["kelas"];
+      } else {
+        Get.snackbar("Error", response["message"]);
       }
     } catch (e) {
       Get.snackbar("Error", e.toString());

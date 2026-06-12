@@ -9,10 +9,11 @@ abstract class Routes {
   static const HALAMAN_UTAMA = _Paths.HALAMAN_UTAMA;
 
   static const BELAJAR_ANYAMAN = _Paths.BELAJAR_ANYAMAN;
-  static const MATERI_ANYAMAN = _Paths.MATERI_ANYAMAN;
   static const DETAIL_VIDEO = _Paths.DETAIL_VIDEO;
   static const DAFTAR_PENGRAJIN = _Paths.DAFTAR_PENGRAJIN;
   static const PROFIL_PENGRAJIN = _Paths.PROFIL_PENGRAJIN;
+
+  static const PESAN_PELATIHAN = _Paths.PESAN_PELATIHAN;
 
   static const TAHAPAN_KELAS = _Paths.TAHAPAN_KELAS;
   static const PILIH_JADWAL = _Paths.PILIH_JADWAL;
@@ -36,9 +37,11 @@ abstract class Routes {
 
   static const OTP_LUPA_PASSWORD = _Paths.OTP_LUPA_PASSWORD;
   static const PASSWORD_BARU = _Paths.PASSWORD_BARU;
-  static const DETAIL_KELAS = _Paths.DETAIL_KELAS;
+  static const PILIH_KELAS = _Paths.PILIH_KELAS;
   static const LIHAT_PESANAN = _Paths.LIHAT_PESANAN;
   static const RIWAYAT_AKTIVITAS = _Paths.RIWAYAT_AKTIVITAS;
+  static const PAYMENT_WEBVIEW = _Paths.PAYMENT_WEBVIEW;
+  static const BERI_RATING = _Paths.BERI_RATING;
 }
 
 abstract class _Paths {
@@ -50,7 +53,6 @@ abstract class _Paths {
   static const HALAMAN_UTAMA = '/halaman-utama';
 
   static const BELAJAR_ANYAMAN = '/belajar-anyaman';
-  static const MATERI_ANYAMAN = '/materi-anyaman';
   static const DAFTAR_PENGRAJIN = '/daftar-pengrajin';
   static const PROFIL_PENGRAJIN = '/profil-pengrajin';
 
@@ -58,6 +60,7 @@ abstract class _Paths {
   static const PILIH_JADWAL = '/pilih-jadwal';
   static const KONFIRMASI_PEMBAYARAN = '/konfirmasi-pembayaran';
   static const PEMBAYARAN_PELATIHAN = '/pembayaran-pelatihan';
+  static const PESAN_PELATIHAN = '/pesan-pelatihan';
 
   static const PEMBAYARAN_BERHASIL = '/pembayaran-berhasil';
   static const JADWAL_SAYA = '/jadwal-saya';
@@ -76,9 +79,11 @@ abstract class _Paths {
 
   static const OTP_LUPA_PASSWORD = '/otp-lupa-password';
   static const PASSWORD_BARU = '/password-baru';
-  static const DETAIL_KELAS = '/detail-kelas';
+  static const PILIH_KELAS = '/pilih-kelas';
   static const DETAIL_VIDEO = '/detail-video';
   static const LIHAT_PESANAN = '/lihat-pesanan';
 
   static const RIWAYAT_AKTIVITAS = '/riwayat-aktivitas';
+  static const PAYMENT_WEBVIEW = '/payment-webview';
+  static const BERI_RATING = '/beri-rating';
 }

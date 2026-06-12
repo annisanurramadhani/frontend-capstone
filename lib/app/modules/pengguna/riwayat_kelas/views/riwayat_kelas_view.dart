@@ -1,315 +1,188 @@
-// riwayat_kelas_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/riwayat_kelas_controller.dart';
-import '../../../../global_widgets/custom_navbar.dart';
 
 class RiwayatKelasView extends GetView<RiwayatKelasController> {
   const RiwayatKelasView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFDF8F3),
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "Riwayat Kelas",
+          style: TextStyle(
+            color: Color(0xFF5A3116),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF5A3116)),
+      ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(color: Color(0xFF8B5E3C)),
+          );
+        }
 
-      // RIWAYAT KELAS
-      bottomNavigationBar: const CustomNavbar(currentIndex: 0),
-
-      body: SafeArea(
-        child: Obx(() {
-          if (controller.riwayatKelas.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                children: [
-                  Icon(
-                    Icons.history_outlined,
-
-                    size: size.width * 0.2,
-
-                    color: Colors.brown.shade300,
-                  ),
-
-                  SizedBox(height: size.height * 0.02),
-
-                  Text(
-                    "Belum Ada Riwayat Kelas",
-
-                    style: TextStyle(
-                      fontSize: size.width * 0.055,
-
-                      fontWeight: FontWeight.bold,
-
-                      color: const Color(0xFF3E2723),
-                    ),
-                  ),
-
-                  SizedBox(height: size.height * 0.01),
-
-                  Text(
-                    "Kelas yang selesai akan tampil di sini",
-
-                    style: TextStyle(
-                      fontSize: size.width * 0.04,
-
-                      color: Colors.brown,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-
-            padding: EdgeInsets.all(size.width * 0.055),
-
+        if (controller.bookings.isEmpty) {
+          return const Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Icon(Icons.history, size: 80, color: Colors.grey),
+                SizedBox(height: 12),
                 Text(
-                  "Riwayat Kelas",
-
-                  style: TextStyle(
-                    fontSize: size.width * 0.085,
-
-                    fontWeight: FontWeight.bold,
-
-                    color: const Color(0xFF3E2723),
-                  ),
+                  "Belum ada riwayat pemesanan",
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
-
-                SizedBox(height: size.height * 0.01),
-
-                Text(
-                  "Kelas yang sudah selesai kamu ikuti",
-
-                  style: TextStyle(
-                    fontSize: size.width * 0.042,
-
-                    color: Colors.brown,
-                  ),
-                ),
-
-                SizedBox(height: size.height * 0.03),
-
-                ListView.builder(
-                  itemCount: controller.riwayatKelas.length,
-
-                  shrinkWrap: true,
-
-                  physics: const NeverScrollableScrollPhysics(),
-
-                  itemBuilder: (context, index) {
-                    final kelas = controller.riwayatKelas[index];
-
-                    return GestureDetector(
-                      onTap: () {
-                        controller.keDetailKelas(kelas);
-                      },
-
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: size.height * 0.025),
-
-                        padding: EdgeInsets.all(size.width * 0.045),
-
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-
-                          borderRadius: BorderRadius.circular(28),
-                        ),
-
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 14,
-
-                                    vertical: 8,
-                                  ),
-
-                                  decoration: BoxDecoration(
-                                    color: Colors.green.withOpacity(0.1),
-
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-
-                                  child: const Text(
-                                    "Selesai",
-
-                                    style: TextStyle(
-                                      color: Colors.green,
-
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-
-                                const Icon(
-                                  Icons.arrow_forward_ios,
-
-                                  size: 18,
-
-                                  color: Color(0xFF5A3116),
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: size.height * 0.025),
-
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(22),
-
-                                  child: Image.network(
-                                    kelas["gambar"] ?? "",
-
-                                    width: size.width * 0.3,
-
-                                    height: size.width * 0.4,
-
-                                    fit: BoxFit.cover,
-
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        width: size.width * 0.3,
-
-                                        height: size.width * 0.4,
-
-                                        color: Colors.grey.shade200,
-
-                                        child: const Icon(Icons.image_outlined),
-                                      );
-                                    },
-                                  ),
-                                ),
-
-                                SizedBox(width: size.width * 0.04),
-
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-
-                                    children: [
-                                      Text(
-                                        kelas["nama_kelas"] ?? "",
-
-                                        style: TextStyle(
-                                          fontSize: size.width * 0.055,
-
-                                          fontWeight: FontWeight.bold,
-
-                                          color: const Color(0xFF3E2723),
-
-                                          height: 1.4,
-                                        ),
-                                      ),
-
-                                      SizedBox(height: size.height * 0.015),
-
-                                      infoRow(
-                                        Icons.person_outline,
-
-                                        kelas["pengrajin"] ?? "",
-                                      ),
-
-                                      SizedBox(height: size.height * 0.012),
-
-                                      infoRow(
-                                        Icons.calendar_month_outlined,
-
-                                        kelas["tanggal"] ?? "",
-                                      ),
-
-                                      SizedBox(height: size.height * 0.012),
-
-                                      infoRow(
-                                        Icons.access_time,
-
-                                        kelas["jam"] ?? "",
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: size.height * 0.025),
-
-                            SizedBox(
-                              width: double.infinity,
-
-                              height: 55,
-
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  controller.beriReview(kelas: kelas);
-                                },
-
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF5A3116),
-
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                ),
-
-                                child: Text(
-                                  "Beri Review",
-
-                                  style: TextStyle(
-                                    fontSize: size.width * 0.043,
-
-                                    fontWeight: FontWeight.bold,
-
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-
-                SizedBox(height: size.height * 0.03),
               ],
             ),
           );
-        }),
-      ),
+        }
+
+        return RefreshIndicator(
+          onRefresh: controller.getRiwayat,
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: controller.bookings.length,
+            itemBuilder: (context, index) {
+              final item = controller.bookings[index];
+
+              return Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black12, blurRadius: 8),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF8B5E3C).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.school_outlined,
+                            color: Color(0xFF8B5E3C),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            item["namaKelas"] ?? "-",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF5A3116),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    const Divider(),
+
+                    const SizedBox(height: 12),
+
+                    _infoRow("Pengrajin", item["pengrajin"] ?? "-"),
+
+                    const SizedBox(height: 8),
+
+                    _infoRow("Tanggal", item["tanggal"] ?? "-"),
+
+                    const SizedBox(height: 8),
+
+                    _infoRow("Jam", item["jamPelatihan"] ?? "-"),
+
+                    const SizedBox(height: 8),
+
+                    _infoRow("Metode", item["metodeBayar"] ?? "-"),
+
+                    const SizedBox(height: 8),
+
+                    _infoRow("Total Bayar", "Rp ${item["totalBayar"]}"),
+
+                    const SizedBox(height: 16),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item["orderId"] ?? "-",
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 11,
+                          ),
+                        ),
+
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: item["statusBayar"] == "lunas"
+                                ? const Color(0xFFD1E7DD)
+                                : const Color(0xFFFFF3CD),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            item["statusBayar"] == "lunas"
+                                ? "Lunas"
+                                : "Menunggu",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: item["statusBayar"] == "lunas"
+                                  ? const Color(0xFF0A3622)
+                                  : const Color(0xFF856404),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      }),
     );
   }
 
-  Widget infoRow(IconData icon, String text) {
+  Widget _infoRow(String title, String value) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Icon(icon, size: 20, color: Colors.brown),
-
-        const SizedBox(width: 10),
-
-        Expanded(
+        Text(
+          title,
+          style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+        ),
+        Flexible(
           child: Text(
-            text,
-
-            style: const TextStyle(fontSize: 16, color: Colors.black87),
+            value,
+            textAlign: TextAlign.end,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 13,
+              color: Color(0xFF3E2723),
+            ),
           ),
         ),
       ],

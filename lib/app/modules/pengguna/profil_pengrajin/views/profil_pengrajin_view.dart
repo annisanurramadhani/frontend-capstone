@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../data/providers/api_provider.dart';
+
+import '../../../../routes/app_pages.dart';
 
 class ProfilPengrajinView extends StatelessWidget {
   const ProfilPengrajinView({super.key});
@@ -183,7 +183,7 @@ class ProfilPengrajinView extends StatelessWidget {
             const SizedBox(height: 18),
 
             _buildInfoCard(
-              title: "Nomor WhatsApp",
+              title: "Nomor Telpon",
 
               icon: Icons.phone_outlined,
 
@@ -200,10 +200,7 @@ class ProfilPengrajinView extends StatelessWidget {
 
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Get.snackbar(
-                    "Pelatihan",
-                    "Fitur pemesanan pelatihan segera hadir",
-                  );
+                  Get.toNamed(Routes.PILIH_KELAS, arguments: pengrajin);
                 },
 
                 icon: const Icon(Icons.school_outlined),
@@ -225,39 +222,6 @@ class ProfilPengrajinView extends StatelessWidget {
             ),
 
             const SizedBox(height: 15),
-
-            // BUTTON WHATSAPP
-            SizedBox(
-              width: double.infinity,
-
-              height: 55,
-
-              child: ElevatedButton.icon(
-                onPressed: () async {
-                  final nomor = pengrajin["noTelpon"];
-
-                  final url = Uri.parse("https://wa.me/$nomor");
-
-                  await launchUrl(url, mode: LaunchMode.externalApplication);
-                },
-
-                icon: const Icon(Icons.chat),
-
-                label: const Text("Chat WhatsApp"),
-
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF25D366),
-
-                  foregroundColor: Colors.white,
-
-                  elevation: 0,
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
