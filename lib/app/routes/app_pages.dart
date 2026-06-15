@@ -14,14 +14,14 @@ import '../auth/password_baru/bindings/password_baru_binding.dart';
 import '../auth/password_baru/views/password_baru_view.dart';
 import '../auth/splash/bindings/splash_binding.dart';
 import '../auth/splash/views/splash_view.dart';
+import '../modules/pengrajin/kelas_saya/bindings/kelas_saya_binding.dart';
+import '../modules/pengrajin/kelas_saya/views/kelas_saya_view.dart';
 import '../modules/pengguna/belajar_anyaman/bindings/belajar_anyaman_binding.dart';
 import '../modules/pengguna/belajar_anyaman/views/belajar_anyaman_view.dart';
+import '../modules/pengguna/beri_rating/bindings/beri_rating_binding.dart';
+import '../modules/pengguna/beri_rating/views/beri_rating_view.dart';
 import '../modules/pengguna/daftar_pengrajin/bindings/daftar_pengrajin_binding.dart';
 import '../modules/pengguna/daftar_pengrajin/views/daftar_pengrajin_view.dart';
-import '../modules/pengguna/detail_kelas/bindings/detail_kelas_binding.dart';
-import '../modules/pengguna/detail_kelas/views/detail_kelas_view.dart';
-import '../modules/pengguna/detail_pesanan/bindings/detail_pesanan_binding.dart';
-import '../modules/pengguna/detail_pesanan/views/detail_pesanan_view.dart';
 import '../modules/pengguna/detail_produk/bindings/detail_produk_binding.dart';
 import '../modules/pengguna/detail_produk/views/detail_produk_view.dart';
 import '../modules/pengguna/detail_video/bindings/detail_video_binding.dart';
@@ -36,20 +36,22 @@ import '../modules/pengguna/konfirmasi_pembayaran/bindings/konfirmasi_pembayaran
 import '../modules/pengguna/konfirmasi_pembayaran/views/konfirmasi_pembayaran_view.dart';
 import '../modules/pengguna/lihat_pesanan/bindings/lihat_pesanan_binding.dart';
 import '../modules/pengguna/lihat_pesanan/views/lihat_pesanan_view.dart';
-import '../modules/pengguna/materi_anyaman/bindings/materi_anyaman_binding.dart';
-import '../modules/pengguna/materi_anyaman/views/materi_anyaman_view.dart';
 import '../modules/pengguna/notifikasi/bindings/notifikasi_binding.dart';
 import '../modules/pengguna/notifikasi/views/notifikasi_view.dart';
+import '../modules/pengguna/payment_webview/bindings/payment_webview_binding.dart';
+import '../modules/pengguna/payment_webview/views/payment_webview_view.dart';
 import '../modules/pengguna/pembayaran_berhasil/bindings/pembayaran_berhasil_binding.dart';
 import '../modules/pengguna/pembayaran_berhasil/views/pembayaran_berhasil_view.dart';
 import '../modules/pengguna/pembayaran_pelatihan/bindings/pembayaran_pelatihan_binding.dart';
 import '../modules/pengguna/pembayaran_pelatihan/views/pembayaran_pelatihan_view.dart';
 import '../modules/pengguna/pembayaran_produk/bindings/pembayaran_produk_binding.dart';
 import '../modules/pengguna/pembayaran_produk/views/pembayaran_produk_view.dart';
-import '../modules/pengguna/pemesanan_produk/bindings/pemesanan_produk_binding.dart';
-import '../modules/pengguna/pemesanan_produk/views/pemesanan_produk_view.dart';
+import '../modules/pengguna/pesan_pelatihan/bindings/pesan_pelatihan_binding.dart';
+import '../modules/pengguna/pesan_pelatihan/views/pesan_pelatihan_view.dart';
 import '../modules/pengguna/pilih_jadwal/bindings/pilih_jadwal_binding.dart';
 import '../modules/pengguna/pilih_jadwal/views/pilih_jadwal_view.dart';
+import '../modules/pengguna/pilih_kelas/bindings/pilih_kelas_binding.dart';
+import '../modules/pengguna/pilih_kelas/views/pilih_kelas_view.dart';
 import '../modules/pengguna/produk_anyaman/bindings/produk_anyaman_binding.dart';
 import '../modules/pengguna/produk_anyaman/views/produk_anyaman_view.dart';
 import '../modules/pengguna/profil/bindings/profil_binding.dart';
@@ -60,14 +62,14 @@ import '../modules/pengguna/riwayat_aktivitas/bindings/riwayat_aktivitas_binding
 import '../modules/pengguna/riwayat_aktivitas/views/riwayat_aktivitas_view.dart';
 import '../modules/pengguna/riwayat_kelas/bindings/riwayat_kelas_binding.dart';
 import '../modules/pengguna/riwayat_kelas/views/riwayat_kelas_view.dart';
-import '../modules/pengguna/riwayat_pesanan/bindings/riwayat_pesanan_binding.dart';
-import '../modules/pengguna/riwayat_pesanan/views/riwayat_pesanan_view.dart';
 import '../modules/pengguna/sertifikat/bindings/sertifikat_binding.dart';
 import '../modules/pengguna/sertifikat/views/sertifikat_view.dart';
 import '../modules/pengguna/tahapan_kelas/bindings/tahapan_kelas_binding.dart';
 import '../modules/pengguna/tahapan_kelas/views/tahapan_kelas_view.dart';
-import '../modules/pengguna/status_pengiriman/bindings/status_pengiriman_binding.dart';
-import '../modules/pengguna/status_pengiriman/views/status_pengiriman_view.dart';
+import '../modules/pengrajin/halaman_pengrajin/bindings/halaman_pengrajin_binding.dart';
+import '../modules/pengrajin/halaman_pengrajin/views/halaman_pengrajin_view.dart';
+import '../modules/pengrajin/profil_pelatih/bindings/profil_pelatih_binding.dart';
+import '../modules/pengrajin/profil_pelatih/views/profil_pelatih_view.dart';
 
 // app_pages.dart
 
@@ -137,12 +139,6 @@ class AppPages {
     ),
 
     GetPage(
-      name: Routes.MATERI_ANYAMAN,
-      page: () => const MateriAnyamanView(),
-      binding: MateriAnyamanBinding(),
-    ),
-
-    GetPage(
       name: Routes.DETAIL_VIDEO,
       page: () => const DetailVideoView(),
       binding: DetailVideoBinding(),
@@ -199,9 +195,9 @@ class AppPages {
     ),
 
     GetPage(
-      name: Routes.DETAIL_KELAS,
-      page: () => const DetailKelasView(),
-      binding: DetailKelasBinding(),
+      name: Routes.PILIH_KELAS,
+      page: () => const PilihKelasView(),
+      binding: PilihKelasBinding(),
     ),
 
     GetPage(
@@ -266,26 +262,35 @@ class AppPages {
       page: () => const RiwayatAktivitasView(),
       binding: RiwayatAktivitasBinding(),
     ),
-    
     GetPage(
-      name: _Paths.PEMESANAN_PRODUK,
-      page: () => const PemesananProdukView(),
-      binding: PemesananProdukBinding(),
+      name: _Paths.PESAN_PELATIHAN,
+      page: () => const PesanPelatihanView(),
+      binding: PesanPelatihanBinding(),
     ),
     GetPage(
-      name: _Paths.RIWAYAT_PESANAN,
-      page: () => const RiwayatPesananView(),
-      binding: RiwayatPesananBinding(),
+      name: _Paths.PAYMENT_WEBVIEW,
+      page: () => const PaymentWebviewView(),
+      binding: PaymentWebviewBinding(),
     ),
     GetPage(
-      name: _Paths.DETAIL_PESANAN,
-      page: () => const DetailPesananView(),
-      binding: DetailPesananBinding(),
+      name: _Paths.BERI_RATING,
+      page: () => const BeriRatingView(),
+      binding: BeriRatingBinding(),
     ),
     GetPage(
-      name: _Paths.STATUS_PENGIRIMAN,
-      page: () => const StatusPengirimanView(),
-      binding: StatusPengirimanBinding(),
+      name: _Paths.HALAMAN_PENGRAJIN,
+      page: () => const HalamanPengrajinView(),
+      binding: HalamanPengrajinBinding(),
+    ),
+    GetPage(
+      name: _Paths.KELAS_SAYA,
+      page: () => const KelasSayaView(),
+      binding: KelasSayaBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFIL_PELATIH,
+      page: () => const ProfilPelatihView(),
+      binding: ProfilPelatihBinding(),
     ),
   ];
 }

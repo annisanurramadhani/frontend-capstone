@@ -1,150 +1,139 @@
-// pembayaran_pelatihan_controller.dart
-
 import 'dart:async';
-
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../../../data/services/pengguna_service.dart';
 import '../../../../routes/app_pages.dart';
 
-class PembayaranPelatihanController
-    extends GetxController {
+class PembayaranPelatihanController extends GetxController {
+  late String metodeBayar;
+  late String orderId;
+  late String redirectUrl;
+  late int amount;
+  late String namaKelas;
 
-  RxBool isLoading =
-      false.obs;
+  RxString statusBayar = "menunggu".obs;
 
-  RxInt menit =
-      23.obs;
-
-  RxInt detik =
-      59.obs;
-
-  Timer? timer;
-
-  RxMap<String, dynamic>
-      pembayaran =
-      <String, dynamic>{}.obs;
-
-  RxMap<String, dynamic>
-      metode =
-      <String, dynamic>{}.obs;
-
-  final String orderId =
-      "ORD-20052024-12345";
-
-  final String totalPembayaran =
-      "Rp205.000";
+  Timer? _timer;
 
   @override
   void onInit() {
     super.onInit();
 
-    getData();
+    final args = Get.arguments;
 
-    mulaiTimer();
+    metodeBayar = args["metodeBayar"];
+    orderId = args["orderId"];
+    redirectUrl = args["redirectUrl"] ?? "";
+    amount = args["amount"];
+    namaKelas = args["namaKelas"];
+
+    print("ORDER ID POLLING: $orderId");
+
+    startPolling();
   }
 
-  void getData() {
+  void startPolling() {
+    _timer = Timer.periodic(const Duration(seconds: 5), (_) async {
+      await cekStatus();
+    });
+  }
 
-    final data =
-        Get.arguments;
+  Future<void> cekStatus() async {
+    try {
+      final response = await PenggunaService.checkStatusBayar(orderId);
 
-    if (data != null) {
+      if (response["success"] == true) {
+        statusBayar.value = response["statusBayar"] ?? "menunggu";
 
-      pembayaran.value =
-          Map<String, dynamic>.from(
-        data["kelas"],
-      );
+        if (statusBayar.value == "lunas") {
+          _timer?.cancel();
 
-      metode.value =
-          Map<String, dynamic>.from(
-        data["metode"],
+          await Get.dialog(
+            AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.check_circle, color: Colors.green, size: 80),
+
+                  const SizedBox(height: 16),
+
+                  const Text(
+                    "Pembayaran Berhasil",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  const Text(
+                    "Booking pelatihan berhasil dikonfirmasi",
+                    textAlign: TextAlign.center,
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+
+                        Get.offAllNamed(Routes.RIWAYAT_KELAS);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF8B5E3C),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        "OK",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            barrierDismissible: false,
+          );
+        }
+      }
+    } catch (e) {
+      print("Polling error: $e");
+    }
+  }
+
+  String get formattedAmount {
+    return "Rp ${amount.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.')}";
+  }
+
+  Future<void> bayarSekarang() async {
+    final result = await Get.toNamed(
+      "/payment-webview",
+      arguments: {"url": redirectUrl, "orderId": orderId},
+    );
+
+    if (result == "success") {
+      statusBayar.value = "lunas";
+
+      _timer?.cancel();
+
+      Get.snackbar(
+        "Pembayaran Berhasil! 🎉",
+        "Booking kamu sudah dikonfirmasi",
+        backgroundColor: const Color(0xFF4CAF50),
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
       );
     }
   }
 
-  void kembali() {
-
-    Get.back();
-  }
-
-  void mulaiTimer() {
-
-    timer = Timer.periodic(
-      const Duration(
-        seconds: 1,
-      ),
-
-      (timer) {
-
-        if (detik.value >
-            0) {
-
-          detik.value--;
-
-        } else {
-
-          if (menit.value >
-              0) {
-
-            menit.value--;
-
-            detik.value =
-                59;
-
-          } else {
-
-            timer.cancel();
-          }
-        }
-      },
-    );
-  }
-
-  void salinOrderId() {
-
-    Clipboard.setData(
-      ClipboardData(
-        text: orderId,
-      ),
-    );
-
-    Get.snackbar(
-      "Berhasil",
-      "Order ID berhasil disalin",
-    );
-  }
-
-  void cekStatusPembayaran() {
-
-    Get.toNamed(
-      Routes.PEMBAYARAN_BERHASIL,
-
-      arguments: {
-
-        "tipe":
-            "pelatihan",
-
-        "order_id":
-            orderId,
-
-        "judul":
-            "Pembayaran Berhasil",
-
-        "subtitle":
-            "Kelas berhasil dipesan dan jadwal sudah dikonfirmasi.",
-
-        "button":
-            "Lihat Jadwal",
-      },
-    );
-  }
-
   @override
   void onClose() {
-
-    timer?.cancel();
-
+    _timer?.cancel();
     super.onClose();
   }
 }

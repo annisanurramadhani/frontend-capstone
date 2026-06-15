@@ -1,43 +1,30 @@
-// riwayat_kelas_controller.dart
-
 import 'package:get/get.dart';
+import '../../../../data/services/pengguna_service.dart';
 
-class RiwayatKelasController
-    extends GetxController {
+class RiwayatKelasController extends GetxController {
+  RxBool isLoading = true.obs;
 
-  RxList riwayatKelas = [].obs;
+  RxList bookings = [].obs;
 
   @override
   void onInit() {
     super.onInit();
-
-    getRiwayatKelas();
+    getRiwayat();
   }
 
-  void getRiwayatKelas() async {
+  Future<void> getRiwayat() async {
+    try {
+      isLoading.value = true;
 
-    // nanti ambil dari API
+      final response = await PenggunaService.getRiwayatBooking();
 
-  }
-
-  void beriReview({
-    required dynamic kelas,
-  }) {
-
-    Get.snackbar(
-      "Review",
-      "Terima kasih sudah memberi review",
-    );
-  }
-
-  void keDetailKelas(
-    dynamic kelas,
-  ) {
-
-    Get.toNamed(
-      '/detail-kelas',
-
-      arguments: kelas,
-    );
+      if (response["success"] == true) {
+        bookings.assignAll(response["bookings"] ?? []);
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

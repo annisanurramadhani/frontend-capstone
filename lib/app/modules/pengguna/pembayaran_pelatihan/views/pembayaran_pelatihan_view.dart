@@ -1,480 +1,221 @@
-// pembayaran_pelatihan_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controllers/pembayaran_pelatihan_controller.dart';
-import '../../../../global_widgets/custom_navbar.dart';
 
 class PembayaranPelatihanView extends GetView<PembayaranPelatihanController> {
   const PembayaranPelatihanView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
-
-      // PEMBAYARAN PELATIHAN
-      bottomNavigationBar: const CustomNavbar(currentIndex: 1),
-
-      body: SafeArea(
-        child: Obx(() {
-          final pembayaran = controller.pembayaran;
-
-          final metode = controller.metode;
-
-          return SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-
-            padding: EdgeInsets.all(size.width * 0.055),
-
-            child: Column(
-              children: [
-                // HEADER
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: controller.kembali,
-
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-
-                        color: Color(0xFF5A3116),
-                      ),
-                    ),
-
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          "Pembayaran",
-
-                          style: TextStyle(
-                            fontSize: size.width * 0.065,
-
-                            fontWeight: FontWeight.bold,
-
-                            color: const Color(0xFF3E2723),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(width: 48),
-                  ],
-                ),
-
-                SizedBox(height: size.height * 0.025),
-
-                // ALERT
-                Container(
-                  width: double.infinity,
-
-                  padding: const EdgeInsets.all(20),
-
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFFBF5),
-
-                    borderRadius: BorderRadius.circular(22),
-
-                    border: Border.all(color: Colors.orange.shade200),
-                  ),
-
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFDF8F3),
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "Pembayaran",
+          style: TextStyle(
+            color: Color(0xFF5A3116),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF5A3116)),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // CARD INFO TRANSAKSI
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(color: Colors.black12, blurRadius: 10),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      const Icon(Icons.access_time, color: Colors.orange),
-
-                      const SizedBox(width: 14),
-
-                      Expanded(
-                        child: Text(
-                          "Selesaikan pembayaran sebelum waktu habis.",
-
-                          style: TextStyle(
-                            fontSize: size.width * 0.038,
-
-                            height: 1.6,
-
-                            color: const Color(0xFF3E2723),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: size.height * 0.025),
-
-                // TOTAL
-                Container(
-                  width: double.infinity,
-
-                  padding: const EdgeInsets.all(24),
-
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-
-                    borderRadius: BorderRadius.circular(28),
-                  ),
-
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
-                    children: [
-                      const Text(
-                        "Total Pembayaran",
-
-                        style: TextStyle(fontSize: 18, color: Colors.brown),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      Text(
-                        controller.totalPembayaran,
-
-                        style: TextStyle(
-                          fontSize: size.width * 0.09,
-
-                          fontWeight: FontWeight.bold,
-
-                          color: const Color(0xFF3E2723),
-                        ),
-                      ),
-
-                      const SizedBox(height: 22),
-
-                      Row(
-                        children: [
-                          const Text(
-                            "Order ID",
-
-                            style: TextStyle(color: Colors.brown),
-                          ),
-
-                          const SizedBox(width: 14),
-
-                          Expanded(
-                            child: Text(
-                              controller.orderId,
-
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-
-                          GestureDetector(
-                            onTap: controller.salinOrderId,
-
-                            child: const Icon(Icons.copy),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: size.height * 0.025),
-
-                // METODE
-                Container(
-                  width: double.infinity,
-
-                  padding: const EdgeInsets.all(24),
-
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-
-                    borderRadius: BorderRadius.circular(28),
-                  ),
-
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
-                    children: [
-                      const Text(
-                        "Metode Pembayaran",
-
-                        style: TextStyle(
-                          fontSize: 22,
-
-                          fontWeight: FontWeight.bold,
-
-                          color: Color(0xFF3E2723),
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
                       Container(
-                        padding: const EdgeInsets.all(18),
-
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFFBF7),
-
-                          borderRadius: BorderRadius.circular(22),
+                          color: const Color(0xFF8B5E3C).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF3EAE0),
-
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-
-                              child: const Icon(
-                                Icons.qr_code,
-
-                                color: Color(0xFF5A3116),
-                              ),
-                            ),
-
-                            const SizedBox(width: 16),
-
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-
-                                children: [
-                                  Text(
-                                    metode["nama"],
-
-                                    style: TextStyle(
-                                      fontSize: size.width * 0.045,
-
-                                      fontWeight: FontWeight.bold,
-
-                                      color: const Color(0xFF3E2723),
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 6),
-
-                                  Text(
-                                    metode["subtitle"],
-
-                                    style: TextStyle(
-                                      fontSize: size.width * 0.036,
-
-                                      color: Colors.brown,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                        child: const Icon(
+                          Icons.receipt_long_outlined,
+                          color: Color(0xFF8B5E3C),
+                          size: 20,
                         ),
                       ),
-
-                      const SizedBox(height: 24),
-
-                      Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-
+                      const SizedBox(width: 12),
+                      const Text(
+                        "Detail Transaksi",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5A3116),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  const SizedBox(height: 12),
+                  _infoRow("Kelas", controller.namaKelas),
+                  const SizedBox(height: 8),
+                  _infoRow("Total Bayar", controller.formattedAmount),
+                  const SizedBox(height: 8),
+                  _infoRow("Metode", "GoPay"),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Status",
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Obx(
+                        () => Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.brown.shade200),
-
+                            color: controller.statusBayar.value == "lunas"
+                                ? const Color(0xFFD1E7DD)
+                                : const Color(0xFFFFF3CD),
                             borderRadius: BorderRadius.circular(20),
                           ),
-
-                          child: Image.network(
-                            "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=PEMBAYARAN-ANYAMAN",
-
-                            width: 220,
-
-                            height: 220,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: size.height * 0.025),
-
-                // TIMER
-                Container(
-                  width: double.infinity,
-
-                  padding: const EdgeInsets.all(24),
-
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-
-                    borderRadius: BorderRadius.circular(28),
-                  ),
-
-                  child: Column(
-                    children: [
-                      const Text(
-                        "Sisa Waktu Pembayaran",
-
-                        style: TextStyle(
-                          fontSize: 20,
-
-                          fontWeight: FontWeight.bold,
-
-                          color: Color(0xFF3E2723),
-                        ),
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-
-                        children: [
-                          Obx(
-                            () => Text(
-                              controller.menit.value.toString().padLeft(2, "0"),
-
-                              style: TextStyle(
-                                fontSize: size.width * 0.13,
-
-                                fontWeight: FontWeight.bold,
-
-                                color: Colors.orange,
-                              ),
-                            ),
-                          ),
-
-                          Text(
-                            " : ",
-
-                            style: TextStyle(
-                              fontSize: size.width * 0.13,
-
-                              fontWeight: FontWeight.bold,
-
-                              color: Colors.orange,
-                            ),
-                          ),
-
-                          Obx(
-                            () => Text(
-                              controller.detik.value.toString().padLeft(2, "0"),
-
-                              style: TextStyle(
-                                fontSize: size.width * 0.13,
-
-                                fontWeight: FontWeight.bold,
-
-                                color: Colors.orange,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: size.height * 0.025),
-
-                // STATUS
-                Container(
-                  width: double.infinity,
-
-                  padding: const EdgeInsets.all(24),
-
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-
-                    borderRadius: BorderRadius.circular(28),
-                  ),
-
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
-                    children: [
-                      const Text(
-                        "Status Pembayaran",
-
-                        style: TextStyle(
-                          fontSize: 22,
-
-                          fontWeight: FontWeight.bold,
-
-                          color: Color(0xFF3E2723),
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-
-                          vertical: 10,
-                        ),
-
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFF3E0),
-
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-
-                        child: const Text(
-                          "Menunggu Pembayaran",
-
-                          style: TextStyle(
-                            color: Colors.orange,
-
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      SizedBox(
-                        width: double.infinity,
-
-                        height: 60,
-
-                        child: ElevatedButton(
-                          onPressed: controller.cekStatusPembayaran,
-
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF5A3116),
-
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-
                           child: Text(
-                            "Cek Status Pembayaran",
-
+                            controller.statusBayar.value == "lunas"
+                                ? "Lunas ✅"
+                                : "Menunggu Pembayaran",
                             style: TextStyle(
-                              fontSize: size.width * 0.042,
-
-                              fontWeight: FontWeight.bold,
-
-                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: controller.statusBayar.value == "lunas"
+                                  ? const Color(0xFF0A3622)
+                                  : const Color(0xFF856404),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-
-                SizedBox(height: size.height * 0.04),
-              ],
+                ],
+              ),
             ),
-          );
-        }),
+
+            const SizedBox(height: 24),
+
+            // GOPAY SECTION
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(color: Colors.black12, blurRadius: 10),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF118EEA).withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.account_balance_wallet_outlined,
+                      color: Color(0xFF118EEA),
+                      size: 40,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Bayar dengan GoPay",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF5A3116),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Klik tombol di bawah untuk melanjutkan pembayaran melalui GoPay.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 32),
+
+            // TOMBOL BAYAR
+            SizedBox(
+              width: double.infinity,
+              height: 55,
+              child: ElevatedButton.icon(
+                onPressed: controller.bayarSekarang,
+                icon: const Icon(
+                  Icons.account_balance_wallet_outlined,
+                  color: Colors.white,
+                ),
+                label: const Text(
+                  "Bayar dengan GoPay",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF118EEA),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _infoRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 13,
+            color: Color(0xFF3E2723),
+          ),
+        ),
+      ],
     );
   }
 }

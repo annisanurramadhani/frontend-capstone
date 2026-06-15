@@ -1,70 +1,50 @@
-// jadwal_saya_controller.dart
-
 import 'package:get/get.dart';
+import 'dart:async';
+import '../../../../data/services/pengguna_service.dart';
 
-import '../../../../routes/app_pages.dart';
+class JadwalSayaController extends GetxController {
+  RxBool isLoading = true.obs;
 
-class JadwalSayaController
-    extends GetxController {
+  RxList jadwal = [].obs;
 
-  RxInt selectedTab = 0.obs;
-
-  RxList jadwalList = [].obs;
-
-  RxList riwayatList = [].obs;
+  Timer? _timer;
 
   @override
   void onInit() {
     super.onInit();
 
     getJadwal();
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      getJadwal(showLoading: false);
+    });
   }
 
-  void getJadwal() {
+  Future<void> getJadwal({bool showLoading = true}) async {
+    try {
+      if (showLoading) {
+        isLoading.value = true;
+      }
 
-    // nanti ambil dari API
+      final response = await PenggunaService.getJadwalKelas();
 
-    jadwalList.value = [];
+      print(response);
 
-    riwayatList.value = [];
+      if (response["success"] == true) {
+        jadwal.assignAll(response["jadwal"] ?? []);
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      if (showLoading) {
+        isLoading.value = false;
+      }
+    }
   }
 
-  void gantiTab(
-    int index,
-  ) {
-
-    selectedTab.value =
-        index;
-  }
-
-  void lihatDetail(
-    dynamic data,
-  ) {
-
-    Get.toNamed(
-      Routes.DETAIL_KELAS,
-      arguments: data,
-    );
-  }
-
-  void keBeranda() {
-
-    Get.offAllNamed(
-      Routes.HALAMAN_UTAMA,
-    );
-  }
-
-  void keProfil() {
-
-    Get.offAllNamed(
-      Routes.PROFIL,
-    );
-  }
-
-  void keCariKelas() {
-
-    Get.offAllNamed(
-      Routes.BELAJAR_ANYAMAN,
-    );
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
   }
 }
