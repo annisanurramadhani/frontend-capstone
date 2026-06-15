@@ -20,16 +20,10 @@ class PesanPelatihanController extends GetxController {
 
   RxString jamPelatihan = "".obs;
 
-  RxString metodeBayar = "".obs;
-
   final List<String> jamList = [
     "09.00 - 11.00",
     "11.30 - 13.30",
     "14.00 - 16.00",
-  ];
-
-  final List<Map<String, dynamic>> metodePembayaran = [
-    {"nama": "GoPay", "kode": "GOPAY"},
   ];
 
   @override
@@ -57,12 +51,6 @@ class PesanPelatihanController extends GetxController {
       return;
     }
 
-    if (metodeBayar.value.isEmpty) {
-      Get.snackbar("Error", "Pilih metode pembayaran");
-
-      return;
-    }
-
     try {
       isLoading.value = true;
 
@@ -85,7 +73,7 @@ class PesanPelatihanController extends GetxController {
 
         "jamPelatihan": jamPelatihan.value,
 
-        "metodeBayar": metodeBayar.value,
+        "metodeBayar": "midtrans",
       };
 
       final response = await PenggunaService.createBooking(data: bookingData);
@@ -98,20 +86,40 @@ class PesanPelatihanController extends GetxController {
       final payment = response["payment"];
       final booking = response["booking"];
 
-      // Navigate ke halaman pembayaran
-      Get.toNamed(
-        Routes.PEMBAYARAN_PELATIHAN,
+      final result = await Get.toNamed(
+        "/payment-webview",
         arguments: {
-          "metodeBayar": payment["metodeBayar"],
-          "orderId": booking["orderId"] ?? "",
-          "redirectUrl": payment["redirect_url"],
-          "amount": booking["totalBayar"] is int
-              ? booking["totalBayar"]
-              : int.tryParse(booking["totalBayar"].toString()) ?? 0,
-          "namaKelas": kelas["namaKelas"],
-          "vaNumber": payment["vaNumber"] ?? "", // jika backend kirim vaNumber
+          "url": payment["redirect_url"],
+          "orderId": booking["orderId"],
         },
       );
+
+      //POPUP
+      if (result == "success") {
+        Get.defaultDialog(
+          title: "Pembayaran Berhasil",
+          titleStyle: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF5A3116),
+          ),
+          middleText:
+              "Booking pelatihan Anda berhasil dan pembayaran telah diterima.",
+          middleTextStyle: const TextStyle(fontSize: 14, color: Colors.black87),
+          radius: 16,
+          textConfirm: "OK",
+          confirmTextColor: Colors.white,
+          buttonColor: const Color(0xFF8B5E3C),
+          onConfirm: () {
+            Get.back();
+            Get.offAllNamed(Routes.HALAMAN_UTAMA,);
+          },
+        );
+      }
+
+      if (result == "cancel") {
+        Get.snackbar("Pembayaran", "Pembayaran dibatalkan");
+      }
     } catch (e) {
       Get.snackbar("Error", e.toString());
     } finally {

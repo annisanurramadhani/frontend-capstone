@@ -41,7 +41,6 @@ class PenggunaService {
 
     final data = jsonDecode(response.body);
 
-    // UPDATE STORAGE
     if (data['success'] == true) {
       box.write("user", data['user']);
     }
@@ -55,18 +54,25 @@ class PenggunaService {
 
     return jsonDecode(response.body);
   }
-  // GET PENGRAJIN
 
+  // GET PENGRAJIN
   static Future<dynamic> getPengrajin() async {
     final response = await ApiProvider.getPengrajin();
 
     return jsonDecode(response.body);
   }
-  // GET KELAS
 
+  // GET KELAS
   static Future<Map<String, dynamic>> getKelas() async {
     try {
-      final response = await ApiProvider.getKelas();
+      final token = box.read("token");
+
+      print("TOKEN KELAS:");
+      print(token);
+
+      final response = await ApiProvider.getKelas(token);
+
+      print(response.body);
 
       return jsonDecode(response.body);
     } catch (e) {
@@ -74,9 +80,7 @@ class PenggunaService {
     }
   }
 
-  // =====================
   // CREATE BOOKING
-  // =====================
   static Future<Map<String, dynamic>> createBooking({
     required Map<String, dynamic> data,
   }) async {
@@ -89,6 +93,7 @@ class PenggunaService {
     }
   }
 
+  // CEK STATUS BAYAR
   static Future<Map<String, dynamic>> checkStatusBayar(String orderId) async {
     try {
       final response = await ApiProvider.checkStatusBayar(orderId);
@@ -97,8 +102,8 @@ class PenggunaService {
       return {"success": false, "message": e.toString()};
     }
   }
-  // GET RIWAYAT BOOKING
 
+  // GET RIWAYAT BOOKING
   static Future<Map<String, dynamic>> getRiwayatBooking() async {
     try {
       final token = box.read("token");
@@ -116,20 +121,16 @@ class PenggunaService {
     try {
       final token = box.read("token");
 
-      print("================================");
       print("TOKEN DI SERVICE:");
       print(token);
-      print("================================");
 
       final response = await ApiProvider.getJadwalKelas(token);
 
-      print("================================");
       print("STATUS CODE:");
       print(response.statusCode);
 
       print("BODY:");
       print(response.body);
-      print("================================");
 
       return jsonDecode(response.body);
     } catch (e) {
@@ -161,5 +162,121 @@ class PenggunaService {
     } catch (e) {
       return {"success": false, "message": e.toString()};
     }
+  }
+
+  //GET SERTIFIKAT
+  static Future<Map<String, dynamic>> getSertifikat() async {
+    final box = GetStorage();
+
+    final token = box.read("token");
+
+    final response = await ApiProvider.getSertifikat(token);
+
+    return jsonDecode(response.body);
+  }
+
+  //GET PRODUK
+  static Future<Map<String, dynamic>> getProduk() async {
+    final response = await ApiProvider.getProduk();
+
+    return jsonDecode(response.body);
+  }
+
+  // GET DETAIL PRODUK
+  static Future<Map<String, dynamic>> getDetailProduk(String id) async {
+    final response = await ApiProvider.getDetailProduk(id);
+
+    return jsonDecode(response.body);
+  }
+
+  // GET KERANJANG
+  static Future<Map<String, dynamic>> getKeranjang() async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.getKeranjang(token);
+
+    return jsonDecode(response.body);
+  }
+
+  // TAMBAH KERANJANG
+  static Future<Map<String, dynamic>> createKeranjang({
+    required String produkId,
+    required int qty,
+  }) async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.createKeranjang(
+      token: token,
+      produkId: produkId,
+      qty: qty,
+    );
+
+    return jsonDecode(response.body);
+  }
+
+  // HAPUS KERANJANG
+  static Future<Map<String, dynamic>> deleteKeranjang(String id) async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.deleteKeranjang(token, id);
+
+    return jsonDecode(response.body);
+  }
+
+  // UPDATE QTY KERANJANG
+  static Future<Map<String, dynamic>> updateKeranjangQty(
+    String id,
+    int qty,
+  ) async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.updateKeranjangQty(
+      token: token,
+      id: id,
+      qty: qty,
+    );
+
+    return jsonDecode(response.body);
+  }
+
+  // CHECKOUT KERANJANG
+  static Future<Map<String, dynamic>> checkoutKeranjang({
+    required String namaPenerima,
+    required String noTelpon,
+    required String alamat,
+    required String metodeBayar,
+  }) async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.checkoutKeranjang(
+      token: token,
+
+      data: {
+        "namaPenerima": namaPenerima,
+        "noTelpon": noTelpon,
+        "alamat": alamat,
+        "metodeBayar": metodeBayar,
+      },
+    );
+
+    return jsonDecode(response.body);
+  }
+
+  //GET RIWAYAT PEMBELIAN
+  static Future<Map<String, dynamic>> getRiwayatPembelian() async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.getRiwayatPembelian(token);
+
+    return jsonDecode(response.body);
+  }
+
+  //GET NOTIFIKASI
+  static Future<Map<String, dynamic>> getNotifikasi() async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.getNotifikasi(token);
+
+    return jsonDecode(response.body);
   }
 }

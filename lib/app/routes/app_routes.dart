@@ -42,6 +42,8 @@ abstract class Routes {
   static const RIWAYAT_AKTIVITAS = _Paths.RIWAYAT_AKTIVITAS;
   static const PAYMENT_WEBVIEW = _Paths.PAYMENT_WEBVIEW;
   static const BERI_RATING = _Paths.BERI_RATING;
+  static const KERANJANG = _Paths.KERANJANG;
+  static const CHECKOUT = _Paths.CHECKOUT;
 }
 
 abstract class _Paths {
@@ -86,4 +88,6 @@ abstract class _Paths {
   static const RIWAYAT_AKTIVITAS = '/riwayat-aktivitas';
   static const PAYMENT_WEBVIEW = '/payment-webview';
   static const BERI_RATING = '/beri-rating';
+  static const KERANJANG = '/keranjang';
+  static const CHECKOUT = '/checkout';
 }

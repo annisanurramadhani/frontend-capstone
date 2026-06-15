@@ -28,11 +28,15 @@ class PilihKelasView extends GetView<PilihKelasController> {
 
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
         if (controller.kelas.isEmpty) {
-          return const Center(child: Text("Belum ada kelas"));
+          return const Center(
+            child: Text("Belum ada kelas"),
+          );
         }
 
         return ListView.builder(
@@ -43,115 +47,154 @@ class PilihKelasView extends GetView<PilihKelasController> {
           itemBuilder: (context, index) {
             final item = controller.kelas[index];
 
-            return Container(
-              margin: const EdgeInsets.only(bottom: 20),
+            final isUnlocked = item["unlocked"] ?? false;
 
-              padding: const EdgeInsets.all(20),
+            return Opacity(
+              opacity: isUnlocked ? 1 : 0.5,
 
-              decoration: BoxDecoration(
-                color: Colors.white,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 20),
 
-                borderRadius: BorderRadius.circular(24),
+                padding: const EdgeInsets.all(20),
 
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
+                decoration: BoxDecoration(
+                  color: Colors.white,
 
-                    blurRadius: 10,
+                  borderRadius: BorderRadius.circular(24),
 
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
 
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                      blurRadius: 10,
 
-                children: [
-                  Text(
-                    item["namaKelas"],
-
-                    style: const TextStyle(
-                      fontSize: 22,
-
-                      fontWeight: FontWeight.bold,
-
-                      color: Color(0xFF3E2723),
+                      offset: const Offset(0, 4),
                     ),
-                  ),
+                  ],
+                ),
 
-                  const SizedBox(height: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
-                  Text(item["deskripsi"]),
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item["namaKelas"],
 
-                  const SizedBox(height: 12),
+                            style: const TextStyle(
+                              fontSize: 22,
 
-                  Row(
-                    children: [
-                      const Icon(Icons.access_time, size: 18),
+                              fontWeight: FontWeight.bold,
 
-                      const SizedBox(width: 6),
+                              color: Color(0xFF3E2723),
+                            ),
+                          ),
+                        ),
 
-                      Text(item["durasi"]),
-                    ],
-                  ),
+                        if (!isUnlocked)
+                          const Icon(
+                            Icons.lock,
 
-                  const SizedBox(height: 8),
-
-                  Row(
-                    children: [
-                      const Icon(Icons.location_on, size: 18),
-
-                      const SizedBox(width: 6),
-
-                      Expanded(child: Text(item["lokasi"])),
-                    ],
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  Text(
-                    "Rp ${item["harga"]}",
-
-                    style: const TextStyle(
-                      fontSize: 18,
-
-                      fontWeight: FontWeight.bold,
-
-                      color: Color(0xFF5A3116),
+                            color: Colors.red,
+                          ),
+                      ],
                     ),
-                  ),
 
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 10),
 
-                  SizedBox(
-                    width: double.infinity,
+                    Text(item["deskripsi"]),
 
-                    height: 50,
+                    const SizedBox(height: 12),
 
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.toNamed(
-                          Routes.PESAN_PELATIHAN,
+                    Row(
+                      children: [
+                        const Icon(Icons.access_time, size: 18),
 
-                          arguments: {"pengrajin": pengrajin, "kelas": item},
-                        );
-                      },
+                        const SizedBox(width: 6),
 
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF5A3116),
+                        Text(item["durasi"]),
+                      ],
+                    ),
 
-                        foregroundColor: Colors.white,
+                    const SizedBox(height: 8),
 
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on, size: 18),
+
+                        const SizedBox(width: 6),
+
+                        Expanded(
+                          child: Text(item["lokasi"]),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    Text(
+                      "Rp ${item["harga"]}",
+
+                      style: const TextStyle(
+                        fontSize: 18,
+
+                        fontWeight: FontWeight.bold,
+
+                        color: Color(0xFF5A3116),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    SizedBox(
+                      width: double.infinity,
+
+                      height: 50,
+
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (!isUnlocked) {
+                            Get.snackbar(
+                              "Kelas Terkunci",
+                              "Selesaikan kelas sebelumnya terlebih dahulu",
+                            );
+
+                            return;
+                          }
+
+                          Get.toNamed(
+                            Routes.PESAN_PELATIHAN,
+
+                            arguments: {
+                              "pengrajin": pengrajin,
+                              "kelas": item,
+                            },
+                          );
+                        },
+
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: isUnlocked
+                              ? const Color(0xFF5A3116)
+                              : Colors.grey,
+
+                          foregroundColor: Colors.white,
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+
+                        child: Text(
+                          isUnlocked
+                              ? "Pilih Kelas"
+                              : "Terkunci",
                         ),
                       ),
-
-                      child: const Text("Pilih Kelas"),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },

@@ -31,9 +31,8 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // =====================
+
               // CARD INFO KELAS
-              // =====================
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
@@ -103,9 +102,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
 
               const SizedBox(height: 28),
 
-              // =====================
               // LABEL SECTION
-              // =====================
               const Text(
                 "Data Peserta",
                 style: TextStyle(
@@ -117,9 +114,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
 
               const SizedBox(height: 16),
 
-              // =====================
               // NAMA
-              // =====================
               TextFormField(
                 controller: controller.namaController,
                 decoration: InputDecoration(
@@ -141,9 +136,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
 
               const SizedBox(height: 16),
 
-              // =====================
               // NO HP
-              // =====================
               TextFormField(
                 controller: controller.noTelponController,
                 keyboardType: TextInputType.phone,
@@ -167,9 +160,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
 
               const SizedBox(height: 28),
 
-              // =====================
               // LABEL SECTION
-              // =====================
               const Text(
                 "Jadwal Pelatihan",
                 style: TextStyle(
@@ -181,9 +172,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
 
               const SizedBox(height: 16),
 
-              // =====================
               // TANGGAL
-              // =====================
               TextFormField(
                 controller: controller.tanggalController,
                 readOnly: true,
@@ -224,9 +213,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
 
               const SizedBox(height: 16),
 
-              // =====================
               // JAM
-              // =====================
               Obx(
                 () => DropdownButtonFormField<String>(
                   value: controller.jamPelatihan.value.isEmpty
@@ -257,106 +244,37 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
 
               const SizedBox(height: 28),
 
-              // =====================
               // LABEL SECTION
-              // =====================
-              const Text(
-                "Metode Pembayaran",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF5A3116),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF6EFE8),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.verified_user_outlined,
+                      color: Color(0xFF8B5E3C),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        "Pembayaran aman melalui Midtrans. Anda dapat membayar menggunakan QRIS, Transfer Bank, E-Wallet, atau metode pembayaran lain yang tersedia.",
+                        style: TextStyle(
+                          color: Colors.grey.shade700,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
               const SizedBox(height: 16),
 
-              // =====================
-              // METODE PEMBAYARAN (CARD PILIHAN)
-              // =====================
-              Obx(
-                () => Column(
-                  children: controller.metodePembayaran.map((item) {
-                    final isSelected =
-                        controller.metodeBayar.value == item["kode"];
-                    return GestureDetector(
-                      onTap: () {
-                        controller.metodeBayar.value = item["kode"];
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? const Color(0xFF8B5E3C).withOpacity(0.08)
-                              : Colors.white,
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: isSelected
-                                ? const Color(0xFF8B5E3C)
-                                : Colors.grey.shade200,
-                            width: isSelected ? 2 : 1,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.04),
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 42,
-                              height: 42,
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? const Color(0xFF8B5E3C).withOpacity(0.15)
-                                    : Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Icon(
-                                item["kode"] == "gopay"
-                                    ? Icons.account_balance_wallet_outlined
-                                    : Icons.qr_code_outlined,
-                                color: isSelected
-                                    ? const Color(0xFF8B5E3C)
-                                    : Colors.grey.shade500,
-                                size: 22,
-                              ),
-                            ),
-                            const SizedBox(width: 14),
-                            Expanded(
-                              child: Text(
-                                item["nama"],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                  color: isSelected
-                                      ? const Color(0xFF5A3116)
-                                      : Colors.grey.shade700,
-                                ),
-                              ),
-                            ),
-                            if (isSelected)
-                              const Icon(
-                                Icons.check_circle,
-                                color: Color(0xFF8B5E3C),
-                                size: 22,
-                              ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              // =====================
               // BUTTON
-              // =====================
               SizedBox(
                 width: double.infinity,
                 height: 55,

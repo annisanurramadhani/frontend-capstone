@@ -14,9 +14,9 @@ import '../auth/password_baru/bindings/password_baru_binding.dart';
 import '../auth/password_baru/views/password_baru_view.dart';
 import '../auth/splash/bindings/splash_binding.dart';
 import '../auth/splash/views/splash_view.dart';
+import '../modules/pengguna/checkout/bindings/checkout_binding.dart';
+import '../modules/pengguna/checkout/views/checkout_view.dart';
 import '../modules/pengguna/belajar_anyaman/bindings/belajar_anyaman_binding.dart';
-import '../modules/pengguna/belajar_anyaman/detail_video/bindings/detail_video_binding.dart';
-import '../modules/pengguna/belajar_anyaman/detail_video/views/detail_video_view.dart';
 import '../modules/pengguna/belajar_anyaman/views/belajar_anyaman_view.dart';
 import '../modules/pengguna/beri_rating/bindings/beri_rating_binding.dart';
 import '../modules/pengguna/beri_rating/views/beri_rating_view.dart';
@@ -24,12 +24,16 @@ import '../modules/pengguna/daftar_pengrajin/bindings/daftar_pengrajin_binding.d
 import '../modules/pengguna/daftar_pengrajin/views/daftar_pengrajin_view.dart';
 import '../modules/pengguna/detail_produk/bindings/detail_produk_binding.dart';
 import '../modules/pengguna/detail_produk/views/detail_produk_view.dart';
+import '../modules/pengguna/detail_video/bindings/detail_video_binding.dart';
+import '../modules/pengguna/detail_video/views/detail_video_view.dart';
 import '../modules/pengguna/edit_profil/bindings/edit_profil_binding.dart';
 import '../modules/pengguna/edit_profil/views/edit_profil_view.dart';
 import '../modules/pengguna/halaman_utama/bindings/halaman_utama_binding.dart';
 import '../modules/pengguna/halaman_utama/views/halaman_utama_view.dart';
 import '../modules/pengguna/jadwal_saya/bindings/jadwal_saya_binding.dart';
 import '../modules/pengguna/jadwal_saya/views/jadwal_saya_view.dart';
+import '../modules/pengguna/keranjang/bindings/keranjang_binding.dart';
+import '../modules/pengguna/keranjang/views/keranjang_view.dart';
 import '../modules/pengguna/konfirmasi_pembayaran/bindings/konfirmasi_pembayaran_binding.dart';
 import '../modules/pengguna/konfirmasi_pembayaran/views/konfirmasi_pembayaran_view.dart';
 import '../modules/pengguna/lihat_pesanan/bindings/lihat_pesanan_binding.dart';
@@ -270,6 +274,16 @@ class AppPages {
       name: _Paths.BERI_RATING,
       page: () => const BeriRatingView(),
       binding: BeriRatingBinding(),
+    ),
+    GetPage(
+      name: _Paths.KERANJANG,
+      page: () => const KeranjangView(),
+      binding: KeranjangBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECKOUT,
+      page: () => const CheckoutView(),
+      binding: CheckoutBinding(),
     ),
   ];
 }

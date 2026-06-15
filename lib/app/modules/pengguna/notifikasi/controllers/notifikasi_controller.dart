@@ -1,11 +1,11 @@
-// notifikasi_controller.dart
-
 import 'package:get/get.dart';
 
-class NotifikasiController
-    extends GetxController {
+import '../../../../data/services/pengguna_service.dart';
 
-  RxList notifikasi = [].obs;
+class NotifikasiController extends GetxController {
+  RxBool isLoading = false.obs;
+
+  RxList notifikasiList = [].obs;
 
   @override
   void onInit() {
@@ -14,46 +14,20 @@ class NotifikasiController
     getNotifikasi();
   }
 
-  void getNotifikasi() async {
+  Future<void> getNotifikasi() async {
+    try {
+      isLoading.value = true;
 
-    // nanti ambil dari API backend
+      final response =
+          await PenggunaService.getNotifikasi();
 
-    /*
-    
-    contoh data dari backend
-
-    [
-      {
-        "id": 1,
-        "judul": "Pembayaran Berhasil",
-        "pesan": "Pembayaran kelas berhasil dilakukan",
-        "waktu": "Baru saja",
-        "tipe": "pembayaran"
+      if (response["success"] == true) {
+        notifikasiList.assignAll(
+          response["data"],
+        );
       }
-    ]
-
-    */
-
-  }
-
-  void bukaNotifikasi(
-    dynamic item,
-  ) {
-
-    if (item["tipe"] ==
-        "pembayaran") {
-
-      Get.toNamed(
-        '/jadwal-saya',
-      );
-    }
-
-    if (item["tipe"] ==
-        "jadwal") {
-
-      Get.toNamed(
-        '/jadwal-saya',
-      );
+    } finally {
+      isLoading.value = false;
     }
   }
 }

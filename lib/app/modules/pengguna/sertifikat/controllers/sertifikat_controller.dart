@@ -1,78 +1,76 @@
-// sertifikat_controller.dart
-
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class SertifikatController
-    extends GetxController {
+import '../../../../data/providers/api_provider.dart';
+import '../../../../data/services/pengguna_service.dart';
 
-  RxBool isLoading =
-      false.obs;
+class SertifikatController extends GetxController {
+  RxBool isLoading = true.obs;
 
-  RxList<dynamic>
-      sertifikatList =
-      <dynamic>[].obs;
+  RxList sertifikatList = [].obs;
 
   @override
   void onInit() {
     super.onInit();
-
     getSertifikat();
   }
 
-  Future<void>
-      getSertifikat() async {
-
+  Future<void> getSertifikat() async {
     try {
+      isLoading.value = true;
 
-      isLoading.value =
-          true;
+      final response =
+          await PenggunaService.getSertifikat();
 
-      // API BACKEND
-      // get sertifikat user
+      print("=== RESPONSE SERTIFIKAT ===");
+      print(response);
 
-      await Future.delayed(
-        const Duration(
-          milliseconds: 500,
-        ),
-      );
-
+      if (response["success"] == true) {
+        sertifikatList.assignAll(
+          response["sertifikat"] ?? [],
+        );
+      }
     } catch (e) {
-
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
-
+      print("ERROR SERTIFIKAT:");
+      print(e);
     } finally {
-
-      isLoading.value =
-          false;
+      isLoading.value = false;
     }
   }
 
   void kembali() {
-
     Get.back();
   }
 
-  void lihatSertifikat(
+  Future<void> lihatSertifikat(
     dynamic data,
-  ) {
+  ) async {
+    if (data["sertifikatUrl"] == null) {
+      return;
+    }
 
-    // buka detail sertifikat
-    // Get.toNamed()
+    final url =
+        "${ApiProvider.baseUrl}${data["sertifikatUrl"]}";
 
+    await launchUrl(
+      Uri.parse(url),
+      mode: LaunchMode.externalApplication,
+    );
   }
 
-  void unduhPdf(
+  Future<void> unduhPdf(
     dynamic data,
-  ) {
+  ) async {
+    if (data["sertifikatUrl"] == null) {
+      return;
+    }
 
-    // download pdf sertifikat
+    final url =
+        "${ApiProvider.baseUrl}${data["sertifikatUrl"]}";
 
-    Get.snackbar(
-      "Berhasil",
-      "Sertifikat berhasil diunduh",
+    await launchUrl(
+      Uri.parse(url),
+      mode: LaunchMode.externalApplication,
     );
   }
 }

@@ -1,86 +1,35 @@
-// lihat_pesanan_controller.dart
-
 import 'package:get/get.dart';
+
+import '../../../../data/services/pengguna_service.dart';
 
 class LihatPesananController
     extends GetxController {
+  RxBool isLoading = false.obs;
 
-  RxBool isLoading =
-      false.obs;
-
-  RxList<dynamic>
-      pesananList =
-      <dynamic>[].obs;
+  RxList pesananList = [].obs;
 
   @override
   void onInit() {
     super.onInit();
 
-    getPesanan();
+    loadPesanan();
   }
 
-  Future<void> getPesanan() async {
-
+  Future<void> loadPesanan() async {
     try {
+      isLoading.value = true;
 
-      isLoading.value =
-          true;
+      final response =
+          await PenggunaService
+              .getRiwayatPembelian();
 
-      // API BACKEND
-      // ambil data pesanan
-
-      await Future.delayed(
-        const Duration(
-          milliseconds: 500,
-        ),
-      );
-
-      pesananList.assignAll([
-        {
-          "nama":
-              "Tas Anyaman",
-
-          "harga":
-              "Rp150.000",
-
-          "status":
-              "Diproses",
-
-          "gambar":
-              "assets/images/produk1.jpg",
-        },
-
-        {
-          "nama":
-              "Keranjang Bambu",
-
-          "harga":
-              "Rp85.000",
-
-          "status":
-              "Dikirim",
-
-          "gambar":
-              "assets/images/produk2.jpg",
-        },
-      ]);
-
-    } catch (e) {
-
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
-
+      if (response["success"] == true) {
+        pesananList.assignAll(
+          response["pesanan"],
+        );
+      }
     } finally {
-
-      isLoading.value =
-          false;
+      isLoading.value = false;
     }
-  }
-
-  void kembali() {
-
-    Get.back();
   }
 }
