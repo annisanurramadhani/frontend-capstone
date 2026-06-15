@@ -131,6 +131,9 @@ class SertifikatView extends GetView<SertifikatController> {
                     itemBuilder: (context, index) {
                       final data = controller.sertifikatList[index];
 
+                      print("DATA SERTIFIKAT:");
+                      print(data);
+
                       return sertifikatCard(context: context, data: data);
                     },
                   );
@@ -145,46 +148,33 @@ class SertifikatView extends GetView<SertifikatController> {
 
   Widget sertifikatCard({
     required BuildContext context,
-
     required dynamic data,
   }) {
     final size = MediaQuery.of(context).size;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 22),
-
       padding: const EdgeInsets.all(18),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
         borderRadius: BorderRadius.circular(24),
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-
             children: [
               Container(
                 width: 100,
-
                 height: 140,
-
                 decoration: BoxDecoration(
                   color: const Color(0xFFF3EAE0),
-
                   borderRadius: BorderRadius.circular(18),
                 ),
-
                 child: const Icon(
                   Icons.workspace_premium,
-
                   size: 50,
-
                   color: Color(0xFF5A3116),
                 ),
               ),
@@ -194,16 +184,12 @@ class SertifikatView extends GetView<SertifikatController> {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-
                   children: [
                     Text(
-                      data["judul"] ?? "",
-
+                      data["kelas"]?["namaKelas"] ?? "-",
                       style: TextStyle(
                         fontSize: size.width * 0.05,
-
                         fontWeight: FontWeight.bold,
-
                         color: const Color(0xFF3E2723),
                       ),
                     ),
@@ -212,44 +198,29 @@ class SertifikatView extends GetView<SertifikatController> {
 
                     infoItem(
                       icon: Icons.person_outline,
-
                       title: "Pengrajin",
-
-                      value: data["pengrajin"] ?? "",
+                      value: data["pengrajin"]?["name"] ?? "-",
                     ),
 
                     const SizedBox(height: 12),
 
                     infoItem(
                       icon: Icons.calendar_month_outlined,
-
                       title: "Tanggal",
-
-                      value: data["tanggal"] ?? "",
+                      value: data["tanggal"] ?? "-",
                     ),
 
                     const SizedBox(height: 12),
 
                     Row(
-                      children: [
-                        const Icon(
-                          Icons.check_circle,
-
-                          color: Colors.green,
-
-                          size: 20,
-                        ),
-
-                        const SizedBox(width: 10),
-
-                        const Text(
+                      children: const [
+                        Icon(Icons.check_circle, color: Colors.green, size: 20),
+                        SizedBox(width: 10),
+                        Text(
                           "Selesai",
-
                           style: TextStyle(
                             fontSize: 16,
-
                             fontWeight: FontWeight.bold,
-
                             color: Colors.green,
                           ),
                         ),
@@ -270,23 +241,17 @@ class SertifikatView extends GetView<SertifikatController> {
                   onPressed: () {
                     controller.lihatSertifikat(data);
                   },
-
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Color(0xFF5A3116)),
-
                     padding: const EdgeInsets.symmetric(vertical: 16),
-
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-
                   child: const Text(
                     "Lihat",
-
                     style: TextStyle(
                       color: Color(0xFF5A3116),
-
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -300,23 +265,17 @@ class SertifikatView extends GetView<SertifikatController> {
                   onPressed: () {
                     controller.unduhPdf(data);
                   },
-
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5A3116),
-
                     padding: const EdgeInsets.symmetric(vertical: 16),
-
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-
                   child: const Text(
                     "Unduh PDF",
-
                     style: TextStyle(
                       color: Colors.white,
-
                       fontWeight: FontWeight.bold,
                     ),
                   ),

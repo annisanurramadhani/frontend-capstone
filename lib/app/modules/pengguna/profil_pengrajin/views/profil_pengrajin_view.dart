@@ -76,26 +76,21 @@ class ProfilPengrajinView extends StatelessWidget {
                   // FOTO
                   ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-
                     child:
-                        pengrajin["photo"] != null &&
+                        pengrajin != null &&
+                            pengrajin["photo"] != null &&
                             pengrajin["photo"].toString().isNotEmpty
                         ? Image.network(
-                            "${ApiProvider.baseUrl}/uploads/${pengrajin["photo"]}",
-
+                            "http://192.168.110.206:3000/uploads/${pengrajin['photo']}",
                             width: 120,
-
                             height: 120,
-
                             fit: BoxFit.cover,
-
                             errorBuilder: (context, error, stackTrace) {
                               return _fotoDefault();
                             },
                           )
                         : _fotoDefault(),
                   ),
-
                   const SizedBox(height: 20),
 
                   // NAMA

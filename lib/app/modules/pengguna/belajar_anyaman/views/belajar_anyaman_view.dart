@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import '../../detail_video/views/detail_video_view.dart';
-
 import '../controllers/belajar_anyaman_controller.dart';
-
 import '../../../../data/providers/api_provider.dart';
 
 class BelajarAnyamanView extends GetView<BelajarAnyamanController> {
@@ -13,207 +9,232 @@ class BelajarAnyamanView extends GetView<BelajarAnyamanController> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
-
       appBar: AppBar(
         backgroundColor: const Color(0xFFFDF8F3),
-
         elevation: 0,
-
         centerTitle: true,
-
         leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF3E2723)),
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+              color: Color(0xFF3E2723), size: 20),
         ),
-
         title: const Text(
           "Belajar Anyaman",
-
           style: TextStyle(
             color: Color(0xFF3E2723),
-
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
           ),
         ),
       ),
-
       body: Obx(() {
-        // LOADING
+        // ── LOADING ──────────────────────────────────────────────────
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(color: Color(0xFF5A3116)),
+          );
         }
 
-        // DATA KOSONG
+        // ── KOSONG ───────────────────────────────────────────────────
         if (controller.videos.isEmpty) {
-          return const Center(child: Text("Belum ada video tutorial"));
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF3EAE0),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Icon(Icons.video_library_outlined,
+                      size: 40, color: Color(0xFF5A3116)),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  "Belum ada video tutorial",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF3E2723),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  "Cek kembali nanti ya",
+                  style: TextStyle(fontSize: 13, color: Color(0xFF8B6347)),
+                ),
+              ],
+            ),
+          );
         }
 
+        // ── LIST ─────────────────────────────────────────────────────
         return ListView.builder(
-          padding: const EdgeInsets.all(20),
-
+          padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
+          physics: const BouncingScrollPhysics(),
           itemCount: controller.videos.length,
-
           itemBuilder: (context, index) {
             final video = controller.videos[index];
-
-            return GestureDetector(
-              onTap: () {
-                Get.to(() => const DetailVideoView(), arguments: video);
-              },
-
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 22),
-
-                decoration: BoxDecoration(
-                  color: Colors.white,
-
-                  borderRadius: BorderRadius.circular(24),
-
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-
-                      blurRadius: 10,
-
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: [
-                    // THUMBNAIL
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(24),
-                      ),
-
-                      child: Image.network(
-                        "${ApiProvider.baseUrl}/uploads/${video["thumbnail"]}",
-
-                        width: double.infinity,
-
-                        height: 210,
-
-                        fit: BoxFit.cover,
-
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            width: double.infinity,
-
-                            height: 210,
-
-                            color: Colors.grey[300],
-
-                            child: const Center(
-                              child: Icon(Icons.broken_image, size: 55),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(18),
-
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-
-                        children: [
-                          Text(
-                            video["title"],
-
-                            maxLines: 2,
-
-                            overflow: TextOverflow.ellipsis,
-
-                            style: TextStyle(
-                              fontSize: size.width * 0.055,
-
-                              fontWeight: FontWeight.bold,
-
-                              color: const Color(0xFF3E2723),
-                            ),
-                          ),
-
-                          const SizedBox(height: 10),
-
-                          Text(
-                            "Pelajari teknik anyaman bambu menggunakan tutorial interaktif.",
-
-                            maxLines: 2,
-
-                            overflow: TextOverflow.ellipsis,
-
-                            style: TextStyle(
-                              fontSize: size.width * 0.038,
-
-                              color: Colors.brown,
-
-                              height: 1.6,
-                            ),
-                          ),
-
-                          const SizedBox(height: 18),
-
-                          SizedBox(
-                            width: double.infinity,
-
-                            height: 52,
-
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                Get.to(
-                                  () => const DetailVideoView(),
-
-                                  arguments: video,
-                                );
-                              },
-
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF5A3116),
-
-                                foregroundColor: Colors.white,
-
-                                elevation: 0,
-
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                              ),
-
-                              icon: const Icon(Icons.play_arrow),
-
-                              label: const Text(
-                                "Lihat Tutorial",
-
-                                style: TextStyle(
-                                  fontSize: 16,
-
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return _VideoCard(video: video);
           },
         );
       }),
+    );
+  }
+}
+
+// ── VIDEO CARD ───────────────────────────────────────────────────────────────
+
+class _VideoCard extends StatelessWidget {
+  final Map<String, dynamic> video;
+  const _VideoCard({required this.video});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Get.to(() => const DetailVideoView(), arguments: video),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFF0E6DD), width: 1.2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ── THUMBNAIL ────────────────────────────────────────────
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
+              child: Stack(
+                children: [
+                  Image.network(
+                    "${ApiProvider.baseUrl}/uploads/${video["thumbnail"]}",
+                    width: double.infinity,
+                    height: 190,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      width: double.infinity,
+                      height: 190,
+                      color: const Color(0xFFF3EAE0),
+                      child: const Icon(
+                        Icons.broken_image_outlined,
+                        size: 48,
+                        color: Color(0xFF8B6347),
+                      ),
+                    ),
+                  ),
+                  // play button overlay
+                  Positioned.fill(
+                    child: Center(
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.45),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.play_arrow_rounded,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // ── INFO ─────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // badge
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF3EAE0),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Text(
+                      "Tutorial",
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF5A3116),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // judul
+                  Text(
+                    video["title"] ?? "",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF3E2723),
+                      height: 1.35,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+
+                  // deskripsi
+                  const Text(
+                    "Pelajari teknik anyaman bambu menggunakan tutorial interaktif.",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF8B6347),
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+
+                  // tombol
+                  SizedBox(
+                    width: double.infinity,
+                    height: 46,
+                    child: ElevatedButton.icon(
+                      onPressed: () =>
+                          Get.to(() => const DetailVideoView(), arguments: video),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF5A3116),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      icon: const Icon(Icons.play_arrow_rounded, size: 20),
+                      label: const Text(
+                        "Lihat Tutorial",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

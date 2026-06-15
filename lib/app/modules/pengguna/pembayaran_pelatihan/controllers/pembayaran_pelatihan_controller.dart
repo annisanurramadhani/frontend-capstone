@@ -74,23 +74,28 @@ class PembayaranPelatihanController extends GetxController {
 
                   const SizedBox(height: 24),
 
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.back();
-
-                        Get.offAllNamed(Routes.RIWAYAT_KELAS);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF8B5E3C),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                  Center(
+                    child: SizedBox(
+                      width: 120,
+                      height: 45,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                          Get.offNamed(Routes.RIWAYAT_KELAS);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                      ),
-                      child: const Text(
-                        "OK",
-                        style: TextStyle(color: Colors.white),
+                        child: const Text(
+                          "OK",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ),

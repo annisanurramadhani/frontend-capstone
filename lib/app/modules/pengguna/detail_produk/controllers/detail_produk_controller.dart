@@ -1,13 +1,8 @@
-// detail_produk_controller.dart
-
 import 'package:get/get.dart';
+import '../../../../data/services/pengguna_service.dart';
 
-import '../../../../routes/app_pages.dart';
-
-class DetailProdukController
-    extends GetxController {
-
-  RxInt jumlah = 1.obs;
+class DetailProdukController extends GetxController {
+  RxBool isLoading = true.obs;
 
   RxMap produk = {}.obs;
 
@@ -15,63 +10,28 @@ class DetailProdukController
   void onInit() {
     super.onInit();
 
-    getDetailProduk();
+    final id = Get.arguments;
+
+    getDetailProduk(id);
   }
 
-  void getDetailProduk() {
+  Future<void> getDetailProduk(
+    String id,
+  ) async {
+    try {
+      isLoading.value = true;
 
-    // data dari halaman sebelumnya
+      final response =
+          await PenggunaService.getDetailProduk(
+        id,
+      );
 
-    produk.value =
-        Get.arguments ?? {};
-  }
-
-  void tambahJumlah() {
-
-    jumlah.value++;
-  }
-
-  void kurangJumlah() {
-
-    if (jumlah.value > 1) {
-
-      jumlah.value--;
+      if (response["success"] == true) {
+        produk.value =
+            response["produk"];
+      }
+    } finally {
+      isLoading.value = false;
     }
-  }
-
-  int get hargaProduk {
-
-    return produk["harga"] ?? 0;
-  }
-
-  int get totalHarga {
-
-    return hargaProduk *
-        jumlah.value;
-  }
-
-  String formatRupiah(
-    int angka,
-  ) {
-
-    return "Rp ${angka.toString().replaceAllMapped(
-      RegExp(
-        r'(\d{1,3})(?=(\d{3})+(?!\d))',
-      ),
-      (Match m) => '${m[1]}.',
-    )}";
-  }
-
-  void pilihPembayaran() {
-
-    Get.toNamed(
-      Routes.PEMBAYARAN_PRODUK,
-
-      arguments: {
-        "produk": produk,
-        "jumlah": jumlah.value,
-        "total": totalHarga,
-      },
-    );
   }
 }

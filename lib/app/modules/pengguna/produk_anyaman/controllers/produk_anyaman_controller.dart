@@ -1,70 +1,33 @@
-// produk_anyaman_controller.dart
-
 import 'package:get/get.dart';
+import '../../../../data/services/pengguna_service.dart';
 
-import '../../../../routes/app_pages.dart';
-
-class ProdukAnyamanController
-    extends GetxController {
+class ProdukAnyamanController extends GetxController {
+  RxBool isLoading = true.obs;
 
   RxList produkList = [].obs;
-
-  RxBool isLoading =
-      false.obs;
 
   @override
   void onInit() {
     super.onInit();
-
     getProduk();
   }
 
-  void getProduk() async {
-
+  Future<void> getProduk() async {
     try {
+      isLoading.value = true;
 
-      isLoading.value =
-          true;
+      final response =
+          await PenggunaService.getProduk();
 
-      // nanti ambil dari API backend
-
-      /*
-      
-      contoh response API
-
-      [
-        {
-          "id": 1,
-          "nama": "Keranjang Bambu",
-          "harga": 85000,
-          "gambar": "https://..."
-        }
-      ]
-
-      */
-
+      if (response["success"] == true) {
+        produkList.assignAll(
+          response["produk"] ?? [],
+        );
+      }
     } catch (e) {
-
-      Get.snackbar(
-        "Error",
-        "Gagal mengambil produk",
-      );
-
+      print(e);
     } finally {
-
-      isLoading.value =
-          false;
+      isLoading.value = false;
     }
-  }
-
-  void lihatDetail(
-    dynamic produk,
-  ) {
-
-    Get.toNamed(
-      Routes.DETAIL_PRODUK,
-
-      arguments: produk,
-    );
   }
 }

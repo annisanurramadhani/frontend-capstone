@@ -45,6 +45,8 @@ abstract class Routes {
   static const HALAMAN_PENGRAJIN = _Paths.HALAMAN_PENGRAJIN;
   static const KELAS_SAYA = _Paths.KELAS_SAYA;
   static const PROFIL_PELATIH = _Paths.PROFIL_PELATIH;
+  static const KERANJANG = _Paths.KERANJANG;
+  static const CHECKOUT = _Paths.CHECKOUT;
 }
 
 abstract class _Paths {
@@ -92,4 +94,6 @@ abstract class _Paths {
   static const HALAMAN_PENGRAJIN = '/halaman-pengrajin';
   static const KELAS_SAYA = '/kelas-saya';
   static const PROFIL_PELATIH = '/profil-pelatih';
+  static const KERANJANG = '/keranjang';
+  static const CHECKOUT = '/checkout';
 }

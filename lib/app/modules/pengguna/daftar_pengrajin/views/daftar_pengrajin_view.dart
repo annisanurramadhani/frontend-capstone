@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../profil_pengrajin/views/profil_pengrajin_view.dart';
-
+import '../../../../routes/app_pages.dart';
 import '../controllers/daftar_pengrajin_controller.dart';
 
 class DaftarPengrajinView extends GetView<DaftarPengrajinController> {
@@ -30,6 +30,15 @@ class DaftarPengrajinView extends GetView<DaftarPengrajinController> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.toNamed(Routes.RIWAYAT_KELAS);
+            },
+            icon: const Icon(Icons.history, color: Color(0xFF3E2723)),
+            tooltip: "Riwayat Kelas",
+          ),
+        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -72,7 +81,7 @@ class DaftarPengrajinView extends GetView<DaftarPengrajinController> {
                             item["photo"] != null &&
                                 item["photo"].toString().isNotEmpty
                             ? Image.network(
-                                "http://10.223.117.201:3000/uploads/${item['photo']}",
+                                "http://192.168.18.72:3000/uploads/${item['photo']}",
                                 width: 76,
                                 height: 76,
                                 fit: BoxFit.cover,

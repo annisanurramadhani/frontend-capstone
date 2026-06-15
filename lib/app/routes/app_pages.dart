@@ -16,6 +16,8 @@ import '../auth/splash/bindings/splash_binding.dart';
 import '../auth/splash/views/splash_view.dart';
 import '../modules/pengrajin/kelas_saya/bindings/kelas_saya_binding.dart';
 import '../modules/pengrajin/kelas_saya/views/kelas_saya_view.dart';
+import '../modules/pengguna/checkout/bindings/checkout_binding.dart';
+import '../modules/pengguna/checkout/views/checkout_view.dart';
 import '../modules/pengguna/belajar_anyaman/bindings/belajar_anyaman_binding.dart';
 import '../modules/pengguna/belajar_anyaman/views/belajar_anyaman_view.dart';
 import '../modules/pengguna/beri_rating/bindings/beri_rating_binding.dart';
@@ -32,6 +34,8 @@ import '../modules/pengguna/halaman_utama/bindings/halaman_utama_binding.dart';
 import '../modules/pengguna/halaman_utama/views/halaman_utama_view.dart';
 import '../modules/pengguna/jadwal_saya/bindings/jadwal_saya_binding.dart';
 import '../modules/pengguna/jadwal_saya/views/jadwal_saya_view.dart';
+import '../modules/pengguna/keranjang/bindings/keranjang_binding.dart';
+import '../modules/pengguna/keranjang/views/keranjang_view.dart';
 import '../modules/pengguna/konfirmasi_pembayaran/bindings/konfirmasi_pembayaran_binding.dart';
 import '../modules/pengguna/konfirmasi_pembayaran/views/konfirmasi_pembayaran_view.dart';
 import '../modules/pengguna/lihat_pesanan/bindings/lihat_pesanan_binding.dart';
@@ -291,6 +295,17 @@ class AppPages {
       name: _Paths.PROFIL_PELATIH,
       page: () => const ProfilPelatihView(),
       binding: ProfilPelatihBinding(),
+    ),
+
+    GetPage(
+      name: _Paths.KERANJANG,
+      page: () => const KeranjangView(),
+      binding: KeranjangBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECKOUT,
+      page: () => const CheckoutView(),
+      binding: CheckoutBinding(),
     ),
   ];
 }

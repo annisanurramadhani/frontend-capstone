@@ -8,6 +8,8 @@ import '../../../../data/services/auth_service.dart';
 
 import '../../../../routes/app_pages.dart';
 
+import '../../../../data/services/socket_service.dart';
+
 class HalamanUtamaController extends GetxController {
   RxBool isLoading = false.obs;
 
@@ -22,6 +24,15 @@ class HalamanUtamaController extends GetxController {
     getUser();
 
     loadMenu();
+
+    SocketService.connect();
+  }
+
+  @override
+  void onClose() {
+    SocketService.disconnect();
+
+    super.onClose();
   }
 
   Future<void> getUser() async {
@@ -42,29 +53,24 @@ class HalamanUtamaController extends GetxController {
     menuUtama.assignAll([
       {
         "title": "Belajar Anyaman",
-
         "icon": Icons.school_outlined,
-
         "route": Routes.BELAJAR_ANYAMAN,
       },
-
       {
         "title": "Daftar Pengrajin",
-
         "icon": Icons.groups_outlined,
-
         "route": Routes.DAFTAR_PENGRAJIN,
       },
-
       {
         "title": "Produk Anyaman",
-
         "icon": Icons.shopping_bag_outlined,
-
         "route": Routes.PRODUK_ANYAMAN,
       },
-
-      {"title": "Profil", "icon": Icons.person_outline, "route": Routes.PROFIL},
+      {
+        "title": "Sertifikat",
+        "icon": Icons.workspace_premium_outlined,
+        "route": Routes.SERTIFIKAT,
+      },
     ]);
   }
 
