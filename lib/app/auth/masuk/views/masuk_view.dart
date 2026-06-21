@@ -37,13 +37,10 @@ class MasukView extends GetView<MasukController> {
               physics: const BouncingScrollPhysics(),
 
               child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: size.height),
+                constraints: BoxConstraints(minHeight: size.height + 200),
 
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.08,
-                    vertical: 24,
-                  ),
+                  padding: EdgeInsets.zero,
 
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,98 +66,46 @@ class MasukView extends GetView<MasukController> {
                           const Spacer(),
 
                           // LOGO
-                          Container(
-                            width: size.width * 0.18,
-
-                            height: size.width * 0.18,
-
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-
-                              shape: BoxShape.circle,
-
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
-
-                                  blurRadius: 12,
-
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-
-                            child: Icon(
-                              Icons.grid_view_rounded,
-
-                              size: size.width * 0.09,
-
-                              color: const Color(0xFF8B5E3C),
+                          SizedBox(
+                            width: 130,
+                            height: 130,
+                            child: Image.asset(
+                              "assets/image/logo.png",
+                              fit: BoxFit.contain,
                             ),
                           ),
-
                           const Spacer(),
 
                           const SizedBox(width: 48),
                         ],
                       ),
 
-                      SizedBox(height: size.height * 0.04),
-
-                      // TITLE
-                      Center(
-                        child: Text(
-                          "Masuk",
-
-                          style: TextStyle(
-                            fontSize: size.width * 0.1,
-
-                            fontWeight: FontWeight.bold,
-
-                            color: const Color(0xFF3E2723),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      // SUBTITLE
-                      Center(
-                        child: Text(
-                          "Masuk untuk mulai belajar anyaman bambu.",
-
-                          textAlign: TextAlign.center,
-
-                          style: TextStyle(
-                            fontSize: size.width * 0.042,
-
-                            color: Colors.brown.shade700,
-
-                            height: 1.7,
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: size.height * 0.05),
+                      SizedBox(height: size.height * 0.01),
 
                       // FORM
                       Container(
                         width: double.infinity,
+                        constraints: BoxConstraints(minHeight: size.height),
 
-                        padding: EdgeInsets.all(size.width * 0.06),
+                        margin: EdgeInsets.only(top: size.height * 0.01),
+
+                        padding: const EdgeInsets.fromLTRB(24, 35, 24, 24),
 
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white,
 
-                          borderRadius: BorderRadius.circular(32),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(45),
+                            topRight: Radius.circular(45),
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30),
+                          ),
 
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-
+                              color: Colors.black.withOpacity(0.08),
                               blurRadius: 20,
-
-                              offset: const Offset(0, 8),
+                              offset: const Offset(0, -3),
                             ),
                           ],
                         ),
@@ -169,6 +114,18 @@ class MasukView extends GetView<MasukController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
 
                           children: [
+                            Center(
+                              child: Text(
+                                "Masuk",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF3E2723),
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 30),
                             // EMAIL
                             buildTitle("Email", size),
 
@@ -190,7 +147,6 @@ class MasukView extends GetView<MasukController> {
 
                             // PASSWORD
                             buildTitle("Kata Sandi", size),
-
                             const SizedBox(height: 12),
 
                             Obx(
@@ -255,12 +211,12 @@ class MasukView extends GetView<MasukController> {
                                       : controller.masuk,
 
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF8B5E3C),
+                                    backgroundColor: const Color(0xFF5A3116),
 
                                     elevation: 0,
 
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(15),
                                     ),
                                   ),
 
@@ -313,8 +269,6 @@ class MasukView extends GetView<MasukController> {
                                 ),
                               ],
                             ),
-
-                            SizedBox(height: size.height * 0.04),
 
                             // GOOGLE
                             SizedBox(

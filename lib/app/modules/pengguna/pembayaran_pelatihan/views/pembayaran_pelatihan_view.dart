@@ -10,17 +10,33 @@ class PembayaranPelatihanView extends GetView<PembayaranPelatihanController> {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFDF8F3),
+        backgroundColor: const Color(0xFFF8F5F1),
+
         elevation: 0,
+
         centerTitle: true,
+
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
+        ),
+
         title: const Text(
           "Pembayaran",
+
           style: TextStyle(
-            color: Color(0xFF5A3116),
+            color: Color(0xFF3E2723),
+
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: const IconThemeData(color: Color(0xFF5A3116)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),

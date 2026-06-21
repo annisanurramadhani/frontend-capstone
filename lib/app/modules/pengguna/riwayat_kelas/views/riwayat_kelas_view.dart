@@ -14,6 +14,18 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
         backgroundColor: const Color(0xFFFDF8F3),
         elevation: 0,
         centerTitle: true,
+
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
+        ),
+
         title: const Text(
           "Riwayat Kelas",
           style: TextStyle(
@@ -21,7 +33,6 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: const IconThemeData(color: Color(0xFF5A3116)),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -75,17 +86,13 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
                             color: const Color(0xFF8B5E3C).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(
-                            Icons.school_outlined,
-                            color: Color(0xFF8B5E3C),
-                          ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             item["namaKelas"] ?? "-",
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 24,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF5A3116),
                             ),

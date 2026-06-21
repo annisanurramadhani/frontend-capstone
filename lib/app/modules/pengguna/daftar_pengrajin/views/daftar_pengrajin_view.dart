@@ -21,7 +21,11 @@ class DaftarPengrajinView extends GetView<DaftarPengrajinController> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF3E2723)),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
         ),
         title: const Text(
           "Daftar Pengrajin",
@@ -81,7 +85,7 @@ class DaftarPengrajinView extends GetView<DaftarPengrajinController> {
                             item["photo"] != null &&
                                 item["photo"].toString().isNotEmpty
                             ? Image.network(
-                                "http://192.168.18.72:3000/uploads/${item['photo']}",
+                                "http://10.223.117.75:3000/uploads/${item['photo']}",
                                 width: 76,
                                 height: 76,
                                 fit: BoxFit.cover,

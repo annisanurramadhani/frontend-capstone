@@ -3,8 +3,50 @@ import 'package:get/get.dart';
 import '../controllers/halaman_utama_controller.dart';
 import '../../../../global_widgets/custom_navbar.dart';
 
-class HalamanUtamaView extends GetView<HalamanUtamaController> {
+class HalamanUtamaView extends StatefulWidget {
   const HalamanUtamaView({super.key});
+
+  @override
+  State<HalamanUtamaView> createState() => _HalamanUtamaViewState();
+}
+
+class _HalamanUtamaViewState extends State<HalamanUtamaView> {
+  final controller = Get.find<HalamanUtamaController>();
+
+  final PageController pageController = PageController();
+
+  int currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    autoSlide();
+  }
+
+  void autoSlide() async {
+    while (mounted) {
+      await Future.delayed(const Duration(seconds: 3));
+
+      currentPage++;
+
+      if (currentPage > 2) {
+        currentPage = 0;
+      }
+
+      pageController.animateToPage(
+        currentPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +88,7 @@ class HalamanUtamaView extends GetView<HalamanUtamaController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Selamat Datang 👋",
+                            "Selamat Datang!",
                             style: TextStyle(
                               fontSize: 13,
                               color: const Color(0xFF8B6347),
@@ -91,91 +133,66 @@ class HalamanUtamaView extends GetView<HalamanUtamaController> {
               SizedBox(height: size.height * 0.03),
 
               // ── BANNER ───────────────────────────────────────────────
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF5A3116),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+              SizedBox(
+                height: 190,
+                child: PageView(
+                  controller: pageController,
+
+                  onPageChanged: (index) {
+                    setState(() {
+                      currentPage = index;
+                    });
+                  },
+
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF8B5E3C),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Text(
-                              "Platform Anyaman",
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Color(0xFFFFE0B2),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            "Belajar Anyaman\nBambu",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              height: 1.3,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          const Text(
-                            "Bersama pengrajin lokal Indonesia.",
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Color(0xFFD7B899),
-                              height: 1.5,
-                            ),
-                          ),
-                        ],
+                    // ClipRRect(
+                    //   borderRadius: BorderRadius.circular(24),
+                    //   child: Image.asset(
+                    //     "assets/image/banner1.jpg",
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    // ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: Image.asset(
+                        "assets/image/banner2.png",
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Container(
-                      width: 72,
-                      height: 72,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF8B5E3C),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Icon(
-                        Icons.school_rounded,
-                        color: Color(0xFFFFE0B2),
-                        size: 38,
+
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: Image.asset(
+                        "assets/image/banner3.png",
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ],
                 ),
               ),
 
-              SizedBox(height: size.height * 0.03),
+              const SizedBox(height: 12),
 
-              // ── MENU TITLE ───────────────────────────────────────────
-              const Text(
-                "Menu Utama",
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF3E2723),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  3,
+                  (index) => AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    width: currentPage == index ? 20 : 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: currentPage == index
+                          ? const Color(0xFF5A3116)
+                          : Colors.grey.shade400,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
                 ),
               ),
 
-              const SizedBox(height: 14),
+              SizedBox(height: size.height * 0.03),
 
               // ── GRID MENU ────────────────────────────────────────────
               Obx(() {

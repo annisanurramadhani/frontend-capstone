@@ -10,13 +10,36 @@ class KeranjangView extends GetView<KeranjangController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Keranjang"),
+        backgroundColor: const Color(0xFFFDF8F3),
+        elevation: 0,
+        centerTitle: true,
+
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF5A3116),
+            size: 20,
+          ),
+        ),
+
+        title: const Text(
+          "Keranjang",
+          style: TextStyle(
+            color: Color(0xFF5A3116),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
         actions: [
           IconButton(
-            icon: const Icon(Icons.receipt_long),
             onPressed: () {
               Get.toNamed("/lihat-pesanan");
             },
+            icon: const Icon(Icons.receipt_long, color: Color(0xFF5A3116)),
+            tooltip: "Riwayat Pembelian",
           ),
         ],
       ),
@@ -52,7 +75,7 @@ class KeranjangView extends GetView<KeranjangController> {
 
                         children: [
                           Image.network(
-                            "http://192.168.18.23:3000/uploads/${produk["foto"]}",
+                            "http://10.223.117.75:3000/uploads/${produk["foto"]}",
 
                             width: 80,
 
@@ -139,14 +162,6 @@ class KeranjangView extends GetView<KeranjangController> {
                                     ),
                                   ],
                                 ),
-
-                                Text(
-                                  "Subtotal : Rp ${produk["harga"] * item["qty"]}",
-
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -187,11 +202,26 @@ class KeranjangView extends GetView<KeranjangController> {
                     ),
                   ),
 
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.toNamed("/checkout");
-                    },
-                    child: const Text("Checkout"),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.toNamed("/checkout");
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF8B5E3C),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      child: const Text(
+                        "Checkout",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ],
               ),

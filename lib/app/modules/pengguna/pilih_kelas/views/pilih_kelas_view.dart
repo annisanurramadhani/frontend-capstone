@@ -17,26 +17,42 @@ class PilihKelasView extends GetView<PilihKelasController> {
       backgroundColor: const Color(0xFFFDF8F3),
 
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFDF8F3),
+        backgroundColor: const Color(0xFFF8F5F1),
 
         elevation: 0,
 
         centerTitle: true,
 
-        title: const Text("Pilih Kelas"),
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
+        ),
+
+        title: const Text(
+          "Pilih Kelas",
+
+          style: TextStyle(
+            color: Color(0xFF3E2723),
+
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
 
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (controller.kelas.isEmpty) {
-          return const Center(
-            child: Text("Belum ada kelas"),
-          );
+          return const Center(child: Text("Belum ada kelas"));
         }
 
         return ListView.builder(
@@ -94,11 +110,7 @@ class PilihKelasView extends GetView<PilihKelasController> {
                         ),
 
                         if (!isUnlocked)
-                          const Icon(
-                            Icons.lock,
-
-                            color: Colors.red,
-                          ),
+                          const Icon(Icons.lock, color: Colors.red),
                       ],
                     ),
 
@@ -126,9 +138,7 @@ class PilihKelasView extends GetView<PilihKelasController> {
 
                         const SizedBox(width: 6),
 
-                        Expanded(
-                          child: Text(item["lokasi"]),
-                        ),
+                        Expanded(child: Text(item["lokasi"])),
                       ],
                     ),
 
@@ -167,10 +177,7 @@ class PilihKelasView extends GetView<PilihKelasController> {
                           Get.toNamed(
                             Routes.PESAN_PELATIHAN,
 
-                            arguments: {
-                              "pengrajin": pengrajin,
-                              "kelas": item,
-                            },
+                            arguments: {"pengrajin": pengrajin, "kelas": item},
                           );
                         },
 
@@ -186,11 +193,7 @@ class PilihKelasView extends GetView<PilihKelasController> {
                           ),
                         ),
 
-                        child: Text(
-                          isUnlocked
-                              ? "Pilih Kelas"
-                              : "Terkunci",
-                        ),
+                        child: Text(isUnlocked ? "Pilih Kelas" : "Terkunci"),
                       ),
                     ),
                   ],

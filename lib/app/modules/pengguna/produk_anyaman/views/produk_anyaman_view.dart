@@ -10,13 +10,40 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Produk Anyaman"),
+        backgroundColor: const Color(0xFFF8F5F1),
+        elevation: 0,
+        centerTitle: true,
+
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
+        ),
+
+        title: const Text(
+          "Produk Anyaman",
+          style: TextStyle(
+            color: Color(0xFF3E2723),
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
+
         actions: [
           IconButton(
             onPressed: () {
               Get.toNamed('/keranjang');
             },
-            icon: const Icon(Icons.shopping_cart),
+            icon: const Icon(
+              Icons.shopping_cart_outlined,
+              color: Color(0xFF3E2723),
+              size: 24,
+            ),
           ),
         ],
       ),
@@ -52,7 +79,7 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
                         borderRadius: BorderRadius.circular(10),
 
                         child: Image.network(
-                          "http://192.168.110.206:3000/uploads/${produk["foto"]}",
+                          "http://10.223.117.75:3000/uploads/${produk["foto"]}",
                           width: 90,
                           height: 90,
                           fit: BoxFit.cover,

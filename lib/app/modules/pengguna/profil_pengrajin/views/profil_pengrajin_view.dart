@@ -30,7 +30,11 @@ class ProfilPengrajinView extends StatelessWidget {
             Get.back();
           },
 
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF3E2723)),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
         ),
 
         title: const Text(
@@ -49,93 +53,100 @@ class ProfilPengrajinView extends StatelessWidget {
 
         child: Column(
           children: [
-            // CARD PROFILE
             Container(
               width: double.infinity,
-
-              padding: const EdgeInsets.all(24),
-
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
-
-                borderRadius: BorderRadius.circular(30),
-
+                borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-
+                    color: Colors.black.withOpacity(0.05),
                     blurRadius: 10,
-
                     offset: const Offset(0, 4),
                   ),
                 ],
               ),
-
-              child: Column(
+              child: Row(
                 children: [
-                  // FOTO
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(60),
                     child:
-                        pengrajin != null &&
-                            pengrajin["photo"] != null &&
+                        pengrajin["photo"] != null &&
                             pengrajin["photo"].toString().isNotEmpty
                         ? Image.network(
-                            "http://192.168.110.206:3000/uploads/${pengrajin['photo']}",
-                            width: 120,
-                            height: 120,
+                            "http://10.223.117.75:3000/uploads/${pengrajin['photo']}",
+                            width: 90,
+                            height: 90,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return _fotoDefault();
-                            },
+                            errorBuilder: (_, __, ___) => _fotoDefault(),
                           )
                         : _fotoDefault(),
                   ),
-                  const SizedBox(height: 20),
 
-                  // NAMA
-                  Text(
-                    pengrajin["name"] ?? "-",
+                  const SizedBox(width: 16),
 
-                    textAlign: TextAlign.center,
-
-                    style: TextStyle(
-                      fontSize: size.width * 0.07,
-
-                      fontWeight: FontWeight.bold,
-
-                      color: const Color(0xFF3E2723),
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // RATING
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-
-                      vertical: 10,
-                    ),
-
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF3D6),
-
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.star, color: Colors.amber),
-
-                        const SizedBox(width: 6),
-
                         Text(
-                          "${pengrajin["rating"]}",
+                          pengrajin["name"] ?? "-",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF3E2723),
+                          ),
+                        ),
 
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        const SizedBox(height: 8),
+
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.star_rounded,
+                              color: Colors.amber,
+                              size: 20,
+                            ),
+
+                            const SizedBox(width: 4),
+
+                            Text(
+                              "${pengrajin["rating"] ?? 0}",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        SizedBox(
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Get.toNamed(
+                                Routes.PILIH_KELAS,
+                                arguments: pengrajin,
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF5A3116),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              "Pesan Kelas",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -149,9 +160,6 @@ class ProfilPengrajinView extends StatelessWidget {
             // INFORMASI
             _buildInfoCard(
               title: "Pengalaman",
-
-              icon: Icons.work_outline,
-
               content: pengrajin["pengalaman"] ?? "-",
             ),
 
@@ -159,9 +167,6 @@ class ProfilPengrajinView extends StatelessWidget {
 
             _buildInfoCard(
               title: "Deskripsi",
-
-              icon: Icons.description_outlined,
-
               content: pengrajin["deskripsi"] ?? "-",
             ),
 
@@ -169,9 +174,6 @@ class ProfilPengrajinView extends StatelessWidget {
 
             _buildInfoCard(
               title: "Alamat",
-
-              icon: Icons.location_on_outlined,
-
               content: pengrajin["alamat"] ?? "-",
             ),
 
@@ -179,55 +181,16 @@ class ProfilPengrajinView extends StatelessWidget {
 
             _buildInfoCard(
               title: "Nomor Telpon",
-
-              icon: Icons.phone_outlined,
-
               content: pengrajin["noTelpon"] ?? "-",
             ),
-
             const SizedBox(height: 30),
-
-            // BUTTON PESAN
-            SizedBox(
-              width: double.infinity,
-
-              height: 55,
-
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Get.toNamed(Routes.PILIH_KELAS, arguments: pengrajin);
-                },
-
-                icon: const Icon(Icons.school_outlined),
-
-                label: const Text("Pesan Pelatihan"),
-
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF5A3116),
-
-                  foregroundColor: Colors.white,
-
-                  elevation: 0,
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 15),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoCard({
-    required String title,
-    required IconData icon,
-    required String content,
-  }) {
+  Widget _buildInfoCard({required String title, required String content}) {
     return Container(
       width: double.infinity,
 
@@ -251,37 +214,24 @@ class ProfilPengrajinView extends StatelessWidget {
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
-          Row(
-            children: [
-              Icon(icon, color: const Color(0xFF5A3116)),
-
-              const SizedBox(width: 10),
-
-              Text(
-                title,
-
-                style: const TextStyle(
-                  fontSize: 18,
-
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF3E2723),
+            ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
 
           Text(
             content,
-
             style: const TextStyle(
-              color: Colors.brown,
-
-              height: 1.7,
-
               fontSize: 15,
+              color: Colors.brown,
+              height: 1.7,
             ),
           ),
         ],

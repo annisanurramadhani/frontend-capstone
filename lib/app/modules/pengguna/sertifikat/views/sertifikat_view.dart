@@ -17,130 +17,99 @@ class SertifikatView extends GetView<SertifikatController> {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
 
-      // SERTIFIKAT
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFDF8F3),
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: controller.kembali,
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
+        ),
+        title: const Text(
+          "Sertifikat Saya",
+          style: TextStyle(
+            color: Color(0xFF3E2723),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+
       bottomNavigationBar: const CustomNavbar(currentIndex: 2),
 
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(size.width * 0.055),
+        child: Column(
+          children: [
+            const SizedBox(height: 2),
 
-          child: Column(
-            children: [
-              SizedBox(height: size.height * 0.01),
-
-              // HEADER
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: controller.kembali,
-
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-
-                      color: Color(0xFF5A3116),
-                    ),
-                  ),
-
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        "Sertifikat Saya",
-
-                        style: TextStyle(
-                          fontSize: size.width * 0.07,
-
-                          fontWeight: FontWeight.bold,
-
-                          color: const Color(0xFF3E2723),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(width: 48),
-                ],
-              ),
-
-              SizedBox(height: size.height * 0.025),
-
-              Text(
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.width * 0.055),
+              child: Text(
                 "Sertifikat yang telah Anda dapatkan akan muncul di halaman ini.",
-
                 textAlign: TextAlign.center,
-
                 style: TextStyle(
                   fontSize: size.width * 0.04,
-
                   color: Colors.brown,
-
-                  height: 1.6,
                 ),
               ),
+            ),
 
-              SizedBox(height: size.height * 0.03),
+            const SizedBox(height: 16),
 
-              Expanded(
-                child: Obx(() {
-                  if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                  if (controller.sertifikatList.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                if (controller.sertifikatList.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.workspace_premium_outlined,
+                          size: 90,
+                          color: Colors.brown.shade300,
+                        ),
 
-                        children: [
-                          Icon(
-                            Icons.workspace_premium_outlined,
+                        const SizedBox(height: 20),
 
-                            size: 90,
-
-                            color: Colors.brown.shade300,
+                        const Text(
+                          "Belum ada sertifikat",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF3E2723),
                           ),
+                        ),
 
-                          const SizedBox(height: 20),
+                        const SizedBox(height: 10),
 
-                          const Text(
-                            "Belum ada sertifikat",
-
-                            style: TextStyle(
-                              fontSize: 22,
-
-                              fontWeight: FontWeight.bold,
-
-                              color: Color(0xFF3E2723),
-                            ),
-                          ),
-
-                          const SizedBox(height: 10),
-
-                          const Text(
-                            "Selesaikan kelas terlebih dahulu",
-
-                            style: TextStyle(fontSize: 16, color: Colors.brown),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
-                    itemCount: controller.sertifikatList.length,
-
-                    itemBuilder: (context, index) {
-                      final data = controller.sertifikatList[index];
-
-                      print("DATA SERTIFIKAT:");
-                      print(data);
-
-                      return sertifikatCard(context: context, data: data);
-                    },
+                        const Text(
+                          "Selesaikan kelas terlebih dahulu",
+                          style: TextStyle(fontSize: 16, color: Colors.brown),
+                        ),
+                      ],
+                    ),
                   );
-                }),
-              ),
-            ],
-          ),
+                }
+
+                return ListView.builder(
+                  itemCount: controller.sertifikatList.length,
+                  itemBuilder: (context, index) {
+                    return sertifikatCard(
+                      context: context,
+                      data: controller.sertifikatList[index],
+                    );
+                  },
+                );
+              }),
+            ),
+          ],
         ),
       ),
     );
@@ -158,81 +127,103 @@ class SertifikatView extends GetView<SertifikatController> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 100,
-                height: 140,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF3EAE0),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: const Icon(
-                  Icons.workspace_premium,
-                  size: 50,
-                  color: Color(0xFF5A3116),
-                ),
+          // GAMBAR SERTIFIKAT
+          Container(
+            width: double.infinity,
+            height: 180,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: const LinearGradient(
+                colors: [Color(0xFF5A3116), Color(0xFF8B5E3C)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.workspace_premium_rounded,
+                  color: Colors.white,
+                  size: 60,
+                ),
 
-              const SizedBox(width: 18),
+                const SizedBox(height: 12),
 
+                Text(
+                  data["kelas"]?["namaKelas"] ?? "-",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                const Text(
+                  "Sertifikat Selesai Platihan",
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+
+          Row(
+            children: [
+              const Icon(
+                Icons.person_outline,
+                size: 20,
+                color: Color(0xFF5A3116),
+              ),
+              const SizedBox(width: 10),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data["kelas"]?["namaKelas"] ?? "-",
-                      style: TextStyle(
-                        fontSize: size.width * 0.05,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF3E2723),
-                      ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    infoItem(
-                      icon: Icons.person_outline,
-                      title: "Pengrajin",
-                      value: data["pengrajin"]?["name"] ?? "-",
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    infoItem(
-                      icon: Icons.calendar_month_outlined,
-                      title: "Tanggal",
-                      value: data["tanggal"] ?? "-",
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    Row(
-                      children: const [
-                        Icon(Icons.check_circle, color: Colors.green, size: 20),
-                        SizedBox(width: 10),
-                        Text(
-                          "Selesai",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                child: Text(
+                  "Pengrajin : ${data["pengrajin"]?["name"] ?? "-"}",
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Color(0xFF3E2723),
+                  ),
                 ),
               ),
             ],
           ),
 
-          const SizedBox(height: 22),
+          const SizedBox(height: 12),
+
+          Row(
+            children: [
+              const Icon(
+                Icons.calendar_month_outlined,
+                size: 20,
+                color: Color(0xFF5A3116),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  "Tanggal : ${data["tanggal"] ?? "-"}",
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Color(0xFF3E2723),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 12),
 
           Row(
             children: [
@@ -285,42 +276,6 @@ class SertifikatView extends GetView<SertifikatController> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget infoItem({
-    required IconData icon,
-
-    required String title,
-
-    required String value,
-  }) {
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: const Color(0xFF5A3116)),
-
-        const SizedBox(width: 10),
-
-        Text(
-          "$title : ",
-
-          style: const TextStyle(fontSize: 15, color: Colors.brown),
-        ),
-
-        Expanded(
-          child: Text(
-            value,
-
-            style: const TextStyle(
-              fontSize: 15,
-
-              fontWeight: FontWeight.w600,
-
-              color: Color(0xFF3E2723),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

@@ -140,12 +140,19 @@ class ProfilView extends GetView<ProfilController> {
                   // SERTIFIKAT
                   menuItem(
                     icon: Icons.workspace_premium_outlined,
-
                     title: "Sertifikat Saya",
-
                     subtitle: "Lihat sertifikat kelas",
-
                     onTap: controller.keSertifikat,
+                  ),
+
+                  SizedBox(height: size.height * 0.02),
+
+                  // RIWAYAT AKTIFITAS
+                  menuItem(
+                    icon: Icons.history_rounded,
+                    title: "Riwayat Aktivitas",
+                    subtitle: "Lihat Riwayat Aktivitas",
+                    onTap: controller.keRiwayatAktivitas,
                   ),
 
                   SizedBox(height: size.height * 0.02),

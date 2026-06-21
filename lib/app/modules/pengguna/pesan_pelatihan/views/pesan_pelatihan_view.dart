@@ -11,17 +11,33 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFDF8F3),
+        backgroundColor: const Color(0xFFF8F5F1),
+
         elevation: 0,
+
         centerTitle: true,
+
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
+        ),
+
         title: const Text(
           "Pesan Pelatihan",
+
           style: TextStyle(
-            color: Color(0xFF5A3116),
+            color: Color(0xFF3E2723),
+
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: const IconThemeData(color: Color(0xFF5A3116)),
       ),
 
       body: Form(
@@ -31,7 +47,6 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               // CARD INFO KELAS
               Container(
                 width: double.infinity,
@@ -54,18 +69,13 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                             color: const Color(0xFF8B5E3C).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(
-                            Icons.school_outlined,
-                            color: Color(0xFF8B5E3C),
-                            size: 20,
-                          ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             controller.kelas["namaKelas"],
                             style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 24,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF5A3116),
                             ),
@@ -284,10 +294,11 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                         ? null
                         : controller.lanjutBooking,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF8B5E3C),
-                      disabledBackgroundColor: Colors.grey.shade300,
+                      backgroundColor: const Color(0xFF5A3116),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(18),
                       ),
                     ),
                     child: controller.isLoading.value

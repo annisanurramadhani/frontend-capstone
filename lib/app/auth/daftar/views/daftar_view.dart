@@ -37,13 +37,10 @@ class DaftarView extends GetView<DaftarController> {
               physics: const BouncingScrollPhysics(),
 
               child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: size.height),
+                constraints: BoxConstraints(minHeight: size.height + 200),
 
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.08,
-                    vertical: 24,
-                  ),
+                  padding: const EdgeInsets.only(top: 24),
 
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,107 +49,49 @@ class DaftarView extends GetView<DaftarController> {
                       SizedBox(height: size.height * 0.01),
 
                       // HEADER
-                      Row(
+                      Stack(
+                        alignment: Alignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-
-                            icon: const Icon(
-                              Icons.arrow_back_ios_new,
-
-                              color: Color(0xFF5A3116),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: IconButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back_ios_new,
+                                color: Color(0xFF5A3116),
+                              ),
                             ),
                           ),
 
-                          const Spacer(),
-
-                          // LOGO
-                          Container(
-                            width: size.width * 0.18,
-
-                            height: size.width * 0.18,
-
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-
-                              shape: BoxShape.circle,
-
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
-
-                                  blurRadius: 12,
-
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-
-                            child: Icon(
-                              Icons.grid_view_rounded,
-
-                              size: size.width * 0.09,
-
-                              color: const Color(0xFF8B5E3C),
+                          const Text(
+                            "Daftar",
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF3E2723),
                             ),
                           ),
-
-                          const Spacer(),
-
-                          const SizedBox(width: 48),
                         ],
                       ),
 
-                      SizedBox(height: size.height * 0.04),
-
-                      // TITLE
-                      Center(
-                        child: Text(
-                          "Daftar",
-
-                          style: TextStyle(
-                            fontSize: size.width * 0.1,
-
-                            fontWeight: FontWeight.bold,
-
-                            color: const Color(0xFF3E2723),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      // SUBTITLE
-                      Center(
-                        child: Text(
-                          "Buat akun baru untuk mulai belajar anyaman bambu.",
-
-                          textAlign: TextAlign.center,
-
-                          style: TextStyle(
-                            fontSize: size.width * 0.042,
-
-                            color: Colors.brown.shade700,
-
-                            height: 1.7,
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: size.height * 0.05),
+                      const SizedBox(height: 12),
 
                       // FORM
                       Container(
                         width: double.infinity,
+                        constraints: BoxConstraints(minHeight: size.height),
 
                         padding: EdgeInsets.all(size.width * 0.06),
 
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white,
 
-                          borderRadius: BorderRadius.circular(32),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40),
+                          ),
 
                           boxShadow: [
                             BoxShadow(
@@ -167,12 +106,11 @@ class DaftarView extends GetView<DaftarController> {
 
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-
                           children: [
+                            SizedBox(height: size.height * 0.03),
+
                             // NAMA
                             buildTitle("Nama Lengkap", size),
-
-                            const SizedBox(height: 12),
 
                             TextField(
                               controller: controller.namaController,
@@ -354,8 +292,6 @@ class DaftarView extends GetView<DaftarController> {
                           ],
                         ),
                       ),
-
-                      SizedBox(height: size.height * 0.05),
                     ],
                   ),
                 ),

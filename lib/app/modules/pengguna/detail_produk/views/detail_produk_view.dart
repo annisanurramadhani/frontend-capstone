@@ -9,6 +9,44 @@ class DetailProdukView extends GetView<DetailProdukController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF8F5F1),
+        elevation: 0,
+        centerTitle: true,
+
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
+        ),
+
+        title: const Text(
+          "Detail Produk",
+          style: TextStyle(
+            color: Color(0xFF3E2723),
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
+
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.toNamed('/keranjang');
+            },
+            icon: const Icon(
+              Icons.shopping_cart_outlined,
+              color: Color(0xFF3E2723),
+              size: 24,
+            ),
+          ),
+        ],
+      ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -20,11 +58,14 @@ class DetailProdukView extends GetView<DetailProdukController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                "http://192.168.110.206:3000/uploads/${produk["foto"]}",
-                height: 300,
-                width: double.infinity,
-                fit: BoxFit.cover,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Image.network(
+                  "http://10.223.117.75:3000/uploads/${produk["foto"]}",
+                  height: 250,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
 
               Padding(
@@ -85,6 +126,7 @@ class DetailProdukView extends GetView<DetailProdukController> {
 
                     SizedBox(
                       width: double.infinity,
+                      height: 55,
                       child: ElevatedButton(
                         onPressed: () {
                           Get.toNamed(
@@ -92,7 +134,21 @@ class DetailProdukView extends GetView<DetailProdukController> {
                             arguments: {'produkId': produk['id'], 'qty': 1},
                           );
                         },
-                        child: const Text("Beli Sekarang"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF5A3116),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: const Text(
+                          "Beli Sekarang",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
                       ),
                     ),
                   ],

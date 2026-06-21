@@ -13,20 +13,23 @@ class NotifikasiView extends GetView<NotifikasiController> {
         backgroundColor: const Color(0xFFFDF8F3),
         elevation: 0,
         centerTitle: true,
+
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () {
+            Get.back();
+          },
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Color(0xFF3E2723),
             size: 20,
           ),
         ),
+
         title: const Text(
           "Notifikasi",
           style: TextStyle(
-            color: Color(0xFF3E2723),
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
+            color: Color(0xFF5A3116),
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

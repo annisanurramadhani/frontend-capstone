@@ -24,8 +24,8 @@ class BelajarAnyamanView extends GetView<BelajarAnyamanController> {
           "Belajar Anyaman",
           style: TextStyle(
             color: Color(0xFF3E2723),
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
         ),
       ),
