@@ -14,14 +14,24 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
         backgroundColor: const Color(0xFFFDF8F3),
         elevation: 0,
         centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
+        ),
         title: const Text(
           "Riwayat Kelas",
           style: TextStyle(
+            fontSize: 20,
             color: Color(0xFF5A3116),
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: const IconThemeData(color: Color(0xFF5A3116)),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -60,8 +70,12 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: const [
-                    BoxShadow(color: Colors.black12, blurRadius: 8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
                   ],
                 ),
                 child: Column(
@@ -72,12 +86,10 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF8B5E3C).withOpacity(0.1),
+                            color: const Color(
+                              0xFF8B5E3C,
+                            ).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            Icons.school_outlined,
-                            color: Color(0xFF8B5E3C),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -85,7 +97,7 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
                           child: Text(
                             item["namaKelas"] ?? "-",
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF5A3116),
                             ),
@@ -127,10 +139,9 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
                           item["orderId"] ?? "-",
                           style: TextStyle(
                             color: Colors.grey.shade600,
-                            fontSize: 11,
+                            fontSize: 12,
                           ),
                         ),
-
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
@@ -147,6 +158,7 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
                                 ? "Lunas"
                                 : "Menunggu",
                             style: TextStyle(
+                              fontSize: 13,
                               fontWeight: FontWeight.w600,
                               color: item["statusBayar"] == "lunas"
                                   ? const Color(0xFF0A3622)
@@ -172,7 +184,7 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
       children: [
         Text(
           title,
-          style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+          style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
         ),
         Flexible(
           child: Text(
@@ -180,7 +192,7 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
             textAlign: TextAlign.end,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 13,
+              fontSize: 14,
               color: Color(0xFF3E2723),
             ),
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../../../routes/app_pages.dart';
 import '../../../../data/services/pengguna_service.dart';
+import '../views/pesan_pelatihan_view.dart';
 
 class PesanPelatihanController extends GetxController {
   RxBool isLoading = false.obs;
@@ -13,9 +13,7 @@ class PesanPelatihanController extends GetxController {
   late Map kelas;
 
   final namaController = TextEditingController();
-
   final noTelponController = TextEditingController();
-
   final tanggalController = TextEditingController();
 
   RxString jamPelatihan = "".obs;
@@ -33,7 +31,6 @@ class PesanPelatihanController extends GetxController {
     pengrajin = args["pengrajin"];
     kelas = args["kelas"];
 
-    // DEBUG - hapus setelah fix
     print("=== DEBUG ARGS ===");
     print("PENGRAJIN: $pengrajin");
     print("PENGRAJIN ID: ${pengrajin["id"]}");
@@ -41,13 +38,14 @@ class PesanPelatihanController extends GetxController {
   }
 
   Future<void> lanjutBooking() async {
-    if (!formKey.currentState!.validate()) {
-      return;
-    }
+    if (!formKey.currentState!.validate()) return;
 
     if (jamPelatihan.value.isEmpty) {
-      Get.snackbar("Error", "Pilih jam pelatihan");
-
+      Get.snackbar(
+        "Error",
+        "Pilih jam pelatihan",
+        snackPosition: SnackPosition.TOP,
+      );
       return;
     }
 
@@ -55,31 +53,27 @@ class PesanPelatihanController extends GetxController {
       isLoading.value = true;
 
       final box = GetStorage();
-
       final user = box.read("user");
 
       final bookingData = {
         "userId": user["id"],
-
         "pengrajinId": pengrajin["id"],
-
         "kelasId": kelas["id"],
-
         "namaLengkap": namaController.text,
-
         "noTelpon": noTelponController.text,
-
         "tanggal": tanggalController.text,
-
         "jamPelatihan": jamPelatihan.value,
-
         "metodeBayar": "midtrans",
       };
 
       final response = await PenggunaService.createBooking(data: bookingData);
 
       if (response["success"] != true) {
-        Get.snackbar("Error", response["message"] ?? "Booking gagal");
+        Get.snackbar(
+          "Error",
+          response["message"] ?? "Booking gagal",
+          snackPosition: SnackPosition.TOP,
+        );
         return;
       }
 
@@ -94,34 +88,19 @@ class PesanPelatihanController extends GetxController {
         },
       );
 
-      //POPUP
       if (result == "success") {
-        Get.defaultDialog(
-          title: "Pembayaran Berhasil",
-          titleStyle: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF5A3116),
-          ),
-          middleText:
-              "Booking pelatihan Anda berhasil dan pembayaran telah diterima.",
-          middleTextStyle: const TextStyle(fontSize: 14, color: Colors.black87),
-          radius: 16,
-          textConfirm: "OK",
-          confirmTextColor: Colors.white,
-          buttonColor: const Color(0xFF8B5E3C),
-          onConfirm: () {
-            Get.back();
-            Get.offAllNamed(Routes.HALAMAN_UTAMA,);
-          },
-        );
+        PesanPelatihanView.showSuccessDialog();
       }
 
       if (result == "cancel") {
-        Get.snackbar("Pembayaran", "Pembayaran dibatalkan");
+        Get.snackbar(
+          "Pembayaran",
+          "Pembayaran dibatalkan",
+          snackPosition: SnackPosition.TOP,
+        );
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.TOP);
     } finally {
       isLoading.value = false;
     }
@@ -130,11 +109,8 @@ class PesanPelatihanController extends GetxController {
   @override
   void onClose() {
     namaController.dispose();
-
     noTelponController.dispose();
-
     tanggalController.dispose();
-
     super.onClose();
   }
 }

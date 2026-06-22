@@ -45,6 +45,7 @@ dependencies:
   qr_flutter: ^4.1.0
   intl: ^0.19.0
   socket_io_client: ^3.1.0
+  google_sign_in: ^7.1.0
 
 dev_dependencies:
   flutter_test:

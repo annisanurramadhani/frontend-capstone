@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../../../../data/providers/api_provider.dart';
-
 import '../../../../routes/app_pages.dart';
 
 class ProfilPengrajinView extends StatelessWidget {
@@ -13,77 +11,60 @@ class ProfilPengrajinView extends StatelessWidget {
   Widget build(BuildContext context) {
     final pengrajin = Get.arguments;
 
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: const Color(0xFFF8F5F1),
-
       appBar: AppBar(
         backgroundColor: const Color(0xFFF8F5F1),
-
         elevation: 0,
-
         centerTitle: true,
-
         leading: IconButton(
           onPressed: () {
             Get.back();
           },
-
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF3E2723)),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
         ),
-
         title: const Text(
           "Profil Pengrajin",
-
           style: TextStyle(
+            fontSize: 20,
             color: Color(0xFF3E2723),
-
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-
         child: Column(
           children: [
-            // CARD PROFILE
             Container(
               width: double.infinity,
-
-              padding: const EdgeInsets.all(24),
-
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
-
-                borderRadius: BorderRadius.circular(30),
-
+                borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.05),
-
                     blurRadius: 10,
-
                     offset: const Offset(0, 4),
                   ),
                 ],
               ),
-
-              child: Column(
+              child: Row(
                 children: [
-                  // FOTO
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(60),
                     child:
-                        pengrajin != null &&
-                            pengrajin["photo"] != null &&
+                        pengrajin["photo"] != null &&
                             pengrajin["photo"].toString().isNotEmpty
                         ? Image.network(
-                            "http://192.168.18.72:3000/uploads/${pengrajin['photo']}",
-                            width: 120,
-                            height: 120,
+                            "${ApiProvider.baseUrl}${pengrajin['photo']}",
+                            width: 90,
+                            height: 90,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return _fotoDefault();
@@ -91,51 +72,64 @@ class ProfilPengrajinView extends StatelessWidget {
                           )
                         : _fotoDefault(),
                   ),
-                  const SizedBox(height: 20),
-
-                  // NAMA
-                  Text(
-                    pengrajin["name"] ?? "-",
-
-                    textAlign: TextAlign.center,
-
-                    style: TextStyle(
-                      fontSize: size.width * 0.07,
-
-                      fontWeight: FontWeight.bold,
-
-                      color: const Color(0xFF3E2723),
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // RATING
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-
-                      vertical: 10,
-                    ),
-
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF3D6),
-
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.star, color: Colors.amber),
-
-                        const SizedBox(width: 6),
-
                         Text(
-                          "${pengrajin["rating"]}",
-
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          pengrajin["name"] ?? "-",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF3E2723),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.star_rounded,
+                              color: Colors.amber,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              "${pengrajin["rating"] ?? 0}",
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF5A3116),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Get.toNamed(
+                                Routes.PILIH_KELAS,
+                                arguments: pengrajin,
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF5A3116),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              "Pesan Kelas",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -146,12 +140,8 @@ class ProfilPengrajinView extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // INFORMASI
             _buildInfoCard(
               title: "Pengalaman",
-
-              icon: Icons.work_outline,
-
               content: pengrajin["pengalaman"] ?? "-",
             ),
 
@@ -159,9 +149,6 @@ class ProfilPengrajinView extends StatelessWidget {
 
             _buildInfoCard(
               title: "Deskripsi",
-
-              icon: Icons.description_outlined,
-
               content: pengrajin["deskripsi"] ?? "-",
             ),
 
@@ -169,119 +156,56 @@ class ProfilPengrajinView extends StatelessWidget {
 
             _buildInfoCard(
               title: "Alamat",
-
-              icon: Icons.location_on_outlined,
-
               content: pengrajin["alamat"] ?? "-",
             ),
 
             const SizedBox(height: 18),
 
             _buildInfoCard(
-              title: "Nomor Telpon",
-
-              icon: Icons.phone_outlined,
-
+              title: "Nomor Telepon",
               content: pengrajin["noTelpon"] ?? "-",
             ),
 
             const SizedBox(height: 30),
-
-            // BUTTON PESAN
-            SizedBox(
-              width: double.infinity,
-
-              height: 55,
-
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Get.toNamed(Routes.PILIH_KELAS, arguments: pengrajin);
-                },
-
-                icon: const Icon(Icons.school_outlined),
-
-                label: const Text("Pesan Pelatihan"),
-
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF5A3116),
-
-                  foregroundColor: Colors.white,
-
-                  elevation: 0,
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 15),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoCard({
-    required String title,
-    required IconData icon,
-    required String content,
-  }) {
+  Widget _buildInfoCard({required String title, required String content}) {
     return Container(
       width: double.infinity,
-
       padding: const EdgeInsets.all(20),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
         borderRadius: BorderRadius.circular(24),
-
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
-
             blurRadius: 8,
-
             offset: const Offset(0, 4),
           ),
         ],
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
-          Row(
-            children: [
-              Icon(icon, color: const Color(0xFF5A3116)),
-
-              const SizedBox(width: 10),
-
-              Text(
-                title,
-
-                style: const TextStyle(
-                  fontSize: 18,
-
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF3E2723),
+            ),
           ),
-
-          const SizedBox(height: 14),
-
+          const SizedBox(height: 12),
           Text(
             content,
-
             style: const TextStyle(
+              fontSize: 14,
               color: Colors.brown,
-
-              height: 1.7,
-
-              fontSize: 15,
+              height: 1.6,
             ),
           ),
         ],
@@ -291,17 +215,13 @@ class ProfilPengrajinView extends StatelessWidget {
 
   Widget _fotoDefault() {
     return Container(
-      width: 120,
-
-      height: 120,
-
+      width: 90,
+      height: 90,
       decoration: const BoxDecoration(
         color: Color(0xFFF3EAE0),
-
         shape: BoxShape.circle,
       ),
-
-      child: const Icon(Icons.person, size: 60, color: Color(0xFF5A3116)),
+      child: const Icon(Icons.person, size: 50, color: Color(0xFF5A3116)),
     );
   }
 }

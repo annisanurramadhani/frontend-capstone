@@ -1,5 +1,3 @@
-// otp_login_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -112,17 +110,38 @@ class OtpLoginView extends GetView<OtpLoginController> {
                         child: Column(
                           children: [
                             // OTP FIELDS
-                            Wrap(
-                              alignment: WrapAlignment.center,
-                              spacing: 10,
-                              runSpacing: 10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                otpField(controller: controller.otp1Controller),
-                                otpField(controller: controller.otp2Controller),
-                                otpField(controller: controller.otp3Controller),
-                                otpField(controller: controller.otp4Controller),
-                                otpField(controller: controller.otp5Controller),
-                                otpField(controller: controller.otp6Controller),
+                                otpField(
+                                  controller: controller.otp1Controller,
+                                  context: context,
+                                ),
+                                SizedBox(width: size.width * 0.02),
+                                otpField(
+                                  controller: controller.otp2Controller,
+                                  context: context,
+                                ),
+                                SizedBox(width: size.width * 0.02),
+                                otpField(
+                                  controller: controller.otp3Controller,
+                                  context: context,
+                                ),
+                                SizedBox(width: size.width * 0.02),
+                                otpField(
+                                  controller: controller.otp4Controller,
+                                  context: context,
+                                ),
+                                SizedBox(width: size.width * 0.02),
+                                otpField(
+                                  controller: controller.otp5Controller,
+                                  context: context,
+                                ),
+                                SizedBox(width: size.width * 0.02),
+                                otpField(
+                                  controller: controller.otp6Controller,
+                                  context: context,
+                                ),
                               ],
                             ),
 
@@ -267,10 +286,16 @@ class OtpLoginView extends GetView<OtpLoginController> {
     );
   }
 
-  Widget otpField({required TextEditingController controller}) {
+  Widget otpField({
+    required TextEditingController controller,
+    required BuildContext context,
+  }) {
+    final size = MediaQuery.of(context).size;
+    final fieldSize = (size.width * 0.84 - (size.width * 0.07 * 2) - 5 * size.width * 0.02) / 6;
+
     return SizedBox(
-      width: 48,
-      height: 58,
+      width: fieldSize,
+      height: fieldSize * 1.2,
       child: TextField(
         controller: controller,
         textAlign: TextAlign.center,
@@ -279,10 +304,10 @@ class OtpLoginView extends GetView<OtpLoginController> {
           FilteringTextInputFormatter.digitsOnly,
           LengthLimitingTextInputFormatter(1),
         ],
-        style: const TextStyle(
-          fontSize: 22,
+        style: TextStyle(
+          fontSize: size.width * 0.055,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF3E2723),
+          color: const Color(0xFF3E2723),
         ),
         decoration: InputDecoration(
           filled: true,

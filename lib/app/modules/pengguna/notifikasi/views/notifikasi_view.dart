@@ -13,32 +13,32 @@ class NotifikasiView extends GetView<NotifikasiController> {
         backgroundColor: const Color(0xFFFDF8F3),
         elevation: 0,
         centerTitle: true,
+
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () {
+            Get.back();
+          },
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Color(0xFF3E2723),
             size: 20,
           ),
         ),
+
         title: const Text(
           "Notifikasi",
           style: TextStyle(
-            color: Color(0xFF3E2723),
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
+            color: Color(0xFF5A3116),
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
       body: Obx(() {
-        // ── LOADING ──────────────────────────────────────────────────
         if (controller.isLoading.value) {
           return const Center(
             child: CircularProgressIndicator(color: Color(0xFF5A3116)),
           );
         }
-
-        // ── KOSONG ───────────────────────────────────────────────────
         if (controller.notifikasiList.isEmpty) {
           return Center(
             child: Column(
@@ -75,8 +75,6 @@ class NotifikasiView extends GetView<NotifikasiController> {
             ),
           );
         }
-
-        // ── LIST ─────────────────────────────────────────────────────
         return ListView.builder(
           padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
           physics: const BouncingScrollPhysics(),
@@ -97,8 +95,6 @@ class NotifikasiView extends GetView<NotifikasiController> {
     );
   }
 }
-
-// ── NOTIF CARD ───────────────────────────────────────────────────────────────
 
 class _NotifCard extends StatelessWidget {
   final String judul;
@@ -129,7 +125,6 @@ class _NotifCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── ICON ─────────────────────────────────────────────────
           Container(
             width: 44,
             height: 44,
@@ -146,7 +141,6 @@ class _NotifCard extends StatelessWidget {
 
           const SizedBox(width: 12),
 
-          // ── KONTEN ───────────────────────────────────────────────
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

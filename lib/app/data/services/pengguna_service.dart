@@ -273,9 +273,22 @@ class PenggunaService {
 
   //GET NOTIFIKASI
   static Future<Map<String, dynamic>> getNotifikasi() async {
+    try {
+      final token = box.read("token");
+
+      final response = await ApiProvider.getNotifikasi(token);
+
+      return jsonDecode(response.body);
+    } catch (e) {
+      return {"success": false, "message": e.toString()};
+    }
+  }
+
+  // DELETE AKUN
+  static Future<dynamic> deleteAkun() async {
     final token = box.read("token");
 
-    final response = await ApiProvider.getNotifikasi(token);
+    final response = await ApiProvider.deleteAkun(token);
 
     return jsonDecode(response.body);
   }

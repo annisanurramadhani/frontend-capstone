@@ -1,5 +1,3 @@
-// otp_login_controller.dart
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -22,7 +20,6 @@ class OtpLoginController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isResending = false.obs;
 
-  // Countdown: 60 detik sebelum boleh kirim ulang
   RxInt countdown = 60.obs;
   RxBool canResend = false.obs;
 
@@ -33,7 +30,9 @@ class OtpLoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
     email = Get.arguments['email'];
+
     _startCountdown();
   }
 
@@ -45,19 +44,25 @@ class OtpLoginController extends GetxController {
     otp4Controller.dispose();
     otp5Controller.dispose();
     otp6Controller.dispose();
+
     _timer?.cancel();
+
     super.onClose();
   }
 
   void _startCountdown() {
     canResend.value = false;
+
     countdown.value = 60;
+
     _timer?.cancel();
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (countdown.value <= 1) {
         timer.cancel();
+
         countdown.value = 0;
+
         canResend.value = true;
       } else {
         countdown.value--;
@@ -86,37 +91,45 @@ class OtpLoginController extends GetxController {
           otp5Controller.text +
           otp6Controller.text;
 
-      // VALIDASI
       if (otp.length < 6) {
         Get.snackbar(
           "Peringatan",
           "Kode OTP harus 6 digit",
           snackPosition: SnackPosition.BOTTOM,
         );
+
         return;
       }
 
-      // VERIFY OTP API
       final response = await AuthService.verifyOtp(email, otp);
 
-      // SUCCESS
-      if (response['success'] == true) {
-        box.write("token", response['token']);
-        box.write("user", response['user']);
+      if (response["success"] == true) {
+        box.write("token", response["token"]);
+        box.write("user", response["user"]);
 
         Get.snackbar(
           "Berhasil",
-          response['message'],
-          snackPosition: SnackPosition.BOTTOM,
+          response["message"],
+          snackPosition: SnackPosition.TOP, 
+          backgroundColor: const Color(0xFF4CAF50), 
+          colorText: Colors.white, 
         );
 
-        Get.offAllNamed(Routes.HALAMAN_UTAMA);
+        final user = response["user"];
+        if (user["role"] == "pengguna") {
+          Get.offAllNamed(Routes.HALAMAN_UTAMA);
+        } else if (user["role"] == "pengrajin") {
+          Get.offAllNamed(Routes.HALAMAN_PENGRAJIN);
+        } else {
+          Get.offAllNamed(Routes.HALAMAN_UTAMA);
+        }
       } else {
         _clearOtpFields();
+
         Get.snackbar(
           "OTP Salah",
-          response['message'] ?? "Kode OTP tidak valid",
-          snackPosition: SnackPosition.BOTTOM,
+          response["message"] ?? "Kode OTP tidak valid",
+          snackPosition: SnackPosition.TOP, 
         );
       }
     } catch (e) {
@@ -127,7 +140,6 @@ class OtpLoginController extends GetxController {
   }
 
   Future<void> kirimUlangOtp() async {
-    // Jangan kirim jika masih dalam cooldown
     if (!canResend.value) return;
 
     try {
@@ -135,22 +147,23 @@ class OtpLoginController extends GetxController {
 
       final response = await AuthService.resendOtp(email);
 
-      if (response['success'] == true) {
+      if (response["success"] == true) {
         _clearOtpFields();
-        _startCountdown(); // mulai ulang countdown
+
+        _startCountdown();
 
         Get.snackbar(
           "Berhasil",
-          response['message'] ?? "Kode OTP baru telah dikirim ke email Anda",
+          response["message"] ?? "Kode OTP baru telah dikirim",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: const Color(0xFF8B5E3C),
+          backgroundColor: const Color(0xFF4CAF50),
           colorText: Colors.white,
           duration: const Duration(seconds: 3),
         );
       } else {
         Get.snackbar(
           "Gagal",
-          response['message'] ?? "Gagal mengirim ulang OTP",
+          response["message"] ?? "Gagal mengirim ulang OTP",
           snackPosition: SnackPosition.BOTTOM,
         );
       }
