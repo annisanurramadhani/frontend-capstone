@@ -273,9 +273,40 @@ class PenggunaService {
 
   //GET NOTIFIKASI
   static Future<Map<String, dynamic>> getNotifikasi() async {
+    try {
+      final token = box.read("token");
+
+      final response = await ApiProvider.getNotifikasi(token);
+
+      return jsonDecode(response.body);
+    } catch (e) {
+      return {"success": false, "message": e.toString()};
+    }
+  }
+
+  // DELETE AKUN
+  static Future<dynamic> deleteAkun() async {
     final token = box.read("token");
 
-    final response = await ApiProvider.getNotifikasi(token);
+    final response = await ApiProvider.deleteAkun(token);
+
+    return jsonDecode(response.body);
+  }
+
+  // GET AKTIVITAS
+  static Future<dynamic> getAktivitas() async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.getAktivitas(token);
+
+    return jsonDecode(response.body);
+  }
+
+  //LOGOUT
+  static Future<dynamic> logout() async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.logout(token);
 
     return jsonDecode(response.body);
   }

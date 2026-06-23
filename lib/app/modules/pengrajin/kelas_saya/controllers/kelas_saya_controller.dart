@@ -1,30 +1,48 @@
 import 'package:get/get.dart';
 
+import '../../../../data/services/pengrajin_service.dart';
+
 class KelasSayaController extends GetxController {
-  final isLoading = false.obs;
+  RxBool isLoading = false.obs;
 
-  final selectedTab = 0.obs;
-
-  final kelasList = <dynamic>[].obs;
+  RxList kelasSaya = [].obs;
 
   @override
   void onInit() {
     super.onInit();
-    getKelasSaya();
+
+    loadData();
   }
 
-  Future<void> getKelasSaya() async {
+  Future<void> loadData() async {
     try {
       isLoading.value = true;
 
-      // API disini nanti
+      final response =
+          await PengrajinService.getKelasSaya();
 
+      if (response["success"] == true) {
+        kelasSaya.assignAll(
+          response["data"],
+        );
+      } else {
+        Get.snackbar(
+          "Gagal",
+          response["message"] ??
+              "Gagal memuat data",
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+      );
     } finally {
       isLoading.value = false;
     }
   }
 
-  void changeTab(int index) {
-    selectedTab.value = index;
+  Future<void> refreshData() async {
+    await loadData();
   }
 }

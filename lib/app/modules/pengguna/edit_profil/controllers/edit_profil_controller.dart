@@ -147,4 +147,59 @@ class EditProfilController extends GetxController {
       Get.snackbar("Error", e.toString());
     }
   }
+
+  Future<void> hapusAkun() async {
+    try {
+      final konfirmasi = await Get.dialog<bool>(
+        AlertDialog(
+          title: const Text("Hapus Akun"),
+          content: const Text(
+            "Apakah Anda yakin ingin menghapus akun?\n\nSemua data akun akan dihapus dan tidak dapat dikembalikan.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back(result: false);
+              },
+              child: const Text("Batal"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Get.back(result: true);
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text("Hapus", style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
+      );
+
+      if (konfirmasi != true) {
+        return;
+      }
+
+      isLoading.value = true;
+
+      final response = await PenggunaService.deleteAkun();
+
+      if (response["success"] == true) {
+        await AuthService.logout();
+
+        Get.offAllNamed("/masuk");
+
+        Get.snackbar(
+          "Berhasil",
+          response["message"],
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      } else {
+        Get.snackbar("Error", response["message"]);
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

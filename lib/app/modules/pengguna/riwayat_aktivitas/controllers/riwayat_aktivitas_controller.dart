@@ -1,71 +1,41 @@
 import 'package:get/get.dart';
 
+import '../../../../data/services/pengguna_service.dart';
+
 class RiwayatAktivitasController
     extends GetxController {
 
-  RxBool isLoading =
-      false.obs;
+  RxBool isLoading = false.obs;
 
-  RxList<dynamic>
-      aktivitasList =
-      <dynamic>[].obs;
+  RxList aktivitas = [].obs;
 
   @override
   void onInit() {
     super.onInit();
 
-    getRiwayatAktivitas();
+    getAktivitas();
   }
 
-  Future<void>
-      getRiwayatAktivitas() async {
-
+  Future<void> getAktivitas() async {
     try {
+      isLoading.value = true;
 
-      isLoading.value =
-          true;
+      final response =
+          await PenggunaService
+              .getAktivitas();
 
-      // API BACKEND
-      // GET RIWAYAT AKTIVITAS USER
-
-      /*
-      contoh response:
-
-      [
-        {
-          "id": 1,
-          "aktivitas":
-              "Pembayaran kelas berhasil",
-          "waktu":
-              "20 Mei 2026 • 10:20",
-          "icon":
-              "payment"
-        }
-      ]
-      */
-
-      await Future.delayed(
-        const Duration(
-          milliseconds: 500,
-        ),
-      );
-
+      if (response["success"] ==
+          true) {
+        aktivitas.value =
+            response["data"];
+      }
     } catch (e) {
-
       Get.snackbar(
         "Error",
         e.toString(),
       );
-
     } finally {
-
-      isLoading.value =
-          false;
+      isLoading.value = false;
     }
-  }
-
-  void kembali() {
-
-    Get.back();
   }
 }

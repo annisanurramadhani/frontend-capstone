@@ -1,10 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../../../routes/app_pages.dart';
 import '../controllers/pesan_pelatihan_controller.dart';
 
 class PesanPelatihanView extends GetView<PesanPelatihanController> {
   const PesanPelatihanView({super.key});
+
+  static void showSuccessDialog() {
+    Get.dialog(
+      barrierDismissible: false,
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28),
+        ),
+        backgroundColor: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF3EAE0),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check_circle_outline_rounded,
+                  color: Color(0xFF5A3116),
+                  size: 44,
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "Pembayaran Berhasil",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF5A3116),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "Booking pelatihan Anda berhasil dan pembayaran telah diterima.",
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.brown,
+                  height: 1.6,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 28),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                    Get.offAllNamed(Routes.HALAMAN_UTAMA);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4CAF50),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: const Text(
+                    "OK",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,34 +91,25 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
       backgroundColor: const Color(0xFFFDF8F3),
       appBar: AppBar(
         backgroundColor: const Color(0xFFF8F5F1),
-
         elevation: 0,
-
         centerTitle: true,
-
         leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-
+          onPressed: () => Get.back(),
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Color(0xFF3E2723),
             size: 20,
           ),
         ),
-
         title: const Text(
           "Pesan Pelatihan",
-
           style: TextStyle(
+            fontSize: 18,
             color: Color(0xFF3E2723),
-
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-
       body: Form(
         key: controller.formKey,
         child: SingleChildScrollView(
@@ -54,8 +124,12 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: const [
-                    BoxShadow(color: Colors.black12, blurRadius: 10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
                   ],
                 ),
                 child: Column(
@@ -66,7 +140,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF8B5E3C).withOpacity(0.1),
+                            color: const Color(0xFF8B5E3C).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
@@ -75,7 +149,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                           child: Text(
                             controller.kelas["namaKelas"],
                             style: const TextStyle(
-                              fontSize: 24,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF5A3116),
                             ),
@@ -99,7 +173,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                         Text(
                           "Rp ${controller.kelas["harga"]}",
                           style: const TextStyle(
-                            fontSize: 18,
+                            fontSize: 15,
                             color: Color(0xFF8B5E3C),
                             fontWeight: FontWeight.bold,
                           ),
@@ -110,26 +184,28 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                 ),
               ),
 
-              const SizedBox(height: 28),
+              const SizedBox(height: 24),
 
-              // LABEL SECTION
+              // DATA PESERTA
               const Text(
                 "Data Peserta",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF5A3116),
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               // NAMA
               TextFormField(
                 controller: controller.namaController,
+                style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
                   labelText: "Nama Lengkap",
-                  prefixIcon: const Icon(Icons.person_outline),
+                  labelStyle: const TextStyle(fontSize: 14),
+                  prefixIcon: const Icon(Icons.person_outline, size: 20),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -144,15 +220,17 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                 },
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               // NO HP
               TextFormField(
                 controller: controller.noTelponController,
                 keyboardType: TextInputType.phone,
+                style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
                   labelText: "No Telepon",
-                  prefixIcon: const Icon(Icons.phone_outlined),
+                  labelStyle: const TextStyle(fontSize: 14),
+                  prefixIcon: const Icon(Icons.phone_outlined, size: 20),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -162,33 +240,36 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                   ),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty)
+                  if (value == null || value.isEmpty) {
                     return "Nomor telepon wajib diisi";
+                  }
                   return null;
                 },
               ),
 
-              const SizedBox(height: 28),
+              const SizedBox(height: 24),
 
-              // LABEL SECTION
+              // JADWAL PELATIHAN
               const Text(
                 "Jadwal Pelatihan",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF5A3116),
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               // TANGGAL
               TextFormField(
                 controller: controller.tanggalController,
                 readOnly: true,
+                style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
                   labelText: "Tanggal Pelatihan",
-                  prefixIcon: const Icon(Icons.calendar_today_outlined),
+                  labelStyle: const TextStyle(fontSize: 14),
+                  prefixIcon: const Icon(Icons.calendar_today_outlined, size: 20),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -221,17 +302,19 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                 },
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               // JAM
               Obx(
                 () => DropdownButtonFormField<String>(
-                  value: controller.jamPelatihan.value.isEmpty
+                  initialValue: controller.jamPelatihan.value.isEmpty
                       ? null
                       : controller.jamPelatihan.value,
+                  style: const TextStyle(fontSize: 14, color: Colors.black87),
                   decoration: InputDecoration(
                     labelText: "Jam Pelatihan",
-                    prefixIcon: const Icon(Icons.access_time_outlined),
+                    labelStyle: const TextStyle(fontSize: 14),
+                    prefixIcon: const Icon(Icons.access_time_outlined, size: 20),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -242,8 +325,10 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                   ),
                   items: controller.jamList
                       .map(
-                        (item) =>
-                            DropdownMenuItem(value: item, child: Text(item)),
+                        (item) => DropdownMenuItem(
+                          value: item,
+                          child: Text(item, style: const TextStyle(fontSize: 14)),
+                        ),
                       )
                       .toList(),
                   onChanged: (value) {
@@ -252,11 +337,11 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                 ),
               ),
 
-              const SizedBox(height: 28),
+              const SizedBox(height: 24),
 
-              // LABEL SECTION
+              // INFO PEMBAYARAN
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF6EFE8),
                   borderRadius: BorderRadius.circular(16),
@@ -267,12 +352,14 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                     const Icon(
                       Icons.verified_user_outlined,
                       color: Color(0xFF8B5E3C),
+                      size: 20,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         "Pembayaran aman melalui Midtrans. Anda dapat membayar menggunakan QRIS, Transfer Bank, E-Wallet, atau metode pembayaran lain yang tersedia.",
                         style: TextStyle(
+                          fontSize: 13,
                           color: Colors.grey.shade700,
                           height: 1.5,
                         ),
@@ -282,12 +369,12 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
               // BUTTON
               SizedBox(
                 width: double.infinity,
-                height: 55,
+                height: 52,
                 child: Obx(
                   () => ElevatedButton(
                     onPressed: controller.isLoading.value
@@ -303,8 +390,8 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                     ),
                     child: controller.isLoading.value
                         ? const SizedBox(
-                            width: 24,
-                            height: 24,
+                            width: 22,
+                            height: 22,
                             child: CircularProgressIndicator(
                               color: Colors.white,
                               strokeWidth: 2.5,
@@ -313,7 +400,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                         : const Text(
                             "Lanjut Pembayaran",
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),

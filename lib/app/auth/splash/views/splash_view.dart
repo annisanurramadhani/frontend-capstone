@@ -13,8 +13,6 @@ class SplashView extends GetView<SplashController> {
     final width = size.width;
     final height = size.height;
 
-    final isSmall = width < 360;
-
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -23,12 +21,18 @@ class SplashView extends GetView<SplashController> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFF5E6D3), Color(0xFFD7A97B)],
+            colors: [
+              Color(0xFFF5E6D3),
+              Color(0xFFD7A97B),
+            ],
           ),
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 20,
+            ),
             child: Column(
               children: [
                 SizedBox(height: height * 0.10),

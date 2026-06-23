@@ -43,6 +43,17 @@ class ApiProvider {
     );
   }
 
+  // GOOGLE LOGIN
+  static Future<http.Response> googleLogin(String idToken) async {
+    return await http.post(
+      Uri.parse("$authUrl/google"),
+
+      headers: {"Content-Type": "application/json"},
+
+      body: jsonEncode({"idToken": idToken}),
+    );
+  }
+
   // VERIFY OTP
   static Future<http.Response> verifyOtp(String email, String otp) async {
     return await http.post(
@@ -357,6 +368,122 @@ class ApiProvider {
   static Future<http.Response> getNotifikasi(String token) async {
     return await http.get(
       Uri.parse("$penggunaUrl/notifikasi"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  //-------------PENGRAJIN------------//
+
+  // URL PENGRAJIN
+  static String get pengrajinUrl => "$baseUrl/api/pengrajin";
+
+  // DASHBOARD PENGRAJIN
+  static Future<http.Response> getDashboardPengrajin(String token) async {
+    return await http.get(
+      Uri.parse("$pengrajinUrl/dashboard"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  // KELAS SAYA
+  static Future<http.Response> getKelasSaya(String token) async {
+    return await http.get(
+      Uri.parse("$pengrajinUrl/kelas-saya"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  // PROFILE PENGRAJIN
+  static Future<http.Response> getProfilePengrajin(String token) async {
+    return await http.get(
+      Uri.parse("$pengrajinUrl/profile"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  //UPDATE PROFIL PENGRAJIN
+  static Future<http.Response> updateProfilePengrajin({
+    required String token,
+    required String name,
+    required String alamat,
+    required String noTelpon,
+    required String pengalaman,
+    required String deskripsi,
+    File? photo,
+  }) async {
+    var request = http.MultipartRequest(
+      "PUT",
+      Uri.parse("$pengrajinUrl/profile"),
+    );
+
+    request.headers["Authorization"] = "Bearer $token";
+
+    request.fields["name"] = name;
+    request.fields["alamat"] = alamat;
+    request.fields["noTelpon"] = noTelpon;
+    request.fields["pengalaman"] = pengalaman;
+    request.fields["deskripsi"] = deskripsi;
+
+    if (photo != null) {
+      request.files.add(await http.MultipartFile.fromPath("photo", photo.path));
+    }
+
+    final streamedResponse = await request.send();
+
+    return await http.Response.fromStream(streamedResponse);
+  }
+
+  // GET NOTIFIKASI PENGRAJIN
+  static Future<http.Response> getNotifikasiPengrajin(String token) async {
+    return await http.get(
+      Uri.parse("$pengrajinUrl/notifikasi"),
+
+      headers: {
+        "Content-Type": "application/json",
+
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  // DELETE AKUN
+  static Future<http.Response> deleteAkun(String token) async {
+    return await http.delete(
+      Uri.parse("$penggunaUrl/delete-account"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  // GET AKTIVITAS
+  static Future<http.Response> getAktivitas(String token) async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/aktivitas"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  //LOGOUT
+  static Future<http.Response> logout(String token) async {
+    return await http.post(
+      Uri.parse("$penggunaUrl/logout"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",

@@ -1,39 +1,68 @@
 import 'package:get/get.dart';
 
+import '../../../../data/services/auth_service.dart';
+import '../../../../data/services/pengrajin_service.dart';
+import '../../../../routes/app_pages.dart';
+
 class ProfilPelatihController extends GetxController {
+  RxBool isLoading = false.obs;
 
-  final isLoading = false.obs;
+  RxString foto = "".obs;
 
-  final nama = ''.obs;
-  final email = ''.obs;
-  final noHp = ''.obs;
-  final alamat = ''.obs;
-  final foto = ''.obs;
+  RxString nama = "".obs;
+
+  RxString email = "".obs;
+
+  RxString noHp = "".obs;
+
+  RxString alamat = "".obs;
+
+  RxString pengalaman = "".obs;
+
+  RxString deskripsi = "".obs;
 
   @override
   void onInit() {
     super.onInit();
-    getProfil();
+
+    loadProfile();
   }
 
-  Future<void> getProfil() async {
+  Future<void> loadProfile() async {
     try {
       isLoading.value = true;
 
-      // TODO:
-      // panggil API profil pelatih
+      final response =
+          await PengrajinService.getProfile();
 
-      /*
-      final result =
-          await PelatihService.getProfil();
+      if (response["success"] == true) {
+        final data =
+            response["data"];
 
-      nama.value = result["nama"] ?? "";
-      email.value = result["email"] ?? "";
-      noHp.value = result["noHp"] ?? "";
-      alamat.value = result["alamat"] ?? "";
-      foto.value = result["foto"] ?? "";
-      */
+        final profile =
+            data["pengrajinProfile"];
 
+        nama.value =
+            data["name"] ?? "";
+
+        email.value =
+            data["email"] ?? "";
+
+        foto.value =
+            data["photo"] ?? "";
+
+        noHp.value =
+            profile?["noTelpon"] ?? "";
+
+        alamat.value =
+            profile?["alamat"] ?? "";
+
+        pengalaman.value =
+            profile?["pengalaman"] ?? "";
+
+        deskripsi.value =
+            profile?["deskripsi"] ?? "";
+      }
     } catch (e) {
       Get.snackbar(
         "Error",
@@ -45,11 +74,16 @@ class ProfilPelatihController extends GetxController {
   }
 
   void editProfil() {
-    // Get.toNamed(Routes.EDIT_PROFIL_PELATIH);
+    Get.toNamed(
+      Routes.EDIT_PROFIL_PELATIH,
+    );
   }
 
-  void logout() {
-    // hapus token
-    // Get.offAllNamed(Routes.MASUK);
+  Future<void> logout() async {
+    await AuthService.logout();
+
+    Get.offAllNamed(
+      Routes.MASUK,
+    );
   }
 }

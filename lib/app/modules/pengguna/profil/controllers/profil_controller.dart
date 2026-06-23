@@ -80,14 +80,27 @@ class ProfilController extends GetxController {
       buttonColor: const Color(0xFF5A3116),
 
       onConfirm: () async {
-        // CLOSE DIALOG
-        Get.back();
+        try {
+          Get.back();
 
-        // LOGOUT
-        await AuthService.logout();
+          isLoading.value = true;
 
-        // PINDAH HALAMAN
-        Get.offAllNamed(Routes.SPLASH);
+          final response = await PenggunaService.logout();
+
+          if (response["success"] == true) {
+            await AuthService.logout();
+
+            Get.offAllNamed(Routes.SPLASH);
+
+            Get.snackbar("Berhasil", response["message"]);
+          } else {
+            Get.snackbar("Error", response["message"]);
+          }
+        } catch (e) {
+          Get.snackbar("Error", e.toString());
+        } finally {
+          isLoading.value = false;
+        }
       },
     );
   }

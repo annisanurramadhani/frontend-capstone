@@ -1,82 +1,108 @@
 import 'package:get/get.dart';
 
+//AUTH
 import '../auth/daftar/bindings/daftar_binding.dart';
 import '../auth/daftar/views/daftar_view.dart';
+
 import '../auth/lupa_password/bindings/lupa_password_binding.dart';
 import '../auth/lupa_password/views/lupa_password_view.dart';
+
 import '../auth/masuk/bindings/masuk_binding.dart';
 import '../auth/masuk/views/masuk_view.dart';
+
 import '../auth/otp_login/bindings/otp_login_binding.dart';
 import '../auth/otp_login/views/otp_login_view.dart';
+
 import '../auth/otp_lupa_password/bindings/otp_lupa_password_binding.dart';
 import '../auth/otp_lupa_password/views/otp_lupa_password_view.dart';
+
 import '../auth/password_baru/bindings/password_baru_binding.dart';
 import '../auth/password_baru/views/password_baru_view.dart';
+
 import '../auth/splash/bindings/splash_binding.dart';
 import '../auth/splash/views/splash_view.dart';
-import '../modules/pengrajin/kelas_saya/bindings/kelas_saya_binding.dart';
-import '../modules/pengrajin/kelas_saya/views/kelas_saya_view.dart';
-import '../modules/pengguna/checkout/bindings/checkout_binding.dart';
-import '../modules/pengguna/checkout/views/checkout_view.dart';
+
+//PENGGUNA
 import '../modules/pengguna/belajar_anyaman/bindings/belajar_anyaman_binding.dart';
 import '../modules/pengguna/belajar_anyaman/views/belajar_anyaman_view.dart';
+
 import '../modules/pengguna/beri_rating/bindings/beri_rating_binding.dart';
 import '../modules/pengguna/beri_rating/views/beri_rating_view.dart';
+
+import '../modules/pengguna/checkout/bindings/checkout_binding.dart';
+import '../modules/pengguna/checkout/views/checkout_view.dart';
+
 import '../modules/pengguna/daftar_pengrajin/bindings/daftar_pengrajin_binding.dart';
 import '../modules/pengguna/daftar_pengrajin/views/daftar_pengrajin_view.dart';
+
 import '../modules/pengguna/detail_produk/bindings/detail_produk_binding.dart';
 import '../modules/pengguna/detail_produk/views/detail_produk_view.dart';
+
 import '../modules/pengguna/detail_video/bindings/detail_video_binding.dart';
 import '../modules/pengguna/detail_video/views/detail_video_view.dart';
+
 import '../modules/pengguna/edit_profil/bindings/edit_profil_binding.dart';
 import '../modules/pengguna/edit_profil/views/edit_profil_view.dart';
+
 import '../modules/pengguna/halaman_utama/bindings/halaman_utama_binding.dart';
 import '../modules/pengguna/halaman_utama/views/halaman_utama_view.dart';
+
 import '../modules/pengguna/jadwal_saya/bindings/jadwal_saya_binding.dart';
 import '../modules/pengguna/jadwal_saya/views/jadwal_saya_view.dart';
+
 import '../modules/pengguna/keranjang/bindings/keranjang_binding.dart';
 import '../modules/pengguna/keranjang/views/keranjang_view.dart';
-import '../modules/pengguna/konfirmasi_pembayaran/bindings/konfirmasi_pembayaran_binding.dart';
-import '../modules/pengguna/konfirmasi_pembayaran/views/konfirmasi_pembayaran_view.dart';
+
 import '../modules/pengguna/lihat_pesanan/bindings/lihat_pesanan_binding.dart';
 import '../modules/pengguna/lihat_pesanan/views/lihat_pesanan_view.dart';
+
 import '../modules/pengguna/notifikasi/bindings/notifikasi_binding.dart';
 import '../modules/pengguna/notifikasi/views/notifikasi_view.dart';
+
 import '../modules/pengguna/payment_webview/bindings/payment_webview_binding.dart';
 import '../modules/pengguna/payment_webview/views/payment_webview_view.dart';
-import '../modules/pengguna/pembayaran_berhasil/bindings/pembayaran_berhasil_binding.dart';
-import '../modules/pengguna/pembayaran_berhasil/views/pembayaran_berhasil_view.dart';
-import '../modules/pengguna/pembayaran_pelatihan/bindings/pembayaran_pelatihan_binding.dart';
-import '../modules/pengguna/pembayaran_pelatihan/views/pembayaran_pelatihan_view.dart';
-import '../modules/pengguna/pembayaran_produk/bindings/pembayaran_produk_binding.dart';
-import '../modules/pengguna/pembayaran_produk/views/pembayaran_produk_view.dart';
+
 import '../modules/pengguna/pesan_pelatihan/bindings/pesan_pelatihan_binding.dart';
 import '../modules/pengguna/pesan_pelatihan/views/pesan_pelatihan_view.dart';
-import '../modules/pengguna/pilih_jadwal/bindings/pilih_jadwal_binding.dart';
-import '../modules/pengguna/pilih_jadwal/views/pilih_jadwal_view.dart';
+
 import '../modules/pengguna/pilih_kelas/bindings/pilih_kelas_binding.dart';
 import '../modules/pengguna/pilih_kelas/views/pilih_kelas_view.dart';
+
 import '../modules/pengguna/produk_anyaman/bindings/produk_anyaman_binding.dart';
 import '../modules/pengguna/produk_anyaman/views/produk_anyaman_view.dart';
+
 import '../modules/pengguna/profil/bindings/profil_binding.dart';
 import '../modules/pengguna/profil/views/profil_view.dart';
+
 import '../modules/pengguna/profil_pengrajin/bindings/profil_pengrajin_binding.dart';
 import '../modules/pengguna/profil_pengrajin/views/profil_pengrajin_view.dart';
+
 import '../modules/pengguna/riwayat_aktivitas/bindings/riwayat_aktivitas_binding.dart';
 import '../modules/pengguna/riwayat_aktivitas/views/riwayat_aktivitas_view.dart';
+
 import '../modules/pengguna/riwayat_kelas/bindings/riwayat_kelas_binding.dart';
 import '../modules/pengguna/riwayat_kelas/views/riwayat_kelas_view.dart';
+
 import '../modules/pengguna/sertifikat/bindings/sertifikat_binding.dart';
 import '../modules/pengguna/sertifikat/views/sertifikat_view.dart';
-import '../modules/pengguna/tahapan_kelas/bindings/tahapan_kelas_binding.dart';
-import '../modules/pengguna/tahapan_kelas/views/tahapan_kelas_view.dart';
+
+//PENGRAJIN
+import '../modules/pengrajin/edit_profil_pelatih/bindings/edit_profil_pelatih_binding.dart';
+import '../modules/pengrajin/edit_profil_pelatih/views/edit_profil_pelatih_view.dart';
+
 import '../modules/pengrajin/halaman_pengrajin/bindings/halaman_pengrajin_binding.dart';
 import '../modules/pengrajin/halaman_pengrajin/views/halaman_pengrajin_view.dart';
+
+import '../modules/pengrajin/kelas_saya/bindings/kelas_saya_binding.dart';
+import '../modules/pengrajin/kelas_saya/views/kelas_saya_view.dart';
+
 import '../modules/pengrajin/profil_pelatih/bindings/profil_pelatih_binding.dart';
 import '../modules/pengrajin/profil_pelatih/views/profil_pelatih_view.dart';
 
-// app_pages.dart
+import '../modules/pengrajin/notifikasi_pengrajin/bindings/notifikasi_pengrajin_binding.dart';
+import '../modules/pengrajin/notifikasi_pengrajin/views/notifikasi_pengrajin_view.dart';
 
+// app_pages.dart
 part 'app_routes.dart';
 
 class AppPages {
@@ -85,7 +111,8 @@ class AppPages {
   static const INITIAL = Routes.SPLASH;
 
   static final routes = [
-    // AUTH
+
+  //----------- AUTH ------------//
     GetPage(
       name: Routes.SPLASH,
       page: () => const SplashView(),
@@ -128,14 +155,13 @@ class AppPages {
       binding: PasswordBaruBinding(),
     ),
 
-    // HALAMAN UTAMA
+  //----------- PENGGUNA ------------//
     GetPage(
       name: Routes.HALAMAN_UTAMA,
       page: () => const HalamanUtamaView(),
       binding: HalamanUtamaBinding(),
     ),
 
-    // BELAJAR
     GetPage(
       name: Routes.BELAJAR_ANYAMAN,
       page: () => const BelajarAnyamanView(),
@@ -148,7 +174,6 @@ class AppPages {
       binding: DetailVideoBinding(),
     ),
 
-    // PENGRAJIN
     GetPage(
       name: Routes.DAFTAR_PENGRAJIN,
       page: () => const DaftarPengrajinView(),
@@ -159,37 +184,6 @@ class AppPages {
       name: Routes.PROFIL_PENGRAJIN,
       page: () => const ProfilPengrajinView(),
       binding: ProfilPengrajinBinding(),
-    ),
-
-    // KELAS
-    GetPage(
-      name: Routes.TAHAPAN_KELAS,
-      page: () => const TahapanKelasView(),
-      binding: TahapanKelasBinding(),
-    ),
-
-    GetPage(
-      name: Routes.PILIH_JADWAL,
-      page: () => const PilihJadwalView(),
-      binding: PilihJadwalBinding(),
-    ),
-
-    GetPage(
-      name: Routes.KONFIRMASI_PEMBAYARAN,
-      page: () => const KonfirmasiPembayaranView(),
-      binding: KonfirmasiPembayaranBinding(),
-    ),
-
-    GetPage(
-      name: Routes.PEMBAYARAN_PELATIHAN,
-      page: () => const PembayaranPelatihanView(),
-      binding: PembayaranPelatihanBinding(),
-    ),
-
-    GetPage(
-      name: Routes.PEMBAYARAN_BERHASIL,
-      page: () => const PembayaranBerhasilView(),
-      binding: PembayaranBerhasilBinding(),
     ),
 
     GetPage(
@@ -210,7 +204,6 @@ class AppPages {
       binding: RiwayatKelasBinding(),
     ),
 
-    // PRODUK
     GetPage(
       name: Routes.PRODUK_ANYAMAN,
       page: () => const ProdukAnyamanView(),
@@ -224,18 +217,11 @@ class AppPages {
     ),
 
     GetPage(
-      name: Routes.PEMBAYARAN_PRODUK,
-      page: () => const PembayaranProdukView(),
-      binding: PembayaranProdukBinding(),
-    ),
-
-    GetPage(
       name: Routes.LIHAT_PESANAN,
       page: () => const LihatPesananView(),
       binding: LihatPesananBinding(),
     ),
 
-    // PROFIL
     GetPage(
       name: Routes.PROFIL,
       page: () => const ProfilView(),
@@ -254,7 +240,6 @@ class AppPages {
       binding: SertifikatBinding(),
     ),
 
-    // NOTIFIKASI
     GetPage(
       name: Routes.NOTIFIKASI,
       page: () => const NotifikasiView(),
@@ -266,35 +251,23 @@ class AppPages {
       page: () => const RiwayatAktivitasView(),
       binding: RiwayatAktivitasBinding(),
     ),
+
     GetPage(
       name: _Paths.PESAN_PELATIHAN,
       page: () => const PesanPelatihanView(),
       binding: PesanPelatihanBinding(),
     ),
+
     GetPage(
       name: _Paths.PAYMENT_WEBVIEW,
       page: () => const PaymentWebviewView(),
       binding: PaymentWebviewBinding(),
     ),
+
     GetPage(
       name: _Paths.BERI_RATING,
       page: () => const BeriRatingView(),
       binding: BeriRatingBinding(),
-    ),
-    GetPage(
-      name: _Paths.HALAMAN_PENGRAJIN,
-      page: () => const HalamanPengrajinView(),
-      binding: HalamanPengrajinBinding(),
-    ),
-    GetPage(
-      name: _Paths.KELAS_SAYA,
-      page: () => const KelasSayaView(),
-      binding: KelasSayaBinding(),
-    ),
-    GetPage(
-      name: _Paths.PROFIL_PELATIH,
-      page: () => const ProfilPelatihView(),
-      binding: ProfilPelatihBinding(),
     ),
 
     GetPage(
@@ -302,10 +275,42 @@ class AppPages {
       page: () => const KeranjangView(),
       binding: KeranjangBinding(),
     ),
+
     GetPage(
       name: _Paths.CHECKOUT,
       page: () => const CheckoutView(),
       binding: CheckoutBinding(),
+    ),
+
+  //----------- PENGRAJIN ------------//
+    GetPage(
+      name: _Paths.HALAMAN_PENGRAJIN,
+      page: () => const HalamanPengrajinView(),
+      binding: HalamanPengrajinBinding(),
+    ),
+
+    GetPage(
+      name: _Paths.KELAS_SAYA,
+      page: () => const KelasSayaView(),
+      binding: KelasSayaBinding(),
+    ),
+
+    GetPage(
+      name: _Paths.PROFIL_PELATIH,
+      page: () => const ProfilPelatihView(),
+      binding: ProfilPelatihBinding(),
+    ),
+
+    GetPage(
+      name: _Paths.EDIT_PROFIL_PELATIH,
+      page: () => const EditProfilPelatihView(),
+      binding: EditProfilPelatihBinding(),
+    ),
+
+    GetPage(
+      name: _Paths.NOTIFIKASI_PENGRAJIN,
+      page: () => const NotifikasiPengrajinView(),
+      binding: NotifikasiPengrajinBinding(),
     ),
   ];
 }

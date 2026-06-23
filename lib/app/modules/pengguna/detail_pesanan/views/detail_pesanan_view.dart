@@ -8,7 +8,6 @@ class DetailPesananView extends GetView<DetailPesananController> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),

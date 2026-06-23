@@ -1,19 +1,25 @@
 import 'package:get/get.dart';
+
+import '../../../../data/services/auth_service.dart';
 import '../../../../data/services/pengrajin_service.dart';
 
 class HalamanPengrajinController extends GetxController {
-  final PengrajinService _service = PengrajinService();
+  RxBool isLoading = false.obs;
 
-  final isLoading = false.obs;
+  RxString nama = "".obs;
 
-  final totalPeserta = 0.obs;
-  final rating = 0.0.obs;
+  RxString photo = "".obs;
 
-  final jadwalHariIni = <dynamic>[].obs;
+  RxInt totalPeserta = 0.obs;
+
+  RxDouble rating = 0.0.obs;
+
+  RxList<dynamic> jadwalHariIni = [].obs;
 
   @override
   void onInit() {
     super.onInit();
+
     loadData();
   }
 
@@ -21,19 +27,55 @@ class HalamanPengrajinController extends GetxController {
     try {
       isLoading.value = true;
 
-      final result =
-          await _service.getDashboardPengrajin();
+      final response =
+          await PengrajinService.getDashboard();
 
-      totalPeserta.value =
-          result["totalPeserta"] ?? 0;
+      print("=== DASHBOARD ===");
+      print(response);
 
-      rating.value =
-          (result["rating"] ?? 0).toDouble();
+      if (response["success"] == true) {
+        final pengrajin =
+            response["pengrajin"] ?? {};
 
-      jadwalHariIni.assignAll(
-        result["jadwalHariIni"] ?? [],
-      );
-    } catch (e) {
+        nama.value =
+            (pengrajin["name"] ?? "")
+                .toString();
+
+        photo.value =
+            (pengrajin["photo"] ?? "")
+                .toString();
+
+        totalPeserta.value =
+            int.tryParse(
+                  response["totalPeserta"]
+                          ?.toString() ??
+                      "0",
+                ) ??
+                0;
+
+        rating.value =
+            double.tryParse(
+                  response["rating"]
+                          ?.toString() ??
+                      "0",
+                ) ??
+                0.0;
+
+        jadwalHariIni.assignAll(
+          response["jadwalHariIni"] ?? [],
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          response["message"] ??
+              "Gagal mengambil data",
+        );
+      }
+    } catch (e, s) {
+      print("ERROR DASHBOARD");
+      print(e);
+      print(s);
+
       Get.snackbar(
         "Error",
         e.toString(),
@@ -41,5 +83,15 @@ class HalamanPengrajinController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> refreshData() async {
+    await loadData();
+  }
+
+  void logout() async {
+    await AuthService.logout();
+
+    Get.offAllNamed("/");
   }
 }

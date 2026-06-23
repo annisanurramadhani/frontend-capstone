@@ -20,7 +20,6 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
   @override
   void initState() {
     super.initState();
-
     autoSlide();
   }
 
@@ -34,11 +33,13 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
         currentPage = 0;
       }
 
-      pageController.animateToPage(
-        currentPage,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+      if (mounted) {
+        pageController.animateToPage(
+          currentPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
     }
   }
 
@@ -65,7 +66,7 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
             children: [
               SizedBox(height: size.height * 0.025),
 
-              // ── HEADER ───────────────────────────────────────────────
+              // HEADER
               Obx(
                 () => Row(
                   children: [
@@ -132,26 +133,24 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
 
               SizedBox(height: size.height * 0.03),
 
-              // ── BANNER ───────────────────────────────────────────────
+              // BANNER
               SizedBox(
                 height: 190,
                 child: PageView(
                   controller: pageController,
-
                   onPageChanged: (index) {
                     setState(() {
                       currentPage = index;
                     });
                   },
-
                   children: [
-                    // ClipRRect(
-                    //   borderRadius: BorderRadius.circular(24),
-                    //   child: Image.asset(
-                    //     "assets/image/banner1.jpg",
-                    //     fit: BoxFit.cover,
-                    //   ),
-                    // ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: Image.asset(
+                        "assets/image/banner1.jpg",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(24),
                       child: Image.asset(
@@ -159,7 +158,6 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
                         fit: BoxFit.cover,
                       ),
                     ),
-
                     ClipRRect(
                       borderRadius: BorderRadius.circular(24),
                       child: Image.asset(
@@ -173,6 +171,7 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
 
               const SizedBox(height: 12),
 
+              // DOTS INDIKATOR
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
@@ -194,7 +193,7 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
 
               SizedBox(height: size.height * 0.03),
 
-              // ── GRID MENU ────────────────────────────────────────────
+              // GRID MENU
               Obx(() {
                 if (controller.isLoading.value) {
                   return const Center(
@@ -238,8 +237,7 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
   }
 }
 
-// ── MENU CARD WIDGET ─────────────────────────────────────────────────────────
-
+// MENU CARD WIDGET
 class _MenuCard extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -281,7 +279,7 @@ class _MenuCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF3E2723),
                 height: 1.4,

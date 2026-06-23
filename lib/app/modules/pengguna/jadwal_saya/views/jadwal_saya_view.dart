@@ -25,47 +25,40 @@ class JadwalSayaView extends GetView<JadwalSayaController> {
       length: 2,
       child: Scaffold(
         backgroundColor: const Color(0xFFFDF8F3),
-
+        bottomNavigationBar: const CustomNavbar(currentIndex: 0),
         appBar: AppBar(
           backgroundColor: const Color(0xFFFDF8F3),
           elevation: 0,
           centerTitle: true,
-
-          leading: IconButton(
-            onPressed: () => Get.back(),
-            icon: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Color(0xFF3E2723),
-              size: 20,
-            ),
-          ),
-
           title: const Text(
             "Jadwal Saya",
             style: TextStyle(
-              color: Color(0xFF3E2723),
+              color: Color(0xFF5A3116),
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
           ),
-
           iconTheme: const IconThemeData(color: Color(0xFF5A3116)),
-
           bottom: const TabBar(
             labelColor: Color(0xFF5A3116),
             unselectedLabelColor: Colors.grey,
             indicatorColor: Color(0xFF5A3116),
             indicatorWeight: 2.5,
+            labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
             tabs: [
               Tab(text: "Jadwal"),
               Tab(text: "Riwayat"),
             ],
           ),
         ),
-
-        body: TabBarView(children: [_buildJadwalTab(), _buildRiwayatTab()]),
-
-        bottomNavigationBar: const CustomNavbar(currentIndex: 0),
+        body: TabBarView(
+          children: [
+            // ── Tab 1: Jadwal Aktif ──
+            _buildJadwalTab(),
+            // ── Tab 2: Riwayat ──
+            _buildRiwayatTab(),
+          ],
+        ),
       ),
     );
   }
@@ -228,7 +221,7 @@ class JadwalSayaView extends GetView<JadwalSayaController> {
                 decoration: BoxDecoration(
                   color: getStatusColor(
                     item["statusKelas"] ?? "",
-                  ).withOpacity(0.12),
+                  ).withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Text(

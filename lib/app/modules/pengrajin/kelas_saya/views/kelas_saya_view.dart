@@ -10,204 +10,162 @@ class KelasSayaView extends GetView<KelasSayaController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF8F3EF),
 
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF8F3EF),
         elevation: 0,
-        automaticallyImplyLeading: false,
-
         title: const Text(
           "Kelas Saya",
           style: TextStyle(
             color: Color(0xFF5A3116),
-            fontSize: 32,
             fontWeight: FontWeight.bold,
           ),
         ),
-
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.calendar_month_outlined,
-              color: Color(0xFF5A3116),
-              size: 30,
-            ),
-          ),
-        ],
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(20),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Kelola kelas dan murid Anda hari ini.",
-              style: TextStyle(color: Colors.black54, fontSize: 16),
+        if (controller.kelasSaya.isEmpty) {
+          return const Center(
+            child: Text(
+              "Belum ada peserta",
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
+          );
+        }
 
-            const SizedBox(height: 25),
+        return RefreshIndicator(
+          onRefresh: controller.loadData,
+          child: ListView.builder(
+            padding: const EdgeInsets.all(20),
+            itemCount: controller.kelasSaya.length,
+            itemBuilder: (context, index) {
+              final item = controller.kelasSaya[index];
 
-            Obx(
-              () => Row(
-                children: [
-                  Expanded(child: tabButton(title: "Akan Datang", index: 0)),
+              return Container(
+                margin: const EdgeInsets.only(bottom: 15),
 
-                  const SizedBox(width: 10),
-
-                  Expanded(child: tabButton(title: "Berlangsung", index: 1)),
-
-                  const SizedBox(width: 10),
-
-                  Expanded(child: tabButton(title: "Selesai", index: 2)),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                return ListView.builder(
-                  itemCount: controller.kelasList.length,
-
-                  itemBuilder: (context, index) {
-                    final kelas = controller.kelasList[index];
-
-                    return kelasCard(kelas);
-                  },
-                );
-              }),
-            ),
-          ],
-        ),
-      ),
-
-      bottomNavigationBar: const NavbarPengrajin(currentIndex: 0),
-    );
-  }
-
-  Widget tabButton({required String title, required int index}) {
-    final active = controller.selectedTab.value == index;
-
-    return InkWell(
-      onTap: () {
-        controller.changeTab(index);
-      },
-      child: Container(
-        height: 52,
-        decoration: BoxDecoration(
-          color: active ? const Color(0xFF5A3116) : const Color(0xFFF8F3EF),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Center(
-          child: Text(
-            title,
-            style: TextStyle(
-              color: active ? Colors.white : const Color(0xFF5A3116),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget kelasCard(dynamic kelas) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-
-      padding: const EdgeInsets.all(18),
-
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [BoxShadow(color: Color(0x11000000), blurRadius: 10)],
-      ),
-
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF8F3EF),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: const Icon(Icons.school, color: Color(0xFF5A3116)),
-              ),
-
-              const SizedBox(width: 15),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      kelas["namaKelas"],
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    Text("${kelas["jamMulai"]} - ${kelas["jamSelesai"]}"),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black12, blurRadius: 8),
                   ],
                 ),
-              ),
-            ],
+
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item["namaLengkap"] ?? "-",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5A3116),
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.school,
+                            size: 18,
+                            color: Color(0xFF8B5E3C),
+                          ),
+
+                          const SizedBox(width: 8),
+
+                          Expanded(
+                            child: Text(item["kelas"]?["namaKelas"] ?? "-"),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_month,
+                            size: 18,
+                            color: Color(0xFF8B5E3C),
+                          ),
+
+                          const SizedBox(width: 8),
+
+                          Text(item["tanggal"] ?? "-"),
+                        ],
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.access_time,
+                            size: 18,
+                            color: Color(0xFF8B5E3C),
+                          ),
+
+                          const SizedBox(width: 8),
+
+                          Text(item["jamPelatihan"] ?? "-"),
+                        ],
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.phone,
+                            size: 18,
+                            color: Color(0xFF8B5E3C),
+                          ),
+
+                          const SizedBox(width: 8),
+
+                          Text(item["noTelpon"] ?? "-"),
+                        ],
+                      ),
+
+                      const SizedBox(height: 15),
+
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: item["statusKelas"] == "selesai"
+                              ? Colors.green.shade100
+                              : Colors.orange.shade100,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          item["statusKelas"] ?? "-",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
+        );
+      }),
 
-          const SizedBox(height: 20),
-
-          const Text(
-            "Murid",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF5A3116),
-            ),
-          ),
-
-          const SizedBox(height: 10),
-
-          ...List.generate(kelas["murid"].length, (i) {
-            final murid = kelas["murid"][i];
-
-            return ListTile(
-              contentPadding: EdgeInsets.zero,
-
-              leading: const CircleAvatar(),
-
-              title: Text(murid["nama"]),
-
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            );
-          }),
-
-          const SizedBox(height: 10),
-
-          Align(
-            alignment: Alignment.centerRight,
-            child: OutlinedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.calendar_month),
-              label: const Text("Lihat Detail"),
-            ),
-          ),
-        ],
-      ),
+      bottomNavigationBar: const NavbarPengrajin(currentIndex: 0),
     );
   }
 }

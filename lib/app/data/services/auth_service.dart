@@ -7,6 +7,21 @@ import '../providers/api_provider.dart';
 class AuthService {
   static final box = GetStorage();
 
+  // GOOGLE LOGIN
+  static Future<dynamic> googleLogin(String idToken) async {
+    final response = await ApiProvider.googleLogin(idToken);
+
+    final data = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      box.write("token", data["token"] ?? "");
+
+      box.write("user", data["user"] ?? {});
+    }
+
+    return data;
+  }
+
   // LOGIN
   static Future<dynamic> login(String email, String password) async {
     final response = await ApiProvider.login(email, password);

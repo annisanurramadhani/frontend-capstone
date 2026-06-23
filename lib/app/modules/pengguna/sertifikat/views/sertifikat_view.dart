@@ -1,5 +1,3 @@
-// sertifikat_view.dart
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -32,6 +30,7 @@ class SertifikatView extends GetView<SertifikatController> {
         title: const Text(
           "Sertifikat Saya",
           style: TextStyle(
+            fontSize: 20,
             color: Color(0xFF3E2723),
             fontWeight: FontWeight.bold,
           ),
@@ -51,7 +50,7 @@ class SertifikatView extends GetView<SertifikatController> {
                 "Sertifikat yang telah Anda dapatkan akan muncul di halaman ini.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: size.width * 0.04,
+                  fontSize: size.width * 0.03,
                   color: Colors.brown,
                 ),
               ),
@@ -81,7 +80,7 @@ class SertifikatView extends GetView<SertifikatController> {
                         const Text(
                           "Belum ada sertifikat",
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 19,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF3E2723),
                           ),
@@ -119,7 +118,6 @@ class SertifikatView extends GetView<SertifikatController> {
     required BuildContext context,
     required dynamic data,
   }) {
-    final size = MediaQuery.of(context).size;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 22),
@@ -166,7 +164,7 @@ class SertifikatView extends GetView<SertifikatController> {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 19,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
