@@ -292,4 +292,22 @@ class PenggunaService {
 
     return jsonDecode(response.body);
   }
+
+  // GET AKTIVITAS
+  static Future<dynamic> getAktivitas() async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.getAktivitas(token);
+
+    return jsonDecode(response.body);
+  }
+
+  //LOGOUT
+  static Future<dynamic> logout() async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.logout(token);
+
+    return jsonDecode(response.body);
+  }
 }

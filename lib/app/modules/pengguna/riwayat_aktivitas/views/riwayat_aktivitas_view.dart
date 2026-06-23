@@ -1,196 +1,266 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../global_widgets/custom_navbar.dart';
-
 import '../controllers/riwayat_aktivitas_controller.dart';
 
-class RiwayatAktivitasView extends GetView<RiwayatAktivitasController> {
-  const RiwayatAktivitasView({super.key});
+class RiwayatAktivitasView
+    extends GetView<RiwayatAktivitasController> {
+  const RiwayatAktivitasView({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF8F3),
+      backgroundColor:
+          const Color(0xFFFDF8F3),
 
-      bottomNavigationBar: const CustomNavbar(currentIndex: 2),
-
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(22),
-
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-
-              // HEADER
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: controller.kembali,
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Color(0xFF5A3116),
-                    ),
-                  ),
-
-                  const Expanded(
-                    child: Center(
-                      child: Text(
-                        "Riwayat Aktivitas",
-                        style: TextStyle(
-                          fontSize: 34,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF3E2723),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(width: 48),
-                ],
-              ),
-
-              const SizedBox(height: 30),
-
-              Expanded(
-                child: Obx(() {
-                  if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (controller.aktivitasList.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        "Belum ada aktivitas",
-                        style: TextStyle(fontSize: 20, color: Colors.grey),
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
-                    itemCount: controller.aktivitasList.length,
-
-                    itemBuilder: (context, index) {
-                      final data = controller.aktivitasList[index];
-
-                      return aktivitasItem(
-                        icon: getIcon(data["icon"]),
-
-                        aktivitas: data["aktivitas"],
-
-                        waktu: data["waktu"],
-                      );
-                    },
-                  );
-                }),
-              ),
-            ],
+      appBar: AppBar(
+        backgroundColor:
+            const Color(0xFFFDF8F3),
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Color(0xFF5A3116),
+          ),
+        ),
+        title: const Text(
+          "Riwayat Aktivitas",
+          style: TextStyle(
+            color: Color(0xFF3E2723),
+            fontWeight:
+                FontWeight.bold,
           ),
         ),
       ),
-    );
-  }
 
-  Widget aktivitasItem({
-    required IconData icon,
-
-    required String aktivitas,
-
-    required String waktu,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 18),
-
-      padding: const EdgeInsets.all(20),
-
-      decoration: BoxDecoration(
-        color: Colors.white,
-
-        borderRadius: BorderRadius.circular(24),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-
-            blurRadius: 10,
-
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-
-      child: Row(
-        children: [
-          Container(
-            width: 70,
-            height: 70,
-
-            decoration: const BoxDecoration(
-              color: Color(0xFFF3EAE0),
-
-              shape: BoxShape.circle,
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child:
+                CircularProgressIndicator(
+              color: Color(
+                0xFF5A3116,
+              ),
             ),
+          );
+        }
 
-            child: Icon(icon, size: 34, color: const Color(0xFF5A3116)),
-          ),
-
-          const SizedBox(width: 18),
-
-          Expanded(
+        if (controller
+            .aktivitas.isEmpty) {
+          return const Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
+              mainAxisAlignment:
+                  MainAxisAlignment
+                      .center,
               children: [
-                Text(
-                  aktivitas,
-
-                  style: const TextStyle(
-                    fontSize: 22,
-
-                    fontWeight: FontWeight.bold,
-
-                    color: Color(0xFF3E2723),
-                  ),
+                Icon(
+                  Icons.history,
+                  size: 70,
+                  color: Colors.grey,
                 ),
-
-                const SizedBox(height: 10),
-
+                SizedBox(height: 12),
                 Text(
-                  waktu,
-
-                  style: const TextStyle(fontSize: 17, color: Colors.brown),
+                  "Belum ada aktivitas",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
                 ),
               ],
             ),
+          );
+        }
+
+        return ListView.builder(
+          padding:
+              const EdgeInsets.all(
+            16,
           ),
-        ],
-      ),
+          itemCount:
+              controller
+                  .aktivitas.length,
+          itemBuilder:
+              (context, index) {
+            final item =
+                controller
+                    .aktivitas[index];
+
+            return Container(
+              margin:
+                  const EdgeInsets.only(
+                bottom: 12,
+              ),
+              padding:
+                  const EdgeInsets.all(
+                16,
+              ),
+              decoration:
+                  BoxDecoration(
+                color: Colors.white,
+                borderRadius:
+                    BorderRadius
+                        .circular(
+                  18,
+                ),
+                border: Border.all(
+                  color:
+                      const Color(
+                    0xFFF0E6DD,
+                  ),
+                ),
+              ),
+
+              child: Row(
+                crossAxisAlignment:
+                    CrossAxisAlignment
+                        .start,
+                children: [
+                  Container(
+                    width: 45,
+                    height: 45,
+                    decoration:
+                        BoxDecoration(
+                      color:
+                          const Color(
+                        0xFFF3EAE0,
+                      ),
+                      borderRadius:
+                          BorderRadius
+                              .circular(
+                        12,
+                      ),
+                    ),
+                    child:
+                        const Icon(
+                      Icons.history,
+                      color: Color(
+                        0xFF5A3116,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    width: 12,
+                  ),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment
+                              .start,
+                      children: [
+                        Text(
+                          item["judul"] ??
+                              "",
+                          style:
+                              const TextStyle(
+                            fontSize:
+                                15,
+                            fontWeight:
+                                FontWeight
+                                    .bold,
+                            color: Color(
+                              0xFF3E2723,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(
+                          height: 4,
+                        ),
+
+                        Text(
+                          item["deskripsi"] ??
+                              "",
+                          style:
+                              const TextStyle(
+                            fontSize:
+                                13,
+                            color:
+                                Colors
+                                    .black87,
+                          ),
+                        ),
+
+                        const SizedBox(
+                          height: 8,
+                        ),
+
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons
+                                  .calendar_today,
+                              size: 14,
+                              color:
+                                  Colors
+                                      .grey,
+                            ),
+
+                            const SizedBox(
+                              width:
+                                  4,
+                            ),
+
+                            Text(
+                              item["tanggal"] ??
+                                  "",
+                              style:
+                                  const TextStyle(
+                                fontSize:
+                                    12,
+                                color:
+                                    Colors.grey,
+                              ),
+                            ),
+
+                            const SizedBox(
+                              width:
+                                  12,
+                            ),
+
+                            const Icon(
+                              Icons
+                                  .access_time,
+                              size: 14,
+                              color:
+                                  Colors
+                                      .grey,
+                            ),
+
+                            const SizedBox(
+                              width:
+                                  4,
+                            ),
+
+                            Text(
+                              item["jam"] ??
+                                  "",
+                              style:
+                                  const TextStyle(
+                                fontSize:
+                                    12,
+                                color:
+                                    Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      }),
     );
-  }
-
-  IconData getIcon(String icon) {
-    switch (icon) {
-      case "login":
-        return Icons.login;
-
-      case "payment":
-        return Icons.payment;
-
-      case "kelas":
-        return Icons.menu_book;
-
-      case "produk":
-        return Icons.shopping_bag;
-
-      case "profil":
-        return Icons.person;
-
-      case "sertifikat":
-        return Icons.workspace_premium;
-
-      default:
-        return Icons.history;
-    }
   }
 }

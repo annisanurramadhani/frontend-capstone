@@ -118,7 +118,6 @@ class SertifikatView extends GetView<SertifikatController> {
     required BuildContext context,
     required dynamic data,
   }) {
-    final size = MediaQuery.of(context).size;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 22),

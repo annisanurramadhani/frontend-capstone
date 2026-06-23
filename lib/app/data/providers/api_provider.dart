@@ -468,4 +468,26 @@ class ApiProvider {
       },
     );
   }
+
+  // GET AKTIVITAS
+  static Future<http.Response> getAktivitas(String token) async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/aktivitas"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
+
+  //LOGOUT
+  static Future<http.Response> logout(String token) async {
+    return await http.post(
+      Uri.parse("$penggunaUrl/logout"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+  }
 }
