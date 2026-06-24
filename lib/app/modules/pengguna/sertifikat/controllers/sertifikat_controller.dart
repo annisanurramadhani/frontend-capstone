@@ -1,4 +1,9 @@
+import 'package:flutter/material.dart';
+
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../data/providers/api_provider.dart';
@@ -46,6 +51,10 @@ class SertifikatController extends GetxController {
     dynamic data,
   ) async {
     if (data["sertifikatUrl"] == null) {
+      Get.snackbar(
+        "Gagal",
+        "Sertifikat tidak ditemukan",
+      );
       return;
     }
 
@@ -53,7 +62,9 @@ class SertifikatController extends GetxController {
         "${ApiProvider.baseUrl}${data["sertifikatUrl"]}";
 
     await launchUrl(
-      Uri.parse(url),
+      Uri.parse(
+        Uri.encodeFull(url),
+      ),
       mode: LaunchMode.externalApplication,
     );
   }
@@ -61,16 +72,61 @@ class SertifikatController extends GetxController {
   Future<void> unduhPdf(
     dynamic data,
   ) async {
-    if (data["sertifikatUrl"] == null) {
-      return;
+    try {
+      if (data["sertifikatUrl"] == null) {
+        Get.snackbar(
+          "Gagal",
+          "Sertifikat tidak ditemukan",
+        );
+        return;
+      }
+
+      final url =
+          "${ApiProvider.baseUrl}${data["sertifikatUrl"]}";
+
+      final directory =
+          await getApplicationDocumentsDirectory();
+
+      final namaFile =
+          "sertifikat_${data["id"]}.pdf";
+
+      final filePath =
+          "${directory.path}/$namaFile";
+
+      Get.dialog(
+        const Center(
+          child:
+              CircularProgressIndicator(),
+        ),
+        barrierDismissible: false,
+      );
+
+      await Dio().download(
+        Uri.encodeFull(url),
+        filePath,
+      );
+
+      Get.back();
+
+      Get.snackbar(
+        "Berhasil",
+        "Sertifikat berhasil diunduh",
+      );
+
+      await OpenFilex.open(
+        filePath,
+      );
+    } catch (e) {
+      if (Get.isDialogOpen ?? false) {
+        Get.back();
+      }
+
+      print(e);
+
+      Get.snackbar(
+        "Gagal",
+        "Tidak dapat mengunduh sertifikat",
+      );
     }
-
-    final url =
-        "${ApiProvider.baseUrl}${data["sertifikatUrl"]}";
-
-    await launchUrl(
-      Uri.parse(url),
-      mode: LaunchMode.externalApplication,
-    );
   }
 }

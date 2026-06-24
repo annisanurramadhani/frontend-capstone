@@ -17,8 +17,11 @@ class BelajarAnyamanView extends GetView<BelajarAnyamanController> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: Color(0xFF3E2723), size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Color(0xFF3E2723),
+            size: 20,
+          ),
         ),
         title: const Text(
           "Belajar Anyaman",
@@ -50,8 +53,11 @@ class BelajarAnyamanView extends GetView<BelajarAnyamanController> {
                     color: const Color(0xFFF3EAE0),
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  child: const Icon(Icons.video_library_outlined,
-                      size: 40, color: Color(0xFF5A3116)),
+                  child: const Icon(
+                    Icons.video_library_outlined,
+                    size: 40,
+                    color: Color(0xFF5A3116),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -91,12 +97,21 @@ class BelajarAnyamanView extends GetView<BelajarAnyamanController> {
 
 class _VideoCard extends StatelessWidget {
   final Map<String, dynamic> video;
+
   const _VideoCard({required this.video});
 
   @override
   Widget build(BuildContext context) {
+    final thumbnail = video["thumbnail"] ?? "";
+
+    final thumbnailUrl = thumbnail.toString().startsWith("http")
+        ? thumbnail
+        : "${ApiProvider.baseUrl}$thumbnail";
+
     return GestureDetector(
-      onTap: () => Get.to(() => const DetailVideoView(), arguments: video),
+      onTap: () {
+        Get.to(() => const DetailVideoView(), arguments: video);
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
@@ -107,7 +122,6 @@ class _VideoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── THUMBNAIL ────────────────────────────────────────────
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(20),
@@ -115,29 +129,31 @@ class _VideoCard extends StatelessWidget {
               child: Stack(
                 children: [
                   Image.network(
-                    "${ApiProvider.baseUrl}/uploads/${video["thumbnail"]}",
+                    Uri.encodeFull(thumbnailUrl),
                     width: double.infinity,
                     height: 190,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      width: double.infinity,
-                      height: 190,
-                      color: const Color(0xFFF3EAE0),
-                      child: const Icon(
-                        Icons.broken_image_outlined,
-                        size: 48,
-                        color: Color(0xFF8B6347),
-                      ),
-                    ),
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: double.infinity,
+                        height: 190,
+                        color: const Color(0xFFF3EAE0),
+                        child: const Icon(
+                          Icons.broken_image_outlined,
+                          size: 48,
+                          color: Color(0xFF8B6347),
+                        ),
+                      );
+                    },
                   ),
-                  // play button overlay
+
                   Positioned.fill(
                     child: Center(
                       child: Container(
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.45),
+                          color: Colors.black.withOpacity(0.45),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -152,16 +168,16 @@ class _VideoCard extends StatelessWidget {
               ),
             ),
 
-            // ── INFO ─────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // badge
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFF3EAE0),
                       borderRadius: BorderRadius.circular(20),
@@ -175,9 +191,9 @@ class _VideoCard extends StatelessWidget {
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 8),
 
-                  // judul
                   Text(
                     video["title"] ?? "",
                     maxLines: 2,
@@ -189,46 +205,48 @@ class _VideoCard extends StatelessWidget {
                       height: 1.35,
                     ),
                   ),
+
                   const SizedBox(height: 6),
 
-                  // deskripsi
-                  const Text(
-                    "Pelajari teknik anyaman bambu menggunakan tutorial interaktif.",
+                  Text(
+                    video["description"] ??
+                        "Pelajari teknik anyaman bambu menggunakan tutorial interaktif.",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13,
                       color: Color(0xFF8B6347),
                       height: 1.5,
                     ),
                   ),
+
                   const SizedBox(height: 14),
 
-                  // tombol
-                  SizedBox(
-                    width: double.infinity,
-                    height: 46,
-                    child: ElevatedButton.icon(
-                      onPressed: () =>
-                          Get.to(() => const DetailVideoView(), arguments: video),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF5A3116),
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      icon: const Icon(Icons.play_arrow_rounded, size: 20),
-                      label: const Text(
-                        "Lihat Tutorial",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: double.infinity,
+                  //   height: 46,
+                  //   child: ElevatedButton.icon(
+                  //     onPressed: () {
+                  //       Get.to(() => const DetailVideoView(), arguments: video);
+                  //     },
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: const Color(0xFF5A3116),
+                  //       foregroundColor: Colors.white,
+                  //       elevation: 0,
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(14),
+                  //       ),
+                  //     ),
+                  //     icon: const Icon(Icons.play_arrow_rounded, size: 20),
+                  //     label: const Text(
+                  //       "Lihat Tutorial",
+                  //       style: TextStyle(
+                  //         fontSize: 14,
+                  //         fontWeight: FontWeight.w600,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

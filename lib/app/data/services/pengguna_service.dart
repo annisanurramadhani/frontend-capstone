@@ -284,6 +284,15 @@ class PenggunaService {
     }
   }
 
+    // AKTIVITAS VIDEO
+  static Future<void> createAktivitasVideo(String videoId) async {
+    try {
+      final token = box.read("token");
+
+      await ApiProvider.createAktivitasVideo(token: token, videoId: videoId);
+    } catch (_) {}
+  }
+
   // DELETE AKUN
   static Future<dynamic> deleteAkun() async {
     final token = box.read("token");

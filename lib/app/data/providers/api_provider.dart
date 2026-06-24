@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class ApiProvider {
   // MOBILE
-  static const String mobileBaseUrl = "http://10.223.117.75:3000";
+  static const String mobileBaseUrl = "http://192.168.18.23:3000";
 
   static const String mobileAuthUrl = "$mobileBaseUrl/api/auth";
 
@@ -477,6 +477,21 @@ class ApiProvider {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
+    );
+  }
+
+  // AKTIVITAS VIDEO
+  static Future<http.Response> createAktivitasVideo({
+    required String token,
+    required String videoId,
+  }) async {
+    return await http.post(
+      Uri.parse("$penggunaUrl/aktivitas-video"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({"videoId": videoId}),
     );
   }
 
