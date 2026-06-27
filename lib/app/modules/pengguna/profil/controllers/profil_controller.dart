@@ -22,6 +22,10 @@ class ProfilController extends GetxController {
     getProfil();
   }
 
+  void kembali() {
+    Get.back();
+  }
+
   Future<void> getProfil() async {
     try {
       isLoading.value = true;

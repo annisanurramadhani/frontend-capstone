@@ -20,21 +20,15 @@ class KeranjangController extends GetxController {
     try {
       isLoading.value = true;
 
-      final response =
-          await PenggunaService.getKeranjang();
+      final response = await PenggunaService.getKeranjang();
 
       if (response["success"] == true) {
-        keranjangList.assignAll(
-          response["keranjang"],
-        );
+        keranjangList.assignAll(response["keranjang"]);
 
         hitungTotal();
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
+      Get.snackbar("Error", e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -44,100 +38,76 @@ class KeranjangController extends GetxController {
     int total = 0;
 
     for (var item in keranjangList) {
-      total +=
-          (item["produk"]["harga"] as int) *
-          (item["qty"] as int);
+      total += (item["produk"]["harga"] as int) * (item["qty"] as int);
     }
 
     totalHarga.value = total;
   }
 
-  Future<void> tambahQty(
-    String keranjangId,
-    int qtySekarang,
-    int stok,
-  ) async {
+  Future<void> tambahQty(String keranjangId, int qtySekarang, int stok) async {
     try {
       if (qtySekarang >= stok) {
-        Get.snackbar(
-          "Info",
-          "Stok tidak mencukupi",
-        );
+        Get.snackbar("Info", "Stok tidak mencukupi");
         return;
       }
 
-      final qtyBaru =
-          qtySekarang + 1;
+      final qtyBaru = qtySekarang + 1;
 
-      final response =
-          await PenggunaService
-              .updateKeranjangQty(
+      final response = await PenggunaService.updateKeranjangQty(
         keranjangId,
         qtyBaru,
       );
 
       if (response["success"] == true) {
-        await getKeranjang();
+        final index = keranjangList.indexWhere((e) => e["id"] == keranjangId);
+
+        if (index != -1) {
+          keranjangList[index]["qty"] = qtyBaru;
+          keranjangList.refresh();
+          hitungTotal();
+        }
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
+      Get.snackbar("Error", e.toString());
     }
   }
 
-  Future<void> kurangQty(
-    String keranjangId,
-    int qtySekarang,
-  ) async {
+  Future<void> kurangQty(String keranjangId, int qtySekarang) async {
     try {
-      if (qtySekarang <= 1) {
-        return;
-      }
+      if (qtySekarang <= 1) return;
 
-      final qtyBaru =
-          qtySekarang - 1;
+      final qtyBaru = qtySekarang - 1;
 
-      final response =
-          await PenggunaService
-              .updateKeranjangQty(
+      final response = await PenggunaService.updateKeranjangQty(
         keranjangId,
         qtyBaru,
       );
 
       if (response["success"] == true) {
-        await getKeranjang();
+        final index = keranjangList.indexWhere((e) => e["id"] == keranjangId);
+
+        if (index != -1) {
+          keranjangList[index]["qty"] = qtyBaru;
+          keranjangList.refresh();
+          hitungTotal();
+        }
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
+      Get.snackbar("Error", e.toString());
     }
   }
 
-  Future<void> hapusKeranjang(
-    String id,
-  ) async {
+  Future<void> hapusKeranjang(String id) async {
     try {
-      final response =
-          await PenggunaService
-              .deleteKeranjang(id);
+      final response = await PenggunaService.deleteKeranjang(id);
 
       if (response["success"] == true) {
         await getKeranjang();
 
-        Get.snackbar(
-          "Berhasil",
-          "Produk dihapus dari keranjang",
-        );
+        Get.snackbar("Berhasil", "Produk dihapus dari keranjang");
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
+      Get.snackbar("Error", e.toString());
     }
   }
 }

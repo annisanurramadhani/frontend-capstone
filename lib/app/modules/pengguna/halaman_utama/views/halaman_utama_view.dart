@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/halaman_utama_controller.dart';
+
 import '../../../../global_widgets/custom_navbar.dart';
+import '../controllers/halaman_utama_controller.dart';
+import '../../../../data/providers/api_provider.dart';
 
 class HalamanUtamaView extends StatefulWidget {
   const HalamanUtamaView({super.key});
@@ -49,129 +51,184 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
     super.dispose();
   }
 
+  String get greeting {
+    final hour = DateTime.now().hour;
+
+    if (hour < 11) {
+      return "Selamat Pagi!";
+    } else if (hour < 15) {
+      return "Selamat Siang!";
+    } else if (hour < 18) {
+      return "Selamat Sore!";
+    } else {
+      return "Selamat Malam!";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final padding = size.width * 0.05;
+    final w = size.width;
+    final h = size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF8F3),
-      bottomNavigationBar: const CustomNavbar(currentIndex: 1),
+      backgroundColor: const Color(0xFFFAF6F1),
+      bottomNavigationBar: const CustomNavbar(currentIndex: 2),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: padding),
+          padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.02, w * 0.05, h * 0.03),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: size.height * 0.025),
-
-              // HEADER
               Obx(
                 () => Row(
                   children: [
-                    Container(
-                      width: 52,
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF3EAE0),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Icon(
-                        Icons.person_rounded,
-                        color: Color(0xFF5A3116),
-                        size: 28,
-                      ),
+                    CircleAvatar(
+                      radius: w * 0.075,
+                      backgroundColor: const Color(0xFFF2E7DB),
+                      backgroundImage:
+                          controller.user["photo"] != null &&
+                              controller.user["photo"].toString().isNotEmpty
+                          ? NetworkImage(
+                              "${ApiProvider.baseUrl}${controller.user["photo"]}",
+                            )
+                          : null,
+                      child:
+                          controller.user["photo"] == null ||
+                              controller.user["photo"].toString().isEmpty
+                          ? Icon(
+                              Icons.person,
+                              color: Color(0xFF5A3116),
+                              size: w * 0.075,
+                            )
+                          : null,
                     ),
-                    const SizedBox(width: 12),
+
+                    SizedBox(width: w * 0.035),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Selamat Datang!",
+                            greeting,
                             style: TextStyle(
-                              fontSize: 13,
-                              color: const Color(0xFF8B6347),
+                              fontSize: w * 0.040,
+                              color: Color(0xFF8B6347),
                             ),
                           ),
-                          const SizedBox(height: 2),
+
+                          const SizedBox(height: 3),
+
                           Text(
                             controller.nama.value.isEmpty
                                 ? "Pengguna"
                                 : controller.nama.value,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF3E2723),
-                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: w * 0.045,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF3E2723),
+                            ),
+                          ),
+
+                          const SizedBox(height: 3),
+                        ],
+                      ),
+                    ),
+
+                    InkWell(
+                      borderRadius: BorderRadius.circular(30),
+                      onTap: () {
+                        Get.toNamed("/notifikasi");
+                      },
+                      child: Container(
+                        width: w * 0.13,
+                        height: w * 0.13,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.brown.withOpacity(.08),
+                              blurRadius: 12,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.notifications_none_rounded,
+                          color: Color(0xFF5A3116),
+                          size: w * 0.065,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: h * 0.035), // BANNER
+              SizedBox(
+                height: h * 0.24,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(w * 0.06),
+                      child: PageView(
+                        controller: pageController,
+                        onPageChanged: (index) {
+                          setState(() {
+                            currentPage = index;
+                          });
+                        },
+                        children: [
+                          Image.asset(
+                            "assets/image/banner1.jpg",
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          Image.asset(
+                            "assets/image/banner2.png",
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          Image.asset(
+                            "assets/image/banner3.png",
+                            width: double.infinity,
+                            fit: BoxFit.cover,
                           ),
                         ],
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => Get.toNamed("/notifikasi"),
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF3EAE0),
-                          borderRadius: BorderRadius.circular(14),
+
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(26),
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Colors.black.withOpacity(.45),
+                            Colors.transparent,
+                          ],
                         ),
-                        child: const Icon(
-                          Icons.notifications_outlined,
-                          color: Color(0xFF5A3116),
-                          size: 24,
-                        ),
+                      ),
+                    ),
+
+                    const Positioned(
+                      left: 22,
+                      bottom: 22,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                       ),
                     ),
                   ],
                 ),
               ),
 
-              SizedBox(height: size.height * 0.03),
+              const SizedBox(height: 16),
 
-              // BANNER
-              SizedBox(
-                height: 190,
-                child: PageView(
-                  controller: pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      currentPage = index;
-                    });
-                  },
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: Image.asset(
-                        "assets/image/banner1.jpg",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: Image.asset(
-                        "assets/image/banner2.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: Image.asset(
-                        "assets/image/banner3.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // DOTS INDIKATOR
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
@@ -179,26 +236,36 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
                   (index) => AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: currentPage == index ? 20 : 8,
-                    height: 8,
+                    width: currentPage == index ? w * 0.055 : w * 0.02,
+
+                    height: w * 0.02,
                     decoration: BoxDecoration(
                       color: currentPage == index
                           ? const Color(0xFF5A3116)
-                          : Colors.grey.shade400,
+                          : Colors.brown.shade200,
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),
               ),
 
-              SizedBox(height: size.height * 0.03),
+              const SizedBox(height: 30),
 
-              // GRID MENU
+              Text(
+                "Apa yang ingin Anda lakukan?",
+                style: TextStyle(
+                  fontSize: w * 0.043,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF3E2723),
+                ),
+              ),
+
+              const SizedBox(height: 18),
               Obx(() {
                 if (controller.isLoading.value) {
                   return const Center(
                     child: Padding(
-                      padding: EdgeInsets.all(32),
+                      padding: EdgeInsets.all(40),
                       child: CircularProgressIndicator(
                         color: Color(0xFF5A3116),
                       ),
@@ -206,29 +273,65 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
                   );
                 }
 
-                final menu = controller.menuUtama;
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: menu.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 14,
-                    mainAxisSpacing: 14,
-                    childAspectRatio: size.width < 360 ? 0.9 : 1.05,
-                  ),
-                  itemBuilder: (context, index) {
-                    final data = menu[index];
-                    return _MenuCard(
-                      icon: data["icon"] as IconData,
-                      title: data["title"] as String,
-                      onTap: () => controller.pindahHalaman(data["route"]),
-                    );
-                  },
+                return Column(
+                  children: [
+                    _FeatureCard(
+                      icon: Icons.menu_book_rounded,
+                      title: "Belajar Anyaman",
+                      subtitle: "Pelajari berbagai teknik dasar anyaman bambu.",
+                      onTap: () {
+                        controller.pindahHalaman(
+                          controller.menuUtama[0]["route"],
+                        );
+                      },
+                    ),
+
+                    SizedBox(height: h * 0.02),
+                    _FeatureCard(
+                      icon: Icons.groups_rounded,
+                      title: "Daftar Pengrajin",
+                      subtitle: "Temukan pengrajin lokal dan mentor terbaik.",
+                      onTap: () {
+                        controller.pindahHalaman(
+                          controller.menuUtama[1]["route"],
+                        );
+                      },
+                    ),
+
+                    SizedBox(height: h * 0.02),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _SmallFeatureCard(
+                            icon: Icons.shopping_bag_outlined,
+                            title: "Produk\nAnyaman",
+                            onTap: () {
+                              controller.pindahHalaman(
+                                controller.menuUtama[2]["route"],
+                              );
+                            },
+                          ),
+                        ),
+
+                        SizedBox(height: h * 0.02),
+                        Expanded(
+                          child: _SmallFeatureCard(
+                            icon: Icons.workspace_premium_outlined,
+                            title: "Sertifikat",
+                            onTap: () {
+                              controller.pindahHalaman(
+                                controller.menuUtama[3]["route"],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: h * 0.035),
+                  ],
                 );
               }),
-
-              SizedBox(height: size.height * 0.025),
             ],
           ),
         ),
@@ -237,13 +340,101 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
   }
 }
 
-// MENU CARD WIDGET
-class _MenuCard extends StatelessWidget {
+class _FeatureCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _FeatureCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(24),
+        onTap: onTap,
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.brown.withOpacity(.08),
+                blurRadius: 18,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Row(
+              children: [
+                Container(
+                  width: 62,
+                  height: 62,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF5ECE3),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: const Color(0xFF5A3116), size: 30),
+                ),
+
+                const SizedBox(width: 18),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF3E2723),
+                        ),
+                      ),
+
+                      const SizedBox(height: 6),
+
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade700,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 18,
+                  color: Color(0xFF5A3116),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SmallFeatureCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final VoidCallback onTap;
 
-  const _MenuCard({
+  const _SmallFeatureCard({
     required this.icon,
     required this.title,
     required this.onTap,
@@ -251,41 +442,52 @@ class _MenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFF0E6DD), width: 1.2),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 54,
-              height: 54,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF3EAE0),
-                borderRadius: BorderRadius.circular(16),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(22),
+        onTap: onTap,
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(22),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.brown.withOpacity(.08),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
               ),
-              child: Icon(icon, size: 28, color: const Color(0xFF5A3116)),
+            ],
+          ),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.21,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF5ECE3),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: const Color(0xFF5A3116), size: 28),
+                ),
+
+                SizedBox(height: 20),
+
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF3E2723),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF3E2723),
-                height: 1.4,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

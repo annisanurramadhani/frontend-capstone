@@ -11,9 +11,11 @@ class MasukView extends GetView<MasukController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
 
       body: Stack(
         children: [
@@ -27,7 +29,7 @@ class MasukView extends GetView<MasukController> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
 
-                colors: [Color(0xFFF8EBDD), Color(0xFFE8D2BC)],
+                colors: [Color(0xFFF8EBDD), Color(0xFFF7EFE6)],
               ),
             ),
           ),
@@ -37,7 +39,7 @@ class MasukView extends GetView<MasukController> {
               physics: const BouncingScrollPhysics(),
 
               child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: size.height + 200),
+                constraints: BoxConstraints(minHeight: size.height),
 
                 child: Padding(
                   padding: EdgeInsets.zero,
@@ -49,56 +51,82 @@ class MasukView extends GetView<MasukController> {
                       SizedBox(height: size.height * 0.01),
 
                       // HEADER
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Get.back();
-                            },
+                      const SizedBox(height: 20),
 
-                            icon: const Icon(
-                              Icons.arrow_back_ios_new,
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: w * 0.05),
+                        child: SizedBox(
+                          height: h * 0.055,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: IconButton(
+                                  onPressed: controller.kembali,
+                                  padding: EdgeInsets.zero,
+                                  splashRadius: 22,
+                                  icon: Icon(
+                                    Icons.arrow_back_ios_new_rounded,
+                                    color: const Color(0xFF5A3116),
+                                    size: w * 0.055,
+                                  ),
+                                ),
+                              ),
 
-                              color: Color(0xFF5A3116),
-                            ),
+                              Text(
+                                "Masuk",
+                                style: TextStyle(
+                                  fontSize: w * 0.065,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF3E2723),
+                                ),
+                              ),
+                            ],
                           ),
-
-                          const Spacer(),
-
-                          // LOGO
-                          SizedBox(
-                            width: 130,
-                            height: 130,
-                            child: Image.asset(
-                              "assets/image/logo.png",
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          const Spacer(),
-
-                          const SizedBox(width: 48),
-                        ],
+                        ),
                       ),
 
-                      SizedBox(height: size.height * 0.01),
+                      const SizedBox(height: 10),
+
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: w * 0.06),
+                        child: Center(
+                          child: SizedBox(
+                            width: w * 0.80,
+                            child: Text(
+                              "Masukkan email dan kata sandi untuk melanjutkan ke akun Anda.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: w * 0.035,
+                                color: Colors.brown.shade600,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 28),
 
                       // FORM
                       Container(
                         width: double.infinity,
                         constraints: BoxConstraints(minHeight: size.height),
 
-                        margin: EdgeInsets.only(top: size.height * 0.01),
-
-                        padding: const EdgeInsets.fromLTRB(24, 35, 24, 24),
-
+                        margin: const EdgeInsets.only(top: 8),
+                        padding: EdgeInsets.fromLTRB(
+                          w * 0.06,
+                          h * 0.02,
+                          w * 0.06,
+                          h * 0.03,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white,
 
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(45),
-                            topRight: Radius.circular(45),
-                            bottomLeft: Radius.circular(30),
-                            bottomRight: Radius.circular(30),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(w * 0.08),
+                            topRight: Radius.circular(w * 0.08),
                           ),
 
                           boxShadow: [
@@ -112,62 +140,39 @@ class MasukView extends GetView<MasukController> {
 
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-
                           children: [
-                            Center(
-                              child: Text(
-                                "Masuk",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF3E2723),
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(height: 30),
-                            // EMAIL
                             buildTitle("Email", size),
 
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 8),
 
                             TextField(
                               controller: controller.emailController,
-
                               keyboardType: TextInputType.emailAddress,
-
                               decoration: inputDecoration(
                                 hint: "Masukkan email",
-
                                 icon: Icons.email_outlined,
                               ),
                             ),
 
-                            const SizedBox(height: 25),
+                            const SizedBox(height: 20),
 
-                            // PASSWORD
                             buildTitle("Kata Sandi", size),
-                            const SizedBox(height: 12),
+
+                            const SizedBox(height: 8),
 
                             Obx(
                               () => TextField(
                                 controller: controller.passwordController,
-
                                 obscureText: controller.isPasswordHidden.value,
-
                                 decoration: inputDecoration(
                                   hint: "Masukkan kata sandi",
-
                                   icon: Icons.lock_outline,
-
                                   suffix: IconButton(
                                     onPressed: controller.togglePassword,
-
                                     icon: Icon(
                                       controller.isPasswordHidden.value
                                           ? Icons.visibility_off_outlined
                                           : Icons.visibility_outlined,
-
                                       color: Colors.brown,
                                     ),
                                   ),
@@ -176,7 +181,6 @@ class MasukView extends GetView<MasukController> {
                             ),
 
                             const SizedBox(height: 14),
-
                             // LUPA PASSWORD
                             Align(
                               alignment: Alignment.centerRight,
@@ -201,37 +205,35 @@ class MasukView extends GetView<MasukController> {
                             // BUTTON MASUK
                             SizedBox(
                               width: double.infinity,
-
-                              height: 58,
-
+                              height: h * 0.065,
                               child: Obx(
                                 () => ElevatedButton(
                                   onPressed: controller.isLoading.value
                                       ? null
                                       : controller.masuk,
-
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF5A3116),
-
                                     elevation: 0,
-
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(
+                                        w * 0.04,
+                                      ),
                                     ),
                                   ),
-
                                   child: controller.isLoading.value
-                                      ? const CircularProgressIndicator(
-                                          color: Colors.white,
+                                      ? const SizedBox(
+                                          width: 22,
+                                          height: 22,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2.5,
+                                            color: Colors.white,
+                                          ),
                                         )
                                       : Text(
                                           "Masuk",
-
                                           style: TextStyle(
-                                            fontSize: size.width * 0.05,
-
+                                            fontSize: w * 0.042,
                                             fontWeight: FontWeight.bold,
-
                                             color: Colors.white,
                                           ),
                                         ),
@@ -239,8 +241,7 @@ class MasukView extends GetView<MasukController> {
                               ),
                             ),
 
-                            SizedBox(height: size.height * 0.04),
-
+                            const SizedBox(height: 20),
                             // DIVIDER
                             Row(
                               children: [
@@ -250,7 +251,7 @@ class MasukView extends GetView<MasukController> {
 
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 14,
+                                    horizontal: 10,
                                   ),
 
                                   child: Text(
@@ -274,8 +275,7 @@ class MasukView extends GetView<MasukController> {
                             SizedBox(
                               width: double.infinity,
 
-                              height: 58,
-
+                              height: h * 0.067,
                               child: OutlinedButton(
                                 onPressed: controller.masukDenganGoogle,
 
@@ -287,7 +287,9 @@ class MasukView extends GetView<MasukController> {
                                   ),
 
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(
+                                      w * 0.05,
+                                    ),
                                   ),
                                 ),
 
@@ -298,20 +300,17 @@ class MasukView extends GetView<MasukController> {
                                     Image.asset(
                                       "assets/image/google.png",
 
-                                      width: 24,
+                                      width: w * 0.06,
                                     ),
 
                                     const SizedBox(width: 14),
 
                                     Text(
                                       "Masuk dengan Google",
-
                                       style: TextStyle(
-                                        fontSize: size.width * 0.042,
-
+                                        fontSize: w * 0.042,
                                         fontWeight: FontWeight.bold,
-
-                                        color: const Color(0xFF3E2723),
+                                        color: Color(0xFF3E2723),
                                       ),
                                     ),
                                   ],
@@ -319,35 +318,27 @@ class MasukView extends GetView<MasukController> {
                               ),
                             ),
 
-                            SizedBox(height: size.height * 0.04),
-
+                            const SizedBox(height: 20),
                             // DAFTAR
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-
                               children: [
-                                Text(
+                                const Text(
                                   "Belum punya akun? ",
-
                                   style: TextStyle(
-                                    fontSize: size.width * 0.038,
-
+                                    fontSize: 14,
                                     color: Colors.brown,
                                   ),
                                 ),
 
                                 GestureDetector(
                                   onTap: controller.goToDaftar,
-
-                                  child: Text(
+                                  child: const Text(
                                     "Daftar",
-
                                     style: TextStyle(
-                                      fontSize: size.width * 0.038,
-
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
-
-                                      color: const Color(0xFF5A3116),
+                                      color: Color(0xFF5A3116),
                                     ),
                                   ),
                                 ),
@@ -356,8 +347,6 @@ class MasukView extends GetView<MasukController> {
                           ],
                         ),
                       ),
-
-                      SizedBox(height: size.height * 0.05),
                     ],
                   ),
                 ),
@@ -372,11 +361,10 @@ class MasukView extends GetView<MasukController> {
   Widget buildTitle(String title, Size size) {
     return Text(
       title,
-
       style: TextStyle(
-        fontSize: size.width * 0.043,
-
+        fontSize: size.width * 0.032,
         fontWeight: FontWeight.w600,
+        color: Color(0xFF3E2723),
       ),
     );
   }
@@ -388,21 +376,25 @@ class MasukView extends GetView<MasukController> {
   }) {
     return InputDecoration(
       hintText: hint,
+      hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 14),
 
-      prefixIcon: Icon(icon, color: Colors.brown),
+      prefixIcon: Icon(icon, color: const Color(0xFF8B5E3C), size: 22),
 
       suffixIcon: suffix,
 
       filled: true,
-
-      fillColor: Colors.white,
+      fillColor: const Color(0xFFF9F7F5),
 
       contentPadding: const EdgeInsets.symmetric(vertical: 18),
 
-      border: OutlineInputBorder(
+      enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(18),
+        borderSide: BorderSide(color: Colors.brown.shade100),
+      ),
 
-        borderSide: BorderSide.none,
+      focusedBorder: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderSide: BorderSide(color: Color(0xFF8B5E3C), width: 1.5),
       ),
     );
   }

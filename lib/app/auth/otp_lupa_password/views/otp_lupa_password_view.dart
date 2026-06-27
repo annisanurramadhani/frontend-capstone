@@ -10,222 +10,316 @@ class OtpLupaPasswordView extends GetView<OtpLupaPasswordController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Stack(
-        children: [
-          // BACKGROUND
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFFF5E6D3), Color(0xFFD7A97B)],
-              ),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFFF8EBDD), Color(0xFFF7EFE6)],
             ),
           ),
-
-          // OVERLAY
-          Container(color: Colors.white.withValues(alpha: 0.15)),
-
-          SafeArea(
+          child: SafeArea(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: size.height),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.08,
-                    vertical: 24,
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(height: size.height * 0.02),
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
 
-                      // BACK
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          onPressed: () => Get.back(),
-                          icon: const Icon(
-                            Icons.arrow_back_ios_new,
-                            color: Color(0xFF5A3116),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.02),
+                    child: SizedBox(
+                      height: h * 0.055,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: IconButton(
+                              onPressed: () => Get.back(),
+                              padding: EdgeInsets.zero,
+                              splashRadius: 22,
+                              icon: Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                                color: const Color(0xFF5A3116),
+                                size: w * 0.055,
+                              ),
+                            ),
                           ),
-                        ),
+
+                          Text(
+                            "OTP Lupa Password",
+                            style: TextStyle(
+                              fontSize: w * 0.065,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3E2723),
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                  ),
 
-                      SizedBox(height: size.height * 0.04),
+                  const SizedBox(height: 10),
 
-                      // ICON
-                      Container(
-                        width: size.width * 0.24,
-                        height: size.width * 0.24,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.90),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.mark_email_read_outlined,
-                          size: size.width * 0.12,
-                          color: const Color(0xFF8B5E3C),
-                        ),
-                      ),
-
-                      SizedBox(height: size.height * 0.04),
-
-                      // TITLE
-                      Text(
-                        "Verifikasi OTP",
-                        style: TextStyle(
-                          fontSize: size.width * 0.085,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF3E2723),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      Text(
-                        "Masukkan kode OTP yang telah dikirim ke email Anda.",
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: SizedBox(
+                      width: w * .80,
+                      child: Text(
+                        "Masukkan 6 digit kode OTP yang telah dikirim ke email Anda.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: size.width * 0.042,
-                          color: Colors.brown,
-                          height: 1.7,
+                          fontSize: w * 0.035,
+                          color: Colors.brown.shade600,
+                          height: 1.5,
                         ),
                       ),
+                    ),
+                  ),
 
-                      SizedBox(height: size.height * 0.06),
+                  const SizedBox(height: 28),
 
-                      // CARD
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(size.width * 0.07),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.92),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Column(
-                          children: [
-                            // OTP FIELDS
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                otpField(controller: controller.otp1Controller, context: context),
-                                SizedBox(width: size.width * 0.02),
-                                otpField(controller: controller.otp2Controller, context: context),
-                                SizedBox(width: size.width * 0.02),
-                                otpField(controller: controller.otp3Controller, context: context),
-                                SizedBox(width: size.width * 0.02),
-                                otpField(controller: controller.otp4Controller, context: context),
-                                SizedBox(width: size.width * 0.02),
-                                otpField(controller: controller.otp5Controller, context: context),
-                                SizedBox(width: size.width * 0.02),
-                                otpField(controller: controller.otp6Controller, context: context),
-                              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(w * 0.06),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(w * 0.07),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(.06),
+                            blurRadius: 18,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Masukan Kode OTP",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF3E2723),
                             ),
+                          ),
 
-                            SizedBox(height: size.height * 0.05),
+                          const SizedBox(height: 14),
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              final boxWidth = (constraints.maxWidth - 40) / 6;
 
-                            // BUTTON
-                            SizedBox(
-                              width: double.infinity,
-                              height: 58,
-                              child: Obx(
-                                () => ElevatedButton(
-                                  onPressed: controller.isLoading.value
-                                      ? null
-                                      : controller.verifikasiOtp,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF8B5E3C),
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18),
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  otpField(
+                                    context: context,
+                                    controller: controller.otp1Controller,
+                                    width: boxWidth,
+                                    isFirst: true,
+                                  ),
+                                  otpField(
+                                    context: context,
+                                    controller: controller.otp2Controller,
+                                    width: boxWidth,
+                                  ),
+                                  otpField(
+                                    context: context,
+                                    controller: controller.otp3Controller,
+                                    width: boxWidth,
+                                  ),
+                                  otpField(
+                                    context: context,
+                                    controller: controller.otp4Controller,
+                                    width: boxWidth,
+                                  ),
+                                  otpField(
+                                    context: context,
+                                    controller: controller.otp5Controller,
+                                    width: boxWidth,
+                                  ),
+                                  otpField(
+                                    context: context,
+                                    controller: controller.otp6Controller,
+                                    width: boxWidth,
+                                    isLast: true,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+
+                          const SizedBox(height: 18),
+
+                          SizedBox(
+                            width: double.infinity,
+                            height: h * 0.065,
+                            child: Obx(
+                              () => ElevatedButton(
+                                onPressed: controller.isLoading.value
+                                    ? null
+                                    : controller.verifikasiOtp,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF5A3116),
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      w * 0.04,
                                     ),
                                   ),
-                                  child: controller.isLoading.value
-                                      ? const CircularProgressIndicator(
+                                ),
+                                child: controller.isLoading.value
+                                    ? const SizedBox(
+                                        width: 22,
+                                        height: 22,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
                                           color: Colors.white,
-                                        )
-                                      : Text(
-                                          "Verifikasi",
-                                          style: TextStyle(
-                                            fontSize: size.width * 0.05,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
                                         ),
-                                ),
+                                      )
+                                    : Text(
+                                        "Verifikasi",
+                                        style: TextStyle(
+                                          fontSize: w * 0.042,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                               ),
                             ),
+                          ),
 
-                            SizedBox(height: size.height * 0.035),
+                          const SizedBox(height: 16),
 
-                            // RESEND
-                            GestureDetector(
-                              onTap: controller.kirimUlangOtp,
-                              child: Text(
-                                "Kirim ulang kode OTP",
-                                style: TextStyle(
-                                  fontSize: size.width * 0.04,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF5A3116),
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: const Color(0xFF5A3116),
+                          Obx(() {
+                            if (controller.isResending.value) {
+                              return const Center(
+                                child: SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Color(0xFF5A3116),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
+                              );
+                            }
+
+                            if (!controller.canResend.value) {
+                              return Center(
+                                child: Text(
+                                  "Kirim ulang dalam ${controller.countdown.value} detik",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.brown,
+                                  ),
+                                ),
+                              );
+                            }
+
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "Tidak menerima kode? ",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.brown,
+                                  ),
+                                ),
+
+                                GestureDetector(
+                                  onTap: controller.kirimUlangOtp,
+                                  child: const Text(
+                                    "Kirim Ulang",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF5A3116),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
   Widget otpField({
-    required TextEditingController controller,
     required BuildContext context,
+    required TextEditingController controller,
+    required double width,
+    bool isFirst = false,
+    bool isLast = false,
   }) {
-    final size = MediaQuery.of(context).size;
-    final fieldSize = (size.width * 0.84 - (size.width * 0.07 * 2) - 5 * size.width * 0.02) / 6;
-
     return SizedBox(
-      width: fieldSize,
-      height: fieldSize * 1.2,
+      width: width,
+      height: width * 1.2,
       child: TextField(
         controller: controller,
+        autofocus: isFirst,
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
+        textInputAction: TextInputAction.next,
+        style: TextStyle(
+          fontSize: width * 0.45,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF3E2723),
+        ),
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
           LengthLimitingTextInputFormatter(1),
         ],
-        style: TextStyle(
-          fontSize: size.width * 0.055,
-          fontWeight: FontWeight.bold,
-          color: const Color(0xFF3E2723),
-        ),
+        onChanged: (value) {
+          if (value.isNotEmpty) {
+            if (!isLast) {
+              FocusScope.of(context).nextFocus();
+            } else {
+              FocusScope.of(context).unfocus();
+            }
+          } else {
+            if (!isFirst) {
+              FocusScope.of(context).previousFocus();
+            }
+          }
+        },
         decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
+          isDense: true,
           contentPadding: EdgeInsets.zero,
+          filled: true,
+          fillColor: const Color(0xFFF9F7F5),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: Colors.brown.shade200, width: 1.5),
+            borderSide: BorderSide(color: Colors.brown.shade100),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFF8B5E3C), width: 2),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+            borderSide: BorderSide(color: Color(0xFF8B5E3C), width: 1.5),
           ),
         ),
       ),

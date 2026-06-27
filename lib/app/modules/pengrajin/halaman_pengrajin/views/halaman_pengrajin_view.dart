@@ -37,8 +37,8 @@ class HalamanPengrajinView extends GetView<HalamanPengrajinController> {
                     // FOTO
                     ClipOval(
                       child: Container(
-                        width: 70,
-                        height: 70,
+                        width: size.width * 0.16,
+                        height: size.width * 0.16,
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: const Color(0xFFD7A97B),
@@ -101,8 +101,8 @@ class HalamanPengrajinView extends GetView<HalamanPengrajinController> {
                         GestureDetector(
                           onTap: () => Get.toNamed(Routes.NOTIFIKASI_PENGRAJIN),
                           child: Container(
-                            width: 44,
-                            height: 44,
+                            width: size.width * 0.11,
+                            height: size.width * 0.11,
                             decoration: BoxDecoration(
                               color: const Color(0xFFF3EAE0),
                               borderRadius: BorderRadius.circular(14),
@@ -231,7 +231,7 @@ class HalamanPengrajinView extends GetView<HalamanPengrajinController> {
                           child: const Icon(
                             Icons.person_outline,
                             color: Color(0xFF5A3116),
-                            size: 22,
+                            size: 20,
                           ),
                         ),
 
@@ -328,7 +328,7 @@ class HalamanPengrajinView extends GetView<HalamanPengrajinController> {
     required IconData icon,
   }) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -343,8 +343,8 @@ class HalamanPengrajinView extends GetView<HalamanPengrajinController> {
       child: Column(
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 42,
+            height: 42,
             decoration: const BoxDecoration(
               color: Color(0xFFF3EAE0),
               shape: BoxShape.circle,
@@ -355,7 +355,7 @@ class HalamanPengrajinView extends GetView<HalamanPengrajinController> {
           Text(
             value,
             style: const TextStyle(
-              fontSize: 22,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Color(0xFF3E2723),
             ),

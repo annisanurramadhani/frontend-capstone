@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../global_widgets/custom_navbar.dart';
+import '../../../../routes/app_pages.dart';
 import '../controllers/riwayat_kelas_controller.dart';
 
 class RiwayatKelasView extends GetView<RiwayatKelasController> {
@@ -8,196 +10,296 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF8F3),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFFDF8F3),
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Color(0xFF3E2723),
-            size: 20,
-          ),
-        ),
-        title: const Text(
-          "Riwayat Kelas",
-          style: TextStyle(
-            fontSize: 20,
-            color: Color(0xFF5A3116),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(color: Color(0xFF8B5E3C)),
-          );
-        }
+      backgroundColor: const Color(0xFFF8F5F1),
 
-        if (controller.bookings.isEmpty) {
-          return const Center(
+      bottomNavigationBar: const CustomNavbar(currentIndex: -1),
+
+      body: SafeArea(
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF5A3116)),
+            );
+          }
+
+          if (controller.bookings.isEmpty) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.history_rounded,
+                    size: 72,
+                    color: Color(0xFFD8C6B6),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Belum ada riwayat kelas",
+                    style: TextStyle(fontSize: 15, color: Color(0xFF8B6347)),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return RefreshIndicator(
+            color: Color(0xFF5A3116),
+            onRefresh: controller.getRiwayat,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.history, size: 80, color: Colors.grey),
-                SizedBox(height: 12),
-                Text(
-                  "Belum ada riwayat pemesanan",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                SizedBox(height: h * 0.018),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: w * 0.05),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: w * 0.055,
+                            color: Color(0xFF5A3116),
+                          ),
+                        ),
+                      ),
+
+                      Transform.translate(
+                        offset: Offset(0, h * 0.008),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Riwayat Pesan Kelas",
+                              style: TextStyle(
+                                fontSize: w * 0.065,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF3E2723),
+                              ),
+                            ),
+
+                            SizedBox(height: h * 0.002),
+
+                            Text(
+                              "Semua kelas yang pernah Anda ikuti",
+                              style: TextStyle(
+                                fontSize: w * 0.034,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                Expanded(
+                  child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemCount: controller.bookings.length,
+                    itemBuilder: (context, index) {
+                      final item = controller.bookings[index];
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 18),
+                        padding: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 58,
+                                  height: 58,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF3EAE0),
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: const Icon(
+                                    Icons.menu_book_rounded,
+                                    color: Color(0xFF5A3116),
+                                    size: 28,
+                                  ),
+                                ),
+
+                                const SizedBox(width: 14),
+
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item["namaKelas"] ?? "-",
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF3E2723),
+                                        ),
+                                      ),
+
+                                      const SizedBox(height: 4),
+
+                                      Text(
+                                        item["pengrajin"] ?? "-",
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Color(0xFF8B6347),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                _statusBadge(item["statusBayar"] ?? ""),
+                              ],
+                            ),
+
+                            const SizedBox(height: 18),
+
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.calendar_today_outlined,
+                                  size: 18,
+                                  color: Color(0xFF8B6347),
+                                ),
+
+                                const SizedBox(width: 8),
+
+                                Expanded(
+                                  child: Text(
+                                    item["tanggal"] ?? "-",
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xFF3E2723),
+                                    ),
+                                  ),
+                                ),
+
+                                const Icon(
+                                  Icons.access_time_rounded,
+                                  size: 18,
+                                  color: Color(0xFF8B6347),
+                                ),
+
+                                const SizedBox(width: 8),
+
+                                Text(
+                                  item["jamPelatihan"] ?? "-",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xFF3E2723),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.payments_outlined,
+                                  size: 18,
+                                  color: Color(0xFF8B6347),
+                                ),
+
+                                const SizedBox(width: 8),
+
+                                Text(
+                                  item["metodeBayar"] ?? "-",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xFF3E2723),
+                                  ),
+                                ),
+
+                                const Spacer(),
+
+                                Text(
+                                  "Rp \\${item['totalBayar']}",
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF5A3116),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 16),
+
+                            Text(
+                              "Order ID",
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+
+                            const SizedBox(height: 4),
+
+                            Text(
+                              item["orderId"] ?? "-",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF8B6347),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
           );
-        }
-
-        return RefreshIndicator(
-          onRefresh: controller.getRiwayat,
-          child: ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: controller.bookings.length,
-            itemBuilder: (context, index) {
-              final item = controller.bookings[index];
-
-              return Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: const Color(
-                              0xFF8B5E3C,
-                            ).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            item["namaKelas"] ?? "-",
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF5A3116),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    const Divider(),
-
-                    const SizedBox(height: 12),
-
-                    _infoRow("Pengrajin", item["pengrajin"] ?? "-"),
-
-                    const SizedBox(height: 8),
-
-                    _infoRow("Tanggal", item["tanggal"] ?? "-"),
-
-                    const SizedBox(height: 8),
-
-                    _infoRow("Jam", item["jamPelatihan"] ?? "-"),
-
-                    const SizedBox(height: 8),
-
-                    _infoRow("Metode", item["metodeBayar"] ?? "-"),
-
-                    const SizedBox(height: 8),
-
-                    _infoRow("Total Bayar", "Rp ${item["totalBayar"]}"),
-
-                    const SizedBox(height: 16),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          item["orderId"] ?? "-",
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 12,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: item["statusBayar"] == "lunas"
-                                ? const Color(0xFFD1E7DD)
-                                : const Color(0xFFFFF3CD),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            item["statusBayar"] == "lunas"
-                                ? "Lunas"
-                                : "Menunggu",
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: item["statusBayar"] == "lunas"
-                                  ? const Color(0xFF0A3622)
-                                  : const Color(0xFF856404),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-      }),
+        }),
+      ),
     );
   }
 
-  Widget _infoRow(String title, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+  Widget _statusBadge(String status) {
+    final bool lunas =
+        status.toLowerCase() == "lunas" || status.toLowerCase() == "settlement";
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: lunas ? const Color(0xFFE8F5E9) : const Color(0xFFFFF3E0),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        lunas ? "Lunas" : "Menunggu",
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          color: lunas ? const Color(0xFF2E7D32) : const Color(0xFFE65100),
         ),
-        Flexible(
-          child: Text(
-            value,
-            textAlign: TextAlign.end,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              color: Color(0xFF3E2723),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

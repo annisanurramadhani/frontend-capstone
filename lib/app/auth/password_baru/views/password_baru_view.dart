@@ -18,24 +18,7 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
       body: Stack(
         children: [
           // BACKGROUND
-          Container(
-            width: double.infinity,
-
-            height: double.infinity,
-
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-
-                end: Alignment.bottomRight,
-
-                colors: [Color(0xFFF5E6D3), Color(0xFFD7A97B)],
-              ),
-            ),
-          ),
-
-          // OVERLAY
-          Container(color: Colors.white.withValues(alpha: 0.15)),
+          Container(color: const Color(0xFFF7EFE6)),
 
           SafeArea(
             child: SingleChildScrollView(
@@ -56,88 +39,66 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
                       SizedBox(height: size.height * 0.02),
 
                       // BACK
-                      Align(
-                        alignment: Alignment.centerLeft,
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () => Get.back(),
+                            icon: const Icon(
+                              Icons.arrow_back_ios_new,
+                              color: Color(0xFF5A3116),
+                            ),
+                          ),
 
-                        child: IconButton(
-                          onPressed: () {
-                            Get.back();
-                          },
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                "Perbarui Sandi",
+                                style: TextStyle(
+                                  fontSize: size.width * 0.065,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF3E2723),
+                                ),
+                              ),
+                            ),
+                          ),
 
-                          icon: const Icon(
-                            Icons.arrow_back_ios_new,
+                          const SizedBox(width: 48),
+                        ],
+                      ),
 
-                            color: Color(0xFF5A3116),
+                      SizedBox(height: size.height * 0.003),
+
+                      Center(
+                        child: SizedBox(
+                          width: size.width * 0.82,
+                          child: Text(
+                            "Masukkan sandi baru untuk akun Anda",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: size.width * 0.034,
+                              color: Colors.grey,
+                              height: 1.4,
+                            ),
                           ),
                         ),
                       ),
-
-                      SizedBox(height: size.height * 0.05),
-
-                      // ICON
-                      Container(
-                        width: size.width * 0.24,
-
-                        height: size.width * 0.24,
-
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.90),
-
-                          shape: BoxShape.circle,
-                        ),
-
-                        child: Icon(
-                          Icons.lock_reset_outlined,
-
-                          size: size.width * 0.12,
-
-                          color: const Color(0xFF8B5E3C),
-                        ),
-                      ),
-
-                      SizedBox(height: size.height * 0.04),
-
-                      // TITLE
-                      Text(
-                        "Password Baru",
-
-                        style: TextStyle(
-                          fontSize: size.width * 0.08,
-
-                          fontWeight: FontWeight.bold,
-
-                          color: const Color(0xFF3E2723),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      Text(
-                        "Buat password baru untuk melanjutkan login.",
-
-                        textAlign: TextAlign.center,
-
-                        style: TextStyle(
-                          fontSize: size.width * 0.042,
-
-                          color: Colors.brown,
-
-                          height: 1.7,
-                        ),
-                      ),
-
-                      SizedBox(height: size.height * 0.07),
-
+                      SizedBox(height: size.height * 0.045),
                       // CARD
                       Container(
                         width: double.infinity,
 
-                        padding: EdgeInsets.all(size.width * 0.07),
-
+                        padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.90),
 
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
 
                         child: Column(
@@ -145,7 +106,7 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
 
                           children: [
                             // PASSWORD BARU
-                            buildTitle("Password Baru", size),
+                            buildTitle("Sandi Baru", size),
 
                             const SizedBox(height: 12),
 
@@ -156,7 +117,7 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
                                 obscureText: controller.isPasswordHidden.value,
 
                                 decoration: inputDecoration(
-                                  hint: "Masukkan password baru",
+                                  hint: "Masukkan sandi baru",
 
                                   icon: Icons.lock_outline,
 
@@ -178,7 +139,7 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
                             const SizedBox(height: 25),
 
                             // KONFIRMASI PASSWORD
-                            buildTitle("Konfirmasi Password", size),
+                            buildTitle("Konfirmasi Sandi", size),
 
                             const SizedBox(height: 12),
 
@@ -191,7 +152,7 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
                                     controller.isKonfirmasiPasswordHidden.value,
 
                                 decoration: inputDecoration(
-                                  hint: "Konfirmasi password baru",
+                                  hint: "Konfirmasi sandi baru",
 
                                   icon: Icons.lock_outline,
 
@@ -213,13 +174,12 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
                               ),
                             ),
 
-                            SizedBox(height: size.height * 0.05),
-
+                            const SizedBox(height: 28),
                             // BUTTON
                             SizedBox(
                               width: double.infinity,
 
-                              height: 58,
+                              height: 56,
 
                               child: Obx(
                                 () => ElevatedButton(
@@ -228,12 +188,12 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
                                       : controller.simpanPasswordBaru,
 
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF8B5E3C),
+                                    backgroundColor: const Color(0xFF7B4B2A),
 
                                     elevation: 0,
 
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18),
+                                      borderRadius: BorderRadius.circular(16),
                                     ),
                                   ),
 
@@ -242,7 +202,7 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
                                           color: Colors.white,
                                         )
                                       : Text(
-                                          "Simpan Password",
+                                          "Simpan Sandi",
 
                                           style: TextStyle(
                                             fontSize: size.width * 0.045,
@@ -274,7 +234,7 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
       title,
 
       style: TextStyle(
-        fontSize: size.width * 0.043,
+        fontSize: size.width * 0.038,
 
         fontWeight: FontWeight.w600,
       ),
@@ -295,14 +255,21 @@ class PasswordBaruView extends GetView<PasswordBaruController> {
 
       filled: true,
 
-      fillColor: Colors.white,
-
-      contentPadding: const EdgeInsets.symmetric(vertical: 18),
+      fillColor: const Color(0xFFF9F7F5),
 
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-
+        borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide.none,
+      ),
+
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: Colors.brown.shade100),
+      ),
+
+      focusedBorder: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderSide: BorderSide(color: Color(0xFF8B5E3C), width: 1.5),
       ),
     );
   }

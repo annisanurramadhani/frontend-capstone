@@ -9,6 +9,9 @@ class ProfilPelatihView extends GetView<ProfilPelatihController> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
       appBar: AppBar(

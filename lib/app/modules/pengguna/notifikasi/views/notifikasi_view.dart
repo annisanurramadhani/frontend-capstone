@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../global_widgets/custom_navbar.dart';
+import '../../../../routes/app_pages.dart';
 import '../controllers/notifikasi_controller.dart';
 
 class NotifikasiView extends GetView<NotifikasiController> {
@@ -8,90 +11,190 @@ class NotifikasiView extends GetView<NotifikasiController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF8F3),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFFDF8F3),
-        elevation: 0,
-        centerTitle: true,
+      backgroundColor: const Color(0xFFF8F5F1),
 
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Color(0xFF3E2723),
-            size: 20,
-          ),
-        ),
+      bottomNavigationBar: const CustomNavbar(currentIndex: -1),
 
-        title: const Text(
-          "Notifikasi",
-          style: TextStyle(
-            color: Color(0xFF5A3116),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(color: Color(0xFF5A3116)),
-          );
-        }
-        if (controller.notifikasiList.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+      body: SafeArea(
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF5A3116)),
+            );
+          }
+
+          if (controller.notifikasiList.isEmpty) {
+            return Column(
               children: [
+                const SizedBox(height: 16),
+
+                SizedBox(
+                  height: 56,
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: () {
+                            Get.offAllNamed(Routes.HALAMAN_UTAMA);
+                          },
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          splashRadius: 22,
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Color(0xFF5A3116),
+                            size: 22,
+                          ),
+                        ),
+                      ),
+
+                      const Center(
+                        child: Text(
+                          "Notifikasi",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF3E2723),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                const Center(
+                  child: Text(
+                    "Semua pemberitahuan Anda",
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
+                ),
+
+                const Spacer(),
+
                 Container(
-                  width: 80,
-                  height: 80,
+                  width: 100,
+                  height: 100,
                   decoration: BoxDecoration(
                     color: const Color(0xFFF3EAE0),
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(28),
                   ),
                   child: const Icon(
-                    Icons.notifications_off_outlined,
-                    size: 40,
+                    Icons.notifications_none_rounded,
+                    size: 48,
                     color: Color(0xFF5A3116),
                   ),
                 ),
-                const SizedBox(height: 16),
+
+                const SizedBox(height: 24),
+
                 const Text(
                   "Belum ada notifikasi",
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                     color: Color(0xFF3E2723),
                   ),
                 ),
-                const SizedBox(height: 6),
-                const Text(
-                  "Notifikasi akan muncul di sini",
-                  style: TextStyle(fontSize: 13, color: Color(0xFF8B6347)),
-                ),
-              ],
-            ),
-          );
-        }
-        return ListView.builder(
-          padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
-          physics: const BouncingScrollPhysics(),
-          itemCount: controller.notifikasiList.length,
-          itemBuilder: (context, index) {
-            final item = controller.notifikasiList[index];
-            final bool isRead = item["isRead"] == true;
 
-            return _NotifCard(
-              judul: item["judul"] ?? "",
-              pesan: item["pesan"] ?? "",
-              waktu: item["waktu"] ?? "",
-              isRead: isRead,
+                const SizedBox(height: 8),
+
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  child: Text(
+                    "Semua informasi mengenai pembayaran, pelatihan, dan aktivitas akun akan muncul di halaman ini.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF8B6347),
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+
+                const Spacer(),
+              ],
             );
-          },
-        );
-      }),
+          }
+
+          return Column(
+            children: [
+              const SizedBox(height: 12),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SizedBox(
+                  height: 56,
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: () {
+                            Get.offAllNamed(Routes.HALAMAN_UTAMA);
+                          },
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          splashRadius: 22,
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Color(0xFF5A3116),
+                            size: 22,
+                          ),
+                        ),
+                      ),
+
+                      const Center(
+                        child: Text(
+                          "Notifikasi",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF3E2723),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 2),
+
+              const Center(
+                child: Text(
+                  "Semua pemberitahuan Anda",
+                  style: TextStyle(fontSize: 13, color: Colors.grey),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              const SizedBox(height: 20),
+
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: controller.notifikasiList.length,
+                  itemBuilder: (context, index) {
+                    final item = controller.notifikasiList[index];
+
+                    final bool isRead = item["isRead"] == true;
+                    return _NotifCard(
+                      judul: item["judul"] ?? "",
+                      pesan: item["pesan"] ?? "",
+                      waktu: item["waktu"] ?? "",
+                      isRead: isRead,
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        }),
+      ),
     );
   }
 }
@@ -112,92 +215,127 @@ class _NotifCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: isRead ? Colors.white : const Color(0xFFFFF8F3),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: isRead ? const Color(0xFFF0E6DD) : const Color(0xFFD4A574),
-          width: isRead ? 1.2 : 1.5,
-        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(.05),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 5,
+            height: 110,
             decoration: BoxDecoration(
-              color: isRead ? const Color(0xFFF3EAE0) : const Color(0xFF5A3116),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(
-              Icons.notifications_outlined,
-              size: 22,
-              color: isRead ? const Color(0xFF8B6347) : const Color(0xFFFFE0B2),
+              color: isRead ? Colors.transparent : const Color(0xFF5A3116),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(18),
+                bottomLeft: Radius.circular(18),
+              ),
             ),
           ),
 
-          const SizedBox(width: 12),
-
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        judul,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: isRead
-                              ? FontWeight.w500
-                              : FontWeight.w700,
-                          color: const Color(0xFF3E2723),
-                        ),
-                      ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 54,
+                    height: 54,
+                    decoration: BoxDecoration(
+                      color: isRead
+                          ? const Color(0xFFF3EAE0)
+                          : const Color(0xFF5A3116),
+                      shape: BoxShape.circle,
                     ),
-                    if (!isRead)
-                      Container(
-                        width: 8,
-                        height: 8,
-                        margin: const EdgeInsets.only(left: 8),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF5A3116),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                  ],
-                ),
-
-                const SizedBox(height: 4),
-
-                Text(
-                  pesan,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF8B6347),
-                    height: 1.5,
+                    child: Icon(
+                      Icons.notifications_rounded,
+                      color: isRead ? const Color(0xFF8B6347) : Colors.white,
+                      size: 28,
+                    ),
                   ),
-                ),
 
-                if (waktu.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  Text(
-                    waktu,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: Color(0xFFB08060),
+                  const SizedBox(width: 14),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                judul,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: isRead
+                                      ? FontWeight.w600
+                                      : FontWeight.bold,
+                                  color: const Color(0xFF3E2723),
+                                ),
+                              ),
+                            ),
+
+                            if (!isRead)
+                              Container(
+                                width: 10,
+                                height: 10,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFF5A3116),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 8),
+                        Text(
+                          pesan,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFF8B6347),
+                            height: 1.6,
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.schedule_rounded,
+                              size: 15,
+                              color: Color(0xFFB08060),
+                            ),
+
+                            const SizedBox(width: 6),
+
+                            Text(
+                              waktu,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFFB08060),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],
-              ],
+              ),
             ),
           ),
         ],

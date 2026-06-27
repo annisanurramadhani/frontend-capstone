@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/detail_pesanan_controller.dart';
+import '../../../../global_widgets/custom_navbar.dart';
 
 class DetailPesananView extends GetView<DetailPesananController> {
   const DetailPesananView({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFFFDF8F3),
+      bottomNavigationBar: const CustomNavbar(currentIndex: -1),
 
       appBar: AppBar(
         title: const Text("Detail Pesanan"),
@@ -44,10 +45,7 @@ class DetailPesananView extends GetView<DetailPesananController> {
                   const Text(
                     "Informasi Produk",
 
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 15),
@@ -95,33 +93,18 @@ class DetailPesananView extends GetView<DetailPesananController> {
                   const Text(
                     "Data Penerima",
 
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 15),
 
-                  buildItem(
-                    "Nama Lengkap",
-                    controller.nama,
-                  ),
+                  buildItem("Nama Lengkap", controller.nama),
 
-                  buildItem(
-                    "Nomor Telepon",
-                    controller.noTelpon,
-                  ),
+                  buildItem("Nomor Telepon", controller.noTelpon),
 
-                  buildItem(
-                    "Kecamatan",
-                    controller.kecamatan,
-                  ),
+                  buildItem("Kecamatan", controller.kecamatan),
 
-                  buildItem(
-                    "Alamat",
-                    controller.alamat,
-                  ),
+                  buildItem("Alamat", controller.alamat),
                 ],
               ),
             ),
@@ -141,25 +124,15 @@ class DetailPesananView extends GetView<DetailPesananController> {
 
               child: Column(
                 children: [
-                  buildPrice(
-                    "Harga Produk",
-                    controller.produk["harga"] ?? 0,
-                  ),
+                  buildPrice("Harga Produk", controller.produk["harga"] ?? 0),
 
                   const SizedBox(height: 12),
 
-                  buildPrice(
-                    "Ongkir",
-                    controller.ongkir,
-                  ),
+                  buildPrice("Ongkir", controller.ongkir),
 
                   const Divider(height: 25),
 
-                  buildPrice(
-                    "Total Pembayaran",
-                    controller.total,
-                    bold: true,
-                  ),
+                  buildPrice("Total Pembayaran", controller.total, bold: true),
                 ],
               ),
             ),
@@ -169,9 +142,7 @@ class DetailPesananView extends GetView<DetailPesananController> {
             Container(
               width: double.infinity,
 
-              padding: const EdgeInsets.symmetric(
-                vertical: 15,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 15),
 
               decoration: BoxDecoration(
                 color: Colors.orange.shade100,
@@ -196,10 +167,7 @@ class DetailPesananView extends GetView<DetailPesananController> {
     );
   }
 
-  Widget buildItem(
-    String title,
-    String value,
-  ) {
+  Widget buildItem(String title, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
 
@@ -207,13 +175,7 @@ class DetailPesananView extends GetView<DetailPesananController> {
         crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
-          Text(
-            title,
-
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
 
           const SizedBox(height: 4),
 
@@ -223,11 +185,7 @@ class DetailPesananView extends GetView<DetailPesananController> {
     );
   }
 
-  Widget buildPrice(
-    String title,
-    int value, {
-    bool bold = false,
-  }) {
+  Widget buildPrice(String title, int value, {bool bold = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
@@ -236,8 +194,7 @@ class DetailPesananView extends GetView<DetailPesananController> {
           title,
 
           style: TextStyle(
-            fontWeight:
-                bold ? FontWeight.bold : FontWeight.normal,
+            fontWeight: bold ? FontWeight.bold : FontWeight.normal,
           ),
         ),
 
@@ -245,8 +202,7 @@ class DetailPesananView extends GetView<DetailPesananController> {
           "Rp $value",
 
           style: TextStyle(
-            fontWeight:
-                bold ? FontWeight.bold : FontWeight.normal,
+            fontWeight: bold ? FontWeight.bold : FontWeight.normal,
           ),
         ),
       ],

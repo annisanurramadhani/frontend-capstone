@@ -189,6 +189,27 @@ class PenggunaService {
     return jsonDecode(response.body);
   }
 
+  // GET KABUPATEN
+  static Future<Map<String, dynamic>> getKabupaten() async {
+    final response = await ApiProvider.getKabupaten();
+
+    return jsonDecode(response.body);
+  }
+
+  // GET KECAMATAN
+  static Future<Map<String, dynamic>> getKecamatan(String kabupaten) async {
+    final response = await ApiProvider.getKecamatan(kabupaten);
+
+    return jsonDecode(response.body);
+  }
+
+  // GET ONGKIR
+  static Future<Map<String, dynamic>> getOngkir(String kecamatan) async {
+    final response = await ApiProvider.getOngkir(kecamatan);
+
+    return jsonDecode(response.body);
+  }
+
   // GET KERANJANG
   static Future<Map<String, dynamic>> getKeranjang() async {
     final token = box.read("token");
@@ -244,17 +265,22 @@ class PenggunaService {
     required String namaPenerima,
     required String noTelpon,
     required String alamat,
+    required String kabupaten,
+    required String kecamatan,
+    required int ongkir,
     required String metodeBayar,
   }) async {
     final token = box.read("token");
 
     final response = await ApiProvider.checkoutKeranjang(
       token: token,
-
       data: {
         "namaPenerima": namaPenerima,
         "noTelpon": noTelpon,
         "alamat": alamat,
+        "kabupaten": kabupaten,
+        "kecamatan": kecamatan,
+        "ongkir": ongkir,
         "metodeBayar": metodeBayar,
       },
     );
@@ -284,7 +310,7 @@ class PenggunaService {
     }
   }
 
-    // AKTIVITAS VIDEO
+  // AKTIVITAS VIDEO
   static Future<void> createAktivitasVideo(String videoId) async {
     try {
       final token = box.read("token");

@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class ApiProvider {
   // MOBILE
-  static const String mobileBaseUrl = "http://192.168.18.23:3000";
+  static const String mobileBaseUrl = "http://192.168.1.9:3000";
 
   static const String mobileAuthUrl = "$mobileBaseUrl/api/auth";
 
@@ -276,6 +276,30 @@ class ApiProvider {
   static Future<http.Response> getDetailProduk(String id) async {
     return await http.get(
       Uri.parse("$penggunaUrl/produk/$id"),
+      headers: {"Content-Type": "application/json"},
+    );
+  }
+
+  // GET KABUPATEN
+  static Future<http.Response> getKabupaten() async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/kabupaten"),
+      headers: {"Content-Type": "application/json"},
+    );
+  }
+
+  // GET KECAMATAN
+  static Future<http.Response> getKecamatan(String kabupaten) async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/kecamatan/$kabupaten"),
+      headers: {"Content-Type": "application/json"},
+    );
+  }
+
+  // GET ONGKIR
+  static Future<http.Response> getOngkir(String kecamatan) async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/ongkir/$kecamatan"),
       headers: {"Content-Type": "application/json"},
     );
   }

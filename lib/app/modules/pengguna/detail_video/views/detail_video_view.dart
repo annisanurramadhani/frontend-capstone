@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
+
 import '../../../../data/providers/api_provider.dart';
 import '../../../../data/services/pengguna_service.dart';
+import '../../../../global_widgets/custom_navbar.dart';
 
 class DetailVideoView extends StatefulWidget {
   const DetailVideoView({super.key});
@@ -25,6 +27,7 @@ class _DetailVideoViewState extends State<DetailVideoView> {
     super.initState();
 
     final video = Get.arguments as Map<String, dynamic>;
+
     final videoUrl = "${ApiProvider.baseUrl}${video["videoUrl"]}";
 
     playerController = VideoPlayerController.networkUrl(
@@ -32,23 +35,29 @@ class _DetailVideoViewState extends State<DetailVideoView> {
     );
 
     playerController.initialize().then((_) {
-      if (mounted) {
-        setState(() {
-          isReady = true;
-        });
-      }
+      if (!mounted) return;
+
+      setState(() {
+        isReady = true;
+      });
     });
 
     playerController.addListener(() async {
       if (sudahKirimAktivitas) return;
+
       final position = playerController.value.position;
+
       if (position.inSeconds >= 10) {
         sudahKirimAktivitas = true;
+
         try {
           await PenggunaService.createAktivitasVideo(video["id"]);
         } catch (_) {}
       }
-      if (mounted) setState(() {});
+
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -61,10 +70,12 @@ class _DetailVideoViewState extends State<DetailVideoView> {
 
   void _enterFullscreen() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+
     setState(() {
       isFullscreen = true;
       showControls = true;
@@ -73,7 +84,9 @@ class _DetailVideoViewState extends State<DetailVideoView> {
 
   void _exitFullscreen() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
     setState(() {
       isFullscreen = false;
       showControls = true;
@@ -87,9 +100,11 @@ class _DetailVideoViewState extends State<DetailVideoView> {
   }
 
   String _formatDuration(Duration d) {
-    final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return '$m:$s';
+    final m = d.inMinutes.remainder(60).toString().padLeft(2, "0");
+
+    final s = d.inSeconds.remainder(60).toString().padLeft(2, "0");
+
+    return "$m:$s";
   }
 
   Widget _buildVideoPlayer() {
@@ -98,7 +113,6 @@ class _DetailVideoViewState extends State<DetailVideoView> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Video
           Container(
             width: double.infinity,
             color: Colors.black,
@@ -109,15 +123,14 @@ class _DetailVideoViewState extends State<DetailVideoView> {
                         : playerController.value.aspectRatio,
                     child: VideoPlayer(playerController),
                   )
-                : const SizedBox(
-                    height: 220,
+                : SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.25,
                     child: Center(
                       child: CircularProgressIndicator(color: Colors.white),
                     ),
                   ),
           ),
 
-          // Overlay controls
           if (isReady && showControls)
             Positioned.fill(
               child: Container(
@@ -126,18 +139,16 @@ class _DetailVideoViewState extends State<DetailVideoView> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.black.withOpacity(0.3),
+                      Colors.black.withOpacity(.35),
                       Colors.transparent,
                       Colors.transparent,
-                      Colors.black.withOpacity(0.6),
+                      Colors.black.withOpacity(.60),
                     ],
-                    stops: const [0.0, 0.3, 0.6, 1.0],
                   ),
                 ),
               ),
             ),
 
-          // Play/Pause button tengah
           if (isReady && showControls)
             GestureDetector(
               onTap: () {
@@ -150,10 +161,10 @@ class _DetailVideoViewState extends State<DetailVideoView> {
                 });
               },
               child: Container(
-                width: 60,
-                height: 60,
+                width: MediaQuery.of(context).size.width * 0.16,
+                height: MediaQuery.of(context).size.width * 0.16,
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.55),
+                  color: Colors.black.withOpacity(.55),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -161,74 +172,73 @@ class _DetailVideoViewState extends State<DetailVideoView> {
                       ? Icons.pause_rounded
                       : Icons.play_arrow_rounded,
                   color: Colors.white,
-                  size: 36,
+                  size: MediaQuery.of(context).size.width * 0.09,
                 ),
               ),
             ),
-
-          // Bottom controls: progress + fullscreen
           if (isReady && showControls)
             Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-                child: Column(
-                  children: [
-                    // Progress bar
-                    VideoProgressIndicator(
-                      playerController,
-                      allowScrubbing: true,
-                      colors: const VideoProgressColors(
-                        playedColor: Color(0xFF8B6347),
-                        bufferedColor: Color(0xFFD7B899),
-                        backgroundColor: Colors.white38,
+              left: 12,
+              right: 12,
+              bottom: 10,
+              child: Column(
+                children: [
+                  VideoProgressIndicator(
+                    playerController,
+                    allowScrubbing: true,
+                    colors: const VideoProgressColors(
+                      playedColor: Color(0xFF8B6347),
+                      bufferedColor: Color(0xFFD7B899),
+                      backgroundColor: Colors.white38,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Row(
+                    children: [
+                      Text(
+                        _formatDuration(playerController.value.position),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Text(
-                          _formatDuration(playerController.value.position),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                          ),
+
+                      const Text(
+                        " / ",
+                        style: TextStyle(color: Colors.white54, fontSize: 11),
+                      ),
+
+                      Text(
+                        _formatDuration(playerController.value.duration),
+                        style: const TextStyle(
+                          color: Colors.white54,
+                          fontSize: 11,
                         ),
-                        const Text(
-                          " / ",
-                          style: TextStyle(color: Colors.white54, fontSize: 11),
+                      ),
+
+                      const Spacer(),
+
+                      GestureDetector(
+                        onTap: () {
+                          if (isFullscreen) {
+                            _exitFullscreen();
+                          } else {
+                            _enterFullscreen();
+                          }
+                        },
+                        child: Icon(
+                          isFullscreen
+                              ? Icons.fullscreen_exit_rounded
+                              : Icons.fullscreen_rounded,
+                          color: Colors.white,
+                          size: 26,
                         ),
-                        Text(
-                          _formatDuration(playerController.value.duration),
-                          style: const TextStyle(
-                            color: Colors.white54,
-                            fontSize: 11,
-                          ),
-                        ),
-                        const Spacer(),
-                        // Tombol fullscreen
-                        GestureDetector(
-                          onTap: () {
-                            if (isFullscreen) {
-                              _exitFullscreen();
-                            } else {
-                              _enterFullscreen();
-                            }
-                          },
-                          child: Icon(
-                            isFullscreen
-                                ? Icons.fullscreen_exit_rounded
-                                : Icons.fullscreen_rounded,
-                            color: Colors.white,
-                            size: 26,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
         ],
@@ -239,11 +249,14 @@ class _DetailVideoViewState extends State<DetailVideoView> {
   @override
   Widget build(BuildContext context) {
     final video = Get.arguments as Map<String, dynamic>;
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
 
-    // Mode fullscreen: tampil hitam semua, video mengisi layar
     if (isFullscreen) {
       return Scaffold(
         backgroundColor: Colors.black,
+        bottomNavigationBar: const CustomNavbar(currentIndex: -1),
         body: SafeArea(
           child: Stack(
             children: [
@@ -254,21 +267,21 @@ class _DetailVideoViewState extends State<DetailVideoView> {
                   child: _buildVideoPlayer(),
                 ),
               ),
-              // Tombol back di fullscreen
+
               if (showControls)
                 Positioned(
-                  top: 8,
-                  left: 8,
+                  top: 10,
+                  left: 10,
                   child: GestureDetector(
                     onTap: _exitFullscreen,
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withOpacity(.5),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
-                        Icons.arrow_back_ios_new_rounded,
+                        Icons.arrow_back_ios_new,
                         color: Colors.white,
                         size: 18,
                       ),
@@ -281,197 +294,141 @@ class _DetailVideoViewState extends State<DetailVideoView> {
       );
     }
 
-    // Mode normal
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF8F3),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFFDF8F3),
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Color(0xFF3E2723),
-            size: 20,
-          ),
-        ),
-        title: const Text(
-          "Tutorial Anyaman",
-          style: TextStyle(
-            color: Color(0xFF3E2723),
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Video player normal
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(24),
-              ),
-              child: _buildVideoPlayer(),
-            ),
-
-            // Konten
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 16, 18, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF3EAE0),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text(
-                      "Tutorial",
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF5A3116),
+      backgroundColor: const Color(0xFFFAF6F1),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.02, w * 0.05, h * 0.03),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: h * 0.065,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        onPressed: () => Get.back(),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        splashRadius: 22,
+                        icon: Icon(
+                          Icons.arrow_back_ios_new,
+                          color: const Color(0xFF5A3116),
+                          size: w * 0.055,
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 10),
-
-                  Text(
-                    video["title"] ?? "",
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF3E2723),
-                      height: 1.35,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Text(
-                    video["description"] ??
-                        "Belajar anyaman bambu menggunakan tutorial video.",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF8B6347),
-                      height: 1.65,
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  const Divider(color: Color(0xFFF0E6DD), thickness: 1),
-
-                  const SizedBox(height: 20),
-
-                  // Computer Vision Card
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF5A3116),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 44,
-                              height: 44,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF8B5E3C),
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: const Icon(
-                                Icons.camera_alt_outlined,
-                                color: Color(0xFFFFE0B2),
-                                size: 24,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            const Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Computer Vision",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    "Deteksi gerakan tangan real-time",
-                                    style: TextStyle(
-                                      color: Color(0xFFD7B899),
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                    Transform.translate(
+                      offset: Offset(0, h * 0.003),
+                      child: Text(
+                        "Video Tutorial",
+                        style: TextStyle(
+                          fontSize: w * 0.065,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF3E2723),
                         ),
-                        const SizedBox(height: 14),
-                        const Text(
-                          "Gunakan kamera untuk mendeteksi gerakan tangan dan mendapatkan panduan anyaman secara langsung.",
-                          style: TextStyle(
-                            color: Color(0xFFD7B899),
-                            fontSize: 13,
-                            height: 1.6,
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 46,
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              Get.snackbar(
-                                "Computer Vision",
-                                "Fitur segera hadir",
-                                backgroundColor: const Color(0xFF3E2723),
-                                colorText: Colors.white,
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: const Color(0xFF5A3116),
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                            icon: const Icon(Icons.camera_alt_rounded, size: 20),
-                            label: const Text(
-                              "Mulai Deteksi",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+
+              SizedBox(height: h * 0.004),
+              Center(
+                child: SizedBox(
+                  width: w * .82,
+                  child: Text(
+                    "Pelajari teknik anyaman melalui video interaktif",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: w * 0.035,
+                      color: Colors.grey,
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: h * 0.02),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: _buildVideoPlayer(),
+              ),
+
+              const SizedBox(height: 22),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(w * 0.045),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.brown.withOpacity(.08),
+                      blurRadius: 18,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5ECE3),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Text(
+                        "Tutorial",
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5A3116),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Text(
+                      video["title"] ?? "",
+                      style: TextStyle(
+                        fontSize: w * 0.052,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF3E2723),
+                        height: 1.35,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Text(
+                      video["description"] ??
+                          "Pelajari teknik anyaman bambu melalui video tutorial.",
+                      style: TextStyle(
+                        fontSize: w * 0.036,
+                        color: Colors.grey,
+                        height: 1.7,
+                      ),
+                    ),
+
+                    const SizedBox(height: 22),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );

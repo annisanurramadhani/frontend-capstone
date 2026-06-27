@@ -1,19 +1,16 @@
-// halaman_utama_controller.dart
-
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../../../../data/services/auth_service.dart';
-
 import '../../../../routes/app_pages.dart';
-
 import '../../../../data/services/socket_service.dart';
 
 class HalamanUtamaController extends GetxController {
   RxBool isLoading = false.obs;
 
   RxString nama = "".obs;
+
+  RxMap<String, dynamic> user = <String, dynamic>{}.obs;
 
   RxList<Map<String, dynamic>> menuUtama = <Map<String, dynamic>>[].obs;
 
@@ -39,9 +36,11 @@ class HalamanUtamaController extends GetxController {
     try {
       isLoading.value = true;
 
-      final user = AuthService.getUser();
+      final data = AuthService.getUser();
 
-      nama.value = user["name"] ?? "";
+      user.assignAll(data);
+
+      nama.value = data["name"] ?? "";
     } catch (e) {
       Get.snackbar("Error", e.toString());
     } finally {

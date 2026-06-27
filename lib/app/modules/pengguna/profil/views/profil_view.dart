@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/profil_controller.dart';
-import '../../../../global_widgets/custom_navbar.dart';
+
 import '../../../../data/providers/api_provider.dart';
+import '../../../../global_widgets/custom_navbar.dart';
+import '../controllers/profil_controller.dart';
 
 class ProfilView extends GetView<ProfilController> {
   const ProfilView({super.key});
@@ -10,136 +11,177 @@ class ProfilView extends GetView<ProfilController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF8F3),
-      bottomNavigationBar: const CustomNavbar(currentIndex: 2),
+      backgroundColor: const Color(0xFFFAF6F1),
+
+      bottomNavigationBar: const CustomNavbar(currentIndex: 4),
+
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(size.width * 0.055),
-          child: Obx(() {
-            if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: size.height * 0.01),
-
-                  // CARD PROFIL
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(22),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: size.width * 0.14,
-                          backgroundColor: const Color(0xFFF3EAE0),
-                          backgroundImage:
-                              controller.user["photo"] != null &&
-                                  controller.user["photo"].toString().isNotEmpty
-                              ? NetworkImage(
-                                  "${ApiProvider.baseUrl}${controller.user["photo"]}",
-                                )
-                              : null,
-                          child:
-                              controller.user["photo"] == null ||
-                                  controller.user["photo"].toString().isEmpty
-                              ? Icon(
-                                  Icons.person,
-                                  size: size.width * 0.14,
-                                  color: const Color(0xFF5A3116),
-                                )
-                              : null,
-                        ),
-
-                        SizedBox(height: size.height * 0.025),
-
-                        Text(
-                          controller.user["name"] ?? "-",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF3E2723),
-                          ),
-                        ),
-
-                        SizedBox(height: size.height * 0.01),
-
-                        Text(
-                          controller.user["email"] ?? "-",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.brown,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: size.height * 0.03),
-
-                  // EDIT PROFIL
-                  menuItem(
-                    size: size,
-                    icon: Icons.person_outline,
-                    title: "Edit Profil",
-                    subtitle: "Ubah informasi akun",
-                    onTap: controller.keEditProfil,
-                  ),
-
-                  SizedBox(height: size.height * 0.02),
-
-                  // SERTIFIKAT
-                  menuItem(
-                    size: size,
-                    icon: Icons.workspace_premium_outlined,
-                    title: "Sertifikat Saya",
-                    subtitle: "Lihat sertifikat kelas",
-                    onTap: controller.keSertifikat,
-                  ),
-
-                  SizedBox(height: size.height * 0.02),
-
-                  // RIWAYAT AKTIVITAS
-                  menuItem(
-                    size: size,
-                    icon: Icons.history_rounded,
-                    title: "Riwayat Aktivitas",
-                    subtitle: "Lihat Riwayat Aktivitas",
-                    onTap: controller.keRiwayatAktivitas,
-                  ),
-
-                  SizedBox(height: size.height * 0.02),
-
-                  // KELUAR
-                  menuItem(
-                    size: size,
-                    icon: Icons.logout_rounded,
-                    title: "Keluar",
-                    subtitle: "Keluar dari akun",
-                    iconColor: Colors.red,
-                    textColor: Colors.red,
-                    onTap: controller.keluar,
-                  ),
-
-                  SizedBox(height: size.height * 0.05),
-                ],
-              ),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF5A3116)),
             );
-          }),
-        ),
+          }
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: w * 0.05),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+
+                SizedBox(
+                  height: h * 0.065,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: controller.kembali,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          icon: Icon(
+                            Icons.arrow_back_ios_new,
+                            size: w * 0.055,
+                            color: const Color(0xFF5A3116),
+                          ),
+                        ),
+                      ),
+
+                      Text(
+                        "Profil Saya",
+                        style: TextStyle(
+                          fontSize: w * 0.065,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF3E2723),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: h * 0.003),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  child: Text(
+                    "Kelola informasi akun Anda dan pengaturan aplikasi",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                      height: 1.6,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 28),
+
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 28,
+                    horizontal: 24,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(.05),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 52,
+                        backgroundColor: const Color(0xFFF3EAE0),
+                        backgroundImage:
+                            controller.user["photo"] != null &&
+                                controller.user["photo"].toString().isNotEmpty
+                            ? NetworkImage(
+                                "${ApiProvider.baseUrl}${controller.user["photo"]}",
+                              )
+                            : null,
+                        child:
+                            controller.user["photo"] == null ||
+                                controller.user["photo"].toString().isEmpty
+                            ? const Icon(
+                                Icons.person,
+                                size: 56,
+                                color: Color(0xFF5A3116),
+                              )
+                            : null,
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      Text(
+                        controller.user["name"] ?? "-",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF3E2723),
+                        ),
+                      ),
+
+                      const SizedBox(height: 6),
+
+                      Text(
+                        controller.user["email"] ?? "-",
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+                menuItem(
+                  icon: Icons.person_outline,
+                  title: "Edit Profil",
+                  subtitle: "Ubah informasi akun",
+                  onTap: controller.keEditProfil,
+                ),
+
+                const SizedBox(height: 16),
+
+                menuItem(
+                  icon: Icons.history_rounded,
+                  title: "Riwayat Aktivitas",
+                  subtitle: "Lihat aktivitas Anda",
+                  onTap: controller.keRiwayatAktivitas,
+                ),
+
+                const SizedBox(height: 16),
+
+                menuItem(
+                  icon: Icons.logout_rounded,
+                  title: "Keluar",
+                  subtitle: "Keluar dari akun",
+                  iconColor: Colors.red,
+                  textColor: Colors.red,
+                  onTap: controller.keluar,
+                ),
+
+                const SizedBox(height: 40),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 
   Widget menuItem({
-    required Size size,
     required IconData icon,
     required String title,
     required String subtitle,
@@ -149,27 +191,34 @@ class ProfilView extends GetView<ProfilController> {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(26),
+      borderRadius: BorderRadius.circular(24),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(26),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
             Container(
-              width: size.width * 0.14,
-              height: size.width * 0.14,
+              width: 52,
+              height: 52,
               decoration: const BoxDecoration(
                 color: Color(0xFFF3EAE0),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: iconColor, size: size.width * 0.08),
+              child: Icon(icon, color: iconColor, size: 26),
             ),
 
-            SizedBox(width: size.width * 0.04),
+            const SizedBox(width: 16),
 
             Expanded(
               child: Column(
@@ -183,20 +232,22 @@ class ProfilView extends GetView<ProfilController> {
                       color: textColor,
                     ),
                   ),
+
                   const SizedBox(height: 4),
+
                   Text(
                     subtitle,
-                    style: const TextStyle(fontSize: 13, color: Colors.brown),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey,
+                      height: 1.4,
+                    ),
                   ),
                 ],
               ),
             ),
 
-            Icon(
-              Icons.chevron_right,
-              color: iconColor,
-              size: size.width * 0.06,
-            ),
+            Icon(Icons.chevron_right_rounded, color: iconColor, size: 28),
           ],
         ),
       ),

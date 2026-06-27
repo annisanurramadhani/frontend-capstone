@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../global_widgets/custom_navbar.dart';
 import '../../../../routes/app_pages.dart';
 import '../controllers/pesan_pelatihan_controller.dart';
 
@@ -10,10 +12,7 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
     Get.dialog(
       barrierDismissible: false,
       Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(28),
-        ),
-        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
         child: Padding(
           padding: const EdgeInsets.all(28),
           child: Column(
@@ -29,52 +28,51 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
                 child: const Icon(
                   Icons.check_circle_outline_rounded,
                   color: Color(0xFF5A3116),
-                  size: 44,
+                  size: 42,
                 ),
               ),
+
               const SizedBox(height: 20),
+
               const Text(
                 "Pembayaran Berhasil",
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF5A3116),
+                  color: Color(0xFF3E2723),
                 ),
-                textAlign: TextAlign.center,
               ),
+
               const SizedBox(height: 10),
+
               const Text(
-                "Booking pelatihan Anda berhasil dan pembayaran telah diterima.",
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.brown,
-                  height: 1.6,
-                ),
+                "Booking pelatihan berhasil dibuat dan pembayaran telah diterima.",
                 textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.grey, height: 1.6),
               ),
-              const SizedBox(height: 28),
+
+              const SizedBox(height: 26),
+
               SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: 52,
                 child: ElevatedButton(
                   onPressed: () {
                     Get.back();
                     Get.offAllNamed(Routes.HALAMAN_UTAMA);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4CAF50),
+                    backgroundColor: const Color(0xFF5A3116),
+                    foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                     ),
                   ),
                   child: const Text(
                     "OK",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -87,333 +85,592 @@ class PesanPelatihanView extends GetView<PesanPelatihanController> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF8F3),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFF8F5F1),
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Color(0xFF3E2723),
-            size: 20,
-          ),
-        ),
-        title: const Text(
-          "Pesan Pelatihan",
-          style: TextStyle(
-            fontSize: 18,
-            color: Color(0xFF3E2723),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Form(
-        key: controller.formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // CARD INFO KELAS
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF8B5E3C).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(10),
+      backgroundColor: const Color(0xFFFAF6F1),
+
+      bottomNavigationBar: const CustomNavbar(currentIndex: -1),
+
+      body: SafeArea(
+        child: Form(
+          key: controller.formKey,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: w * 0.05),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: h * 0.02),
+                SizedBox(
+                  height: 56,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 48,
+                        child: IconButton(
+                          onPressed: () => Get.back(),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          splashRadius: 22,
+                          icon: Icon(
+                            Icons.arrow_back_ios_new,
+                            color: const Color(0xFF5A3116),
+                            size: w * 0.055,
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
+                      ),
+
+                      Expanded(
+                        child: Center(
                           child: Text(
-                            controller.kelas["namaKelas"],
-                            style: const TextStyle(
-                              fontSize: 16,
+                            "Pesan Kelas",
+                            style: TextStyle(
+                              fontSize: w * 0.065,
                               fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3E2723),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 48),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: h * 0.004),
+
+                Center(
+                  child: SizedBox(
+                    width: w * 0.82,
+                    child: Text(
+                      "Lengkapi data sebelum melanjutkan pembayaran",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: w * 0.034,
+                        color: Colors.grey,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: h * 0.02),
+
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(w * 0.045),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(.05),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Badge Level
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _badgeColor(controller.kelas["namaKelas"]),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Text(
+                          controller.kelas["namaKelas"],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      Text(
+                        controller.kelas["deskripsi"] ?? "-",
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF3E2723),
+                          height: 1.6,
+                        ),
+                      ),
+
+                      const SizedBox(height: 14),
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: 120,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF8F5F1),
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.schedule_outlined,
+                                    color: Color(0xFF5A3116),
+                                  ),
+
+                                  const SizedBox(height: 4),
+
+                                  const Text(
+                                    "Durasi",
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 2),
+
+                                  Text(
+                                    controller.kelas["durasi"] ?? "-",
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF3E2723),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 14),
+
+                          Expanded(
+                            child: Container(
+                              height: 120,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF8F5F1),
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.location_on_outlined,
+                                    color: Color(0xFF5A3116),
+                                  ),
+
+                                  const SizedBox(height: 8),
+
+                                  const Text(
+                                    "Lokasi",
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 4),
+
+                                  Text(
+                                    controller.kelas["lokasi"] ?? "-",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF3E2723),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      Divider(color: Colors.grey.shade300),
+
+                      const SizedBox(height: 16),
+
+                      Text(
+                        "Rp ${controller.kelas["harga"]}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5A3116),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 28),
+                const Text(
+                  "Data Peserta",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF3E2723),
+                  ),
+                ),
+
+                const SizedBox(height: 14),
+
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(.05),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: controller.namaController,
+                        decoration: InputDecoration(
+                          labelText: "Nama Lengkap",
+                          prefixIcon: const Icon(Icons.person_outline),
+                          filled: true,
+                          fillColor: const Color(0xFFF8F5F1),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF5A3116),
+                            ),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 14,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Nama wajib diisi";
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      TextFormField(
+                        controller: controller.noTelponController,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          labelText: "Nomor Telepon",
+                          prefixIcon: const Icon(Icons.phone_outlined),
+                          filled: true,
+                          fillColor: const Color(0xFFF8F5F1),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: const BorderSide(
                               color: Color(0xFF5A3116),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    const Divider(),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Total Pembayaran",
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        Text(
-                          "Rp ${controller.kelas["harga"]}",
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Color(0xFF8B5E3C),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // DATA PESERTA
-              const Text(
-                "Data Peserta",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF5A3116),
-                ),
-              ),
-
-              const SizedBox(height: 14),
-
-              // NAMA
-              TextFormField(
-                controller: controller.namaController,
-                style: const TextStyle(fontSize: 14),
-                decoration: InputDecoration(
-                  labelText: "Nama Lengkap",
-                  labelStyle: const TextStyle(fontSize: 14),
-                  prefixIcon: const Icon(Icons.person_outline, size: 20),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF8B5E3C)),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Nomor telepon wajib diisi";
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) return "Nama wajib diisi";
-                  return null;
-                },
-              ),
 
-              const SizedBox(height: 14),
+                const SizedBox(height: 28),
 
-              // NO HP
-              TextFormField(
-                controller: controller.noTelponController,
-                keyboardType: TextInputType.phone,
-                style: const TextStyle(fontSize: 14),
-                decoration: InputDecoration(
-                  labelText: "No Telepon",
-                  labelStyle: const TextStyle(fontSize: 14),
-                  prefixIcon: const Icon(Icons.phone_outlined, size: 20),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF8B5E3C)),
+                const Text(
+                  "Jadwal Pelatihan",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF3E2723),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Nomor telepon wajib diisi";
-                  }
-                  return null;
-                },
-              ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 14),
 
-              // JADWAL PELATIHAN
-              const Text(
-                "Jadwal Pelatihan",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF5A3116),
-                ),
-              ),
-
-              const SizedBox(height: 14),
-
-              // TANGGAL
-              TextFormField(
-                controller: controller.tanggalController,
-                readOnly: true,
-                style: const TextStyle(fontSize: 14),
-                decoration: InputDecoration(
-                  labelText: "Tanggal Pelatihan",
-                  labelStyle: const TextStyle(fontSize: 14),
-                  prefixIcon: const Icon(Icons.calendar_today_outlined, size: 20),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF8B5E3C)),
-                  ),
-                ),
-                onTap: () async {
-                  final picked = await showDatePicker(
-                    context: context,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2100),
-                    initialDate: DateTime.now(),
-                    builder: (context, child) {
-                      return Theme(
-                        data: Theme.of(context).copyWith(
-                          colorScheme: const ColorScheme.light(
-                            primary: Color(0xFF8B5E3C),
-                          ),
-                        ),
-                        child: child!,
-                      );
-                    },
-                  );
-                  if (picked != null) {
-                    controller.tanggalController.text =
-                        "${picked.day}-${picked.month}-${picked.year}";
-                  }
-                },
-              ),
-
-              const SizedBox(height: 14),
-
-              // JAM
-              Obx(
-                () => DropdownButtonFormField<String>(
-                  initialValue: controller.jamPelatihan.value.isEmpty
-                      ? null
-                      : controller.jamPelatihan.value,
-                  style: const TextStyle(fontSize: 14, color: Colors.black87),
-                  decoration: InputDecoration(
-                    labelText: "Jam Pelatihan",
-                    labelStyle: const TextStyle(fontSize: 14),
-                    prefixIcon: const Icon(Icons.access_time_outlined, size: 20),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFF8B5E3C)),
-                    ),
-                  ),
-                  items: controller.jamList
-                      .map(
-                        (item) => DropdownMenuItem(
-                          value: item,
-                          child: Text(item, style: const TextStyle(fontSize: 14)),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    controller.jamPelatihan.value = value.toString();
-                  },
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // INFO PEMBAYARAN
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF6EFE8),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    const Icon(
-                      Icons.verified_user_outlined,
-                      color: Color(0xFF8B5E3C),
-                      size: 20,
-                    ),
-                    const SizedBox(width: 12),
                     Expanded(
-                      child: Text(
-                        "Pembayaran aman melalui Midtrans. Anda dapat membayar menggunakan QRIS, Transfer Bank, E-Wallet, atau metode pembayaran lain yang tersedia.",
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey.shade700,
-                          height: 1.5,
+                      child: TextFormField(
+                        controller: controller.tanggalController,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: "Tanggal",
+                          prefixIcon: const Icon(Icons.calendar_today_outlined),
+                          filled: true,
+                          fillColor: const Color(0xFFF8F5F1),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF5A3116),
+                            ),
+                          ),
+                        ),
+                        onTap: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2100),
+                            initialDate: DateTime.now(),
+                          );
+
+                          if (picked != null) {
+                            controller.tanggalController.text =
+                                "${picked.day}-${picked.month}-${picked.year}";
+                          }
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(width: 14),
+
+                    Expanded(
+                      child: Obx(
+                        () => DropdownButtonFormField<String>(
+                          isExpanded: true,
+                          initialValue: controller.jamPelatihan.value.isEmpty
+                              ? null
+                              : controller.jamPelatihan.value,
+                          decoration: InputDecoration(
+                            labelText: "Jam",
+                            prefixIcon: const Icon(Icons.access_time_outlined),
+                            filled: true,
+                            fillColor: const Color(0xFFF8F5F1),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(18),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(18),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(18),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF5A3116),
+                              ),
+                            ),
+                          ),
+                          items: controller.jamList
+                              .map(
+                                (jam) => DropdownMenuItem(
+                                  value: jam,
+                                  child: Text(
+                                    jam,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 13),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            controller.jamPelatihan.value = value ?? "";
+                          },
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
 
-              const SizedBox(height: 20),
+                const SizedBox(height: 28),
 
-              // BUTTON
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: Obx(
-                  () => ElevatedButton(
-                    onPressed: controller.isLoading.value
-                        ? null
-                        : controller.lanjutBooking,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF5A3116),
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                const Text(
+                  "Ringkasan Pembayaran",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF3E2723),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(w * 0.05),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(.05),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
                       ),
-                    ),
-                    child: controller.isLoading.value
-                        ? const SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.5,
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Biaya Pelatihan",
+                            style: TextStyle(fontSize: 15, color: Colors.grey),
+                          ),
+                          Text(
+                            "Rp ${controller.kelas["harga"]}",
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
                             ),
-                          )
-                        : const Text(
-                            "Lanjut Pembayaran",
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 14),
+
+                      Divider(color: Colors.grey.shade300),
+
+                      const SizedBox(height: 14),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Total Pembayaran",
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: Color(0xFF3E2723),
                             ),
                           ),
+                          Text(
+                            "Rp ${controller.kelas["harga"]}",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF5A3116),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 24),
-            ],
+                SizedBox(height: 28),
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: Obx(
+                    () => ElevatedButton(
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : controller.lanjutBooking,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF5A3116),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 10),
+                                Text(
+                                  "Lanjut ke Pembayaran",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Color _badgeColor(String? namaKelas) {
+    if (namaKelas == null) {
+      return const Color(0xFF5A3116);
+    }
+
+    final nama = namaKelas.toLowerCase();
+
+    if (nama.contains("pemula")) {
+      return Colors.green;
+    }
+
+    if (nama.contains("menengah")) {
+      return Colors.orange;
+    }
+
+    if (nama.contains("lanjutan")) {
+      return Colors.red;
+    }
+
+    return const Color(0xFF5A3116);
   }
 }
