@@ -8,14 +8,16 @@ class AuthService {
   static final box = GetStorage();
 
   // GOOGLE LOGIN
-  static Future<dynamic> googleLogin(String idToken) async {
-    final response = await ApiProvider.googleLogin(idToken);
+  static Future<dynamic> googleLogin(
+    String idToken, {
+    String role = "pengguna",
+  }) async {
+    final response = await ApiProvider.googleLogin(idToken, role: role);
 
     final data = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
       box.write("token", data["token"] ?? "");
-
       box.write("user", data["user"] ?? {});
     }
 

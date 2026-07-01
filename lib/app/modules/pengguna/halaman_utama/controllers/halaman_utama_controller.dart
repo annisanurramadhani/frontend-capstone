@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../data/services/auth_service.dart';
+import '../../../../data/services/pengguna_service.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../data/services/socket_service.dart';
 
@@ -36,11 +36,15 @@ class HalamanUtamaController extends GetxController {
     try {
       isLoading.value = true;
 
-      final data = AuthService.getUser();
+      final result = await PenggunaService.getProfile();
 
-      user.assignAll(data);
+      if (result["success"] == true) {
+        user.assignAll(result["user"]);
 
-      nama.value = data["name"] ?? "";
+        nama.value = result["user"]["name"] ?? "";
+      } else {
+        Get.snackbar("Gagal", result["message"] ?? "Gagal mengambil profil");
+      }
     } catch (e) {
       Get.snackbar("Error", e.toString());
     } finally {

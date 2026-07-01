@@ -47,7 +47,7 @@ class _DetailVideoViewState extends State<DetailVideoView> {
 
       final position = playerController.value.position;
 
-      if (position.inSeconds >= 10) {
+      if (position.inSeconds >= 5) {
         sudahKirimAktivitas = true;
 
         try {
@@ -63,8 +63,15 @@ class _DetailVideoViewState extends State<DetailVideoView> {
 
   @override
   void dispose() {
-    _exitFullscreen();
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
+    );
+
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
     playerController.dispose();
+
     super.dispose();
   }
 
@@ -83,7 +90,10 @@ class _DetailVideoViewState extends State<DetailVideoView> {
   }
 
   void _exitFullscreen() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
+    );
 
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -254,41 +264,50 @@ class _DetailVideoViewState extends State<DetailVideoView> {
     final h = size.height;
 
     if (isFullscreen) {
-      return Scaffold(
-        backgroundColor: Colors.black,
-        bottomNavigationBar: const CustomNavbar(currentIndex: -1),
-        body: SafeArea(
-          child: Stack(
-            children: [
-              Center(
-                child: SizedBox(
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: _buildVideoPlayer(),
-                ),
-              ),
+      return PopScope(
+        onPopInvokedWithResult: (_, __) {
+          SystemChrome.setEnabledSystemUIMode(
+            SystemUiMode.manual,
+            overlays: SystemUiOverlay.values,
+          );
 
-              if (showControls)
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: GestureDetector(
-                    onTap: _exitFullscreen,
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(.5),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Colors.white,
-                        size: 18,
+          SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+        },
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          body: SafeArea(
+            child: Stack(
+              children: [
+                Center(
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: _buildVideoPlayer(),
+                  ),
+                ),
+
+                if (showControls)
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    child: GestureDetector(
+                      onTap: _exitFullscreen,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(.5),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                       ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       );

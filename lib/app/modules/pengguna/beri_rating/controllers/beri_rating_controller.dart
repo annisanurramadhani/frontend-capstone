@@ -10,21 +10,62 @@ class BeriRatingController extends GetxController {
 
   RxBool isLoading = false.obs;
 
+  RxBool isLoadingPengrajin = false.obs;
+
   late String bookingId;
 
   late String pengrajinId;
 
-  late String pengrajinNama;
+  RxString pengrajinNama = "".obs;
+
+  RxString pengrajinPhoto = "".obs;
 
   @override
   void onInit() {
     super.onInit();
 
-    bookingId = Get.arguments["bookingId"];
+    final args = Get.arguments;
 
-    pengrajinId = Get.arguments["pengrajinId"];
+    bookingId = args["bookingId"] ?? "";
 
-    pengrajinNama = Get.arguments["pengrajinNama"];
+    pengrajinId = args["pengrajinId"] ?? "";
+
+    // Pakai dulu data dari argumen (kalau ada) supaya tidak blank sesaat
+    pengrajinNama.value = args["pengrajinNama"] ?? "";
+
+    pengrajinPhoto.value = args["pengrajinPhoto"] ?? "";
+
+    // Tetap fetch detail pengrajin langsung dari API
+    // supaya foto & nama selalu akurat tanpa bergantung halaman asal
+    loadPengrajin();
+  }
+
+  Future<void> loadPengrajin() async {
+    if (pengrajinId.isEmpty) return;
+
+    try {
+      isLoadingPengrajin.value = true;
+
+      final response = await PenggunaService.getPengrajin();
+
+      if (response["success"] == true) {
+        final List daftarPengrajin = response["pengrajin"];
+
+        final found = daftarPengrajin.firstWhere(
+          (item) => item["id"] == pengrajinId,
+          orElse: () => null,
+        );
+
+        if (found != null) {
+          pengrajinNama.value = found["name"] ?? pengrajinNama.value;
+          pengrajinPhoto.value = found["photo"] ?? pengrajinPhoto.value;
+        }
+      }
+    } catch (e) {
+      print("Gagal memuat data pengrajin: $e");
+    } finally {
+      isLoadingPengrajin.value = false;
+    }
   }
 
   Future<void> submitReview() async {

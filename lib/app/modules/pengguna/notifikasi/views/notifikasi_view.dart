@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../global_widgets/custom_navbar.dart';
 import '../../../../routes/app_pages.dart';
 import '../controllers/notifikasi_controller.dart';
+
+String _formatWaktu(String? createdAtRaw) {
+  if (createdAtRaw == null || createdAtRaw.isEmpty) return "-";
+
+  try {
+    final date = DateTime.parse(createdAtRaw);
+    return DateFormat("d MMM yyyy, HH:mm").format(date);
+  } catch (_) {
+    return "-";
+  }
+}
 
 class NotifikasiView extends GetView<NotifikasiController> {
   const NotifikasiView({super.key});
@@ -181,11 +193,12 @@ class NotifikasiView extends GetView<NotifikasiController> {
                   itemBuilder: (context, index) {
                     final item = controller.notifikasiList[index];
 
-                    final bool isRead = item["isRead"] == true;
+                    final bool isRead = item["dibaca"] == true;
+
                     return _NotifCard(
                       judul: item["judul"] ?? "",
                       pesan: item["pesan"] ?? "",
-                      waktu: item["waktu"] ?? "",
+                      waktu: _formatWaktu(item["createdAt"]),
                       isRead: isRead,
                     );
                   },

@@ -31,7 +31,7 @@ class OtpLoginController extends GetxController {
   void onInit() {
     super.onInit();
 
-    email = Get.arguments['email'];
+    email = Get.arguments?['email'] ?? "";
 
     _startCountdown();
   }
@@ -52,7 +52,6 @@ class OtpLoginController extends GetxController {
 
   void _startCountdown() {
     canResend.value = false;
-
     countdown.value = 60;
 
     _timer?.cancel();
@@ -60,9 +59,7 @@ class OtpLoginController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (countdown.value <= 1) {
         timer.cancel();
-
         countdown.value = 0;
-
         canResend.value = true;
       } else {
         countdown.value--;
@@ -81,6 +78,7 @@ class OtpLoginController extends GetxController {
 
   Future<void> verifikasiOtp() async {
     try {
+      if (isLoading.value) return;
       isLoading.value = true;
 
       final otp =
@@ -95,30 +93,28 @@ class OtpLoginController extends GetxController {
         Get.snackbar(
           "Peringatan",
           "Kode OTP harus 6 digit",
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
         );
-
         return;
       }
 
       final response = await AuthService.verifyOtp(email, otp);
 
       if (response["success"] == true) {
-        box.write("token", response["token"]);
-        box.write("user", response["user"]);
+        box.write("token", response["token"] ?? "");
+        box.write("user", response["user"] ?? {});
 
         Get.snackbar(
           "Berhasil",
-          response["message"],
-          snackPosition: SnackPosition.TOP, 
-          backgroundColor: const Color(0xFF4CAF50), 
-          colorText: Colors.white, 
+          response["message"] ?? "Registrasi berhasil",
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: const Color(0xFF4CAF50),
+          colorText: Colors.white,
         );
 
         final user = response["user"];
-        if (user["role"] == "pengguna") {
-          Get.offAllNamed(Routes.HALAMAN_UTAMA);
-        } else if (user["role"] == "pengrajin") {
+
+        if (user["role"] == "pengrajin") {
           Get.offAllNamed(Routes.HALAMAN_PENGRAJIN);
         } else {
           Get.offAllNamed(Routes.HALAMAN_UTAMA);
@@ -129,11 +125,15 @@ class OtpLoginController extends GetxController {
         Get.snackbar(
           "OTP Salah",
           response["message"] ?? "Kode OTP tidak valid",
-          snackPosition: SnackPosition.TOP, 
+          snackPosition: SnackPosition.TOP,
         );
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        snackPosition: SnackPosition.TOP,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -149,26 +149,28 @@ class OtpLoginController extends GetxController {
 
       if (response["success"] == true) {
         _clearOtpFields();
-
         _startCountdown();
 
         Get.snackbar(
           "Berhasil",
           response["message"] ?? "Kode OTP baru telah dikirim",
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           backgroundColor: const Color(0xFF4CAF50),
           colorText: Colors.white,
-          duration: const Duration(seconds: 3),
         );
       } else {
         Get.snackbar(
           "Gagal",
           response["message"] ?? "Gagal mengirim ulang OTP",
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
         );
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        snackPosition: SnackPosition.TOP,
+      );
     } finally {
       isResending.value = false;
     }

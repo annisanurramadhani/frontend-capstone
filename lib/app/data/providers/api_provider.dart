@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class ApiProvider {
   // MOBILE
-  static const String mobileBaseUrl = "http://192.168.1.9:3000";
+  static const String mobileBaseUrl = "http://10.62.136.201:3000";
 
   static const String mobileAuthUrl = "$mobileBaseUrl/api/auth";
 
@@ -44,13 +44,14 @@ class ApiProvider {
   }
 
   // GOOGLE LOGIN
-  static Future<http.Response> googleLogin(String idToken) async {
+  static Future<http.Response> googleLogin(
+    String idToken, {
+    String role = "pengguna",
+  }) async {
     return await http.post(
       Uri.parse("$authUrl/google"),
-
       headers: {"Content-Type": "application/json"},
-
-      body: jsonEncode({"idToken": idToken}),
+      body: jsonEncode({"idToken": idToken, "role": role}),
     );
   }
 
@@ -197,13 +198,15 @@ class ApiProvider {
 
   // CREATE BOOKING
   static Future<http.Response> createBooking({
+    required String token,
     required Map<String, dynamic> data,
   }) async {
     return await http.post(
       Uri.parse("$penggunaUrl/booking"),
-
-      headers: {"Content-Type": "application/json"},
-
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
       body: jsonEncode(data),
     );
   }
@@ -281,26 +284,38 @@ class ApiProvider {
   }
 
   // GET KABUPATEN
-  static Future<http.Response> getKabupaten() async {
+  static Future<http.Response> getKabupaten(String token) async {
     return await http.get(
       Uri.parse("$penggunaUrl/kabupaten"),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
     );
   }
 
   // GET KECAMATAN
-  static Future<http.Response> getKecamatan(String kabupaten) async {
+  static Future<http.Response> getKecamatan(
+    String token,
+    String kabupaten,
+  ) async {
     return await http.get(
       Uri.parse("$penggunaUrl/kecamatan/$kabupaten"),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
     );
   }
 
   // GET ONGKIR
-  static Future<http.Response> getOngkir(String kecamatan) async {
+  static Future<http.Response> getOngkir(String token, String kecamatan) async {
     return await http.get(
       Uri.parse("$penggunaUrl/ongkir/$kecamatan"),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
     );
   }
 
@@ -367,12 +382,10 @@ class ApiProvider {
   }) async {
     return await http.post(
       Uri.parse("$penggunaUrl/checkout"),
-
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
-
       body: jsonEncode(data),
     );
   }
@@ -516,6 +529,17 @@ class ApiProvider {
         "Authorization": "Bearer $token",
       },
       body: jsonEncode({"videoId": videoId}),
+    );
+  }
+
+  // GET TOP PRODUK
+  static Future<http.Response> getTopProduk(String token) async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/produk/top"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
     );
   }
 

@@ -8,6 +8,14 @@ import '../controllers/riwayat_kelas_controller.dart';
 class RiwayatKelasView extends GetView<RiwayatKelasController> {
   const RiwayatKelasView({super.key});
 
+  String _formatRupiah(dynamic value) {
+    final angka = (value ?? 0).toString();
+    return angka.replaceAllMapped(
+      RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+      (m) => '${m[1]}.',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -161,7 +169,7 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
                                       const SizedBox(height: 4),
 
                                       Text(
-                                        item["pengrajin"] ?? "-",
+                                        item["pengrajinNama"] ?? "-",
                                         style: const TextStyle(
                                           fontSize: 14,
                                           color: Color(0xFF8B6347),
@@ -238,7 +246,7 @@ class RiwayatKelasView extends GetView<RiwayatKelasController> {
                                 const Spacer(),
 
                                 Text(
-                                  "Rp \\${item['totalBayar']}",
+                                  "Rp ${_formatRupiah(item['totalBayar'])}",
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,

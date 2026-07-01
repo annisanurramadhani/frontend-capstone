@@ -56,24 +56,30 @@ class CheckoutController extends GetxController {
   Future<void> loadKabupaten() async {
     final response = await PenggunaService.getKabupaten();
 
+    print(response);
+
     if (response["success"] == true) {
-      kabupatenList.assignAll(List<String>.from(response["data"]));
+      kabupatenList.assignAll(List<String>.from(response["kabupaten"]));
     }
   }
 
   Future<void> loadKecamatan(String kabupaten) async {
     final response = await PenggunaService.getKecamatan(kabupaten);
 
+    print(response);
+
     if (response["success"] == true) {
-      kecamatanList.assignAll(List<String>.from(response["data"]));
+      kecamatanList.assignAll(List<String>.from(response["kecamatan"]));
     }
   }
 
   Future<void> loadOngkir(String kecamatan) async {
     final response = await PenggunaService.getOngkir(kecamatan);
 
+    print(response);
+
     if (response["success"] == true) {
-      ongkir.value = response["data"]["ongkir"];
+      ongkir.value = response["ongkir"]["ongkir"];
 
       hitungTotal();
     }
@@ -101,7 +107,6 @@ class CheckoutController extends GetxController {
         alamat: alamatC.value,
         kabupaten: kabupaten.value,
         kecamatan: kecamatan.value,
-        ongkir: ongkir.value,
         metodeBayar: metodeBayar.value,
       );
 
