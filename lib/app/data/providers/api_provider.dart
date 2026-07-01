@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class ApiProvider {
   // MOBILE
-  static const String mobileBaseUrl = "http://192.168.1.9:3000";
+  static const String mobileBaseUrl = "http://10.62.136.75:3000";
 
   static const String mobileAuthUrl = "$mobileBaseUrl/api/auth";
 
