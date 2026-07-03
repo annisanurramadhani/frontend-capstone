@@ -7,10 +7,13 @@ class ProdukAnyamanController extends GetxController {
   RxList produkList = [].obs;
   RxList allProduk = [].obs;
 
+  RxList topProduk = [].obs;
+
   @override
   void onInit() {
     super.onInit();
     getProduk();
+    getTopProduk();
   }
 
   Future<void> getProduk() async {
@@ -27,6 +30,22 @@ class ProdukAnyamanController extends GetxController {
       print(e);
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> getTopProduk() async {
+    try {
+      final response = await PenggunaService.getTopProduk();
+
+      print("=== TOP PRODUK ===");
+      print(response);
+
+      if (response["success"] == true) {
+        topProduk.assignAll(response["top3Produk"] ?? []);
+        print(topProduk);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

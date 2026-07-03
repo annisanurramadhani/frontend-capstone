@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import '../../../../routes/app_pages.dart';
 
 import '../../../../data/providers/api_provider.dart';
 import '../../../../global_widgets/custom_navbar.dart';
@@ -178,7 +179,7 @@ class _VideoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         onTap: () {
           if (box.read("hideComputerVisionInfo") == true) {
-            Get.to(() => const DetailVideoView(), arguments: video);
+            Get.toNamed(Routes.DETAIL_VIDEO, arguments: video);
             return;
           }
 
@@ -528,10 +529,7 @@ class _ComputerVisionSheetState extends State<ComputerVisionSheet> {
 
                   Navigator.pop(context);
 
-                  Get.to(
-                    () => const DetailVideoView(),
-                    arguments: widget.video,
-                  );
+                  Get.toNamed(Routes.DETAIL_VIDEO, arguments: widget.video);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF5A3116),

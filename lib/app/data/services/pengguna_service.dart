@@ -85,7 +85,12 @@ class PenggunaService {
     required Map<String, dynamic> data,
   }) async {
     try {
-      final response = await ApiProvider.createBooking(data: data);
+      final token = box.read("token");
+
+      final response = await ApiProvider.createBooking(
+        token: token,
+        data: data,
+      );
 
       return jsonDecode(response.body);
     } catch (e) {
@@ -191,21 +196,27 @@ class PenggunaService {
 
   // GET KABUPATEN
   static Future<Map<String, dynamic>> getKabupaten() async {
-    final response = await ApiProvider.getKabupaten();
+    final token = box.read("token");
+
+    final response = await ApiProvider.getKabupaten(token);
 
     return jsonDecode(response.body);
   }
 
   // GET KECAMATAN
   static Future<Map<String, dynamic>> getKecamatan(String kabupaten) async {
-    final response = await ApiProvider.getKecamatan(kabupaten);
+    final token = box.read("token");
+
+    final response = await ApiProvider.getKecamatan(token, kabupaten);
 
     return jsonDecode(response.body);
   }
 
   // GET ONGKIR
   static Future<Map<String, dynamic>> getOngkir(String kecamatan) async {
-    final response = await ApiProvider.getOngkir(kecamatan);
+    final token = box.read("token");
+
+    final response = await ApiProvider.getOngkir(token, kecamatan);
 
     return jsonDecode(response.body);
   }
@@ -260,14 +271,12 @@ class PenggunaService {
     return jsonDecode(response.body);
   }
 
-  // CHECKOUT KERANJANG
   static Future<Map<String, dynamic>> checkoutKeranjang({
     required String namaPenerima,
     required String noTelpon,
     required String alamat,
     required String kabupaten,
     required String kecamatan,
-    required int ongkir,
     required String metodeBayar,
   }) async {
     final token = box.read("token");
@@ -280,7 +289,6 @@ class PenggunaService {
         "alamat": alamat,
         "kabupaten": kabupaten,
         "kecamatan": kecamatan,
-        "ongkir": ongkir,
         "metodeBayar": metodeBayar,
       },
     );
@@ -333,6 +341,15 @@ class PenggunaService {
     final token = box.read("token");
 
     final response = await ApiProvider.getAktivitas(token);
+
+    return jsonDecode(response.body);
+  }
+
+  // GET TOP PRODUK
+  static Future<Map<String, dynamic>> getTopProduk() async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.getTopProduk(token);
 
     return jsonDecode(response.body);
   }

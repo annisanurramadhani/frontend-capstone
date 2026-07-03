@@ -15,6 +15,7 @@ class MasukController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
     GoogleSignIn.instance.initialize(
       serverClientId:
           '807830659888-3nubedb4eh6a1l7hhflalj0o89401t66.apps.googleusercontent.com',
@@ -53,22 +54,36 @@ class MasukController extends GetxController {
         passwordController.text.trim(),
       );
 
-      if (response['success'] == true) {
+      if (response["success"] == true) {
+        AuthService.box.write("token", response["token"] ?? "");
+        AuthService.box.write("user", response["user"] ?? {});
+
         Get.snackbar(
           "Berhasil",
-          response['message'],
+          response["message"] ?? "Login berhasil",
           snackPosition: SnackPosition.TOP,
         );
-        Get.toNamed(Routes.OTP_LOGIN, arguments: {"email": response['email']});
+
+        final user = response["user"];
+
+        if (user["role"] == "pengrajin") {
+          Get.offAllNamed(Routes.HALAMAN_PENGRAJIN);
+        } else {
+          Get.offAllNamed(Routes.HALAMAN_UTAMA);
+        }
       } else {
         Get.snackbar(
           "Error",
-          response['message'],
+          response["message"] ?? "Login gagal",
           snackPosition: SnackPosition.TOP,
         );
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.TOP);
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        snackPosition: SnackPosition.TOP,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -79,8 +94,8 @@ class MasukController extends GetxController {
       if (isLoading.value) return;
       isLoading.value = true;
 
-      final GoogleSignInAccount account = await GoogleSignIn.instance
-          .authenticate();
+      final GoogleSignInAccount account =
+          await GoogleSignIn.instance.authenticate();
 
       final GoogleSignInAuthentication auth = account.authentication;
 
@@ -90,7 +105,10 @@ class MasukController extends GetxController {
         throw Exception("ID Token tidak ditemukan");
       }
 
-      final result = await AuthService.googleLogin(idToken);
+      final result = await AuthService.googleLogin(
+        idToken,
+        role: "pengguna",
+      );
 
       if (result["success"] == true) {
         Get.snackbar(
@@ -98,7 +116,14 @@ class MasukController extends GetxController {
           result["message"] ?? "Login berhasil",
           snackPosition: SnackPosition.TOP,
         );
-        Get.offAllNamed(Routes.HALAMAN_UTAMA);
+
+        final user = result["user"];
+
+        if (user["role"] == "pengrajin") {
+          Get.offAllNamed(Routes.HALAMAN_PENGRAJIN);
+        } else {
+          Get.offAllNamed(Routes.HALAMAN_UTAMA);
+        }
       } else {
         Get.snackbar(
           "Error",
@@ -109,18 +134,24 @@ class MasukController extends GetxController {
     } on GoogleSignInException catch (e) {
       Get.snackbar(
         "Error",
-        e.toString(), // ← fix: hapus .message
+        e.toString(),
         snackPosition: SnackPosition.TOP,
       );
     } catch (e) {
-      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.TOP);
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        snackPosition: SnackPosition.TOP,
+      );
     } finally {
       isLoading.value = false;
     }
   }
 
   void lupaPassword() => Get.toNamed(Routes.LUPA_PASSWORD);
+
   void goToDaftar() => Get.toNamed(Routes.DAFTAR);
+
   void kembali() {
     Get.back();
   }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../global_widgets/custom_navbar.dart';
 import '../controllers/beri_rating_controller.dart';
+import '../../../../data/providers/api_provider.dart';
 
 class BeriRatingView extends GetView<BeriRatingController> {
   const BeriRatingView({super.key});
@@ -90,29 +91,50 @@ class BeriRatingView extends GetView<BeriRatingController> {
                 ),
                 child: Column(
                   children: [
-                    Container(
-                      width: w * 0.22,
-                      height: w * 0.22,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFF3EAE0),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.person,
-                        size: w * 0.11,
-                        color: Color(0xFF5A3116),
+                    Obx(
+                      () => ClipOval(
+                        child: controller.pengrajinPhoto.value.isNotEmpty
+                            ? Image.network(
+                                "${ApiProvider.baseUrl}${controller.pengrajinPhoto.value}",
+                                width: w * 0.22,
+                                height: w * 0.22,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) {
+                                  return Container(
+                                    width: w * 0.22,
+                                    height: w * 0.22,
+                                    color: const Color(0xFFF3EAE0),
+                                    child: Icon(
+                                      Icons.person,
+                                      size: w * 0.11,
+                                      color: const Color(0xFF5A3116),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Container(
+                                width: w * 0.22,
+                                height: w * 0.22,
+                                color: const Color(0xFFF3EAE0),
+                                child: Icon(
+                                  Icons.person,
+                                  size: w * 0.11,
+                                  color: const Color(0xFF5A3116),
+                                ),
+                              ),
                       ),
                     ),
-
                     const SizedBox(height: 14),
 
-                    Text(
-                      controller.pengrajinNama,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: w * 0.05,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF3E2723),
+                    Obx(
+                      () => Text(
+                        controller.pengrajinNama.value,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: w * 0.05,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF3E2723),
+                        ),
                       ),
                     ),
 

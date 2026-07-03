@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
+import '../../../../data/providers/api_provider.dart';
 import '../../../../global_widgets/custom_navbar.dart';
 import '../../../../routes/app_pages.dart';
 import '../controllers/lihat_pesanan_controller.dart';
@@ -177,14 +179,212 @@ class LihatPesananView extends GetView<LihatPesananController> {
                         ),
                       )
                     : ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
+                        padding: const EdgeInsets.only(
+                          left: 18,
+                          right: 18,
+                          bottom: 18,
+                        ),
                         itemCount: controller.filteredPesanan.length,
                         itemBuilder: (context, index) {
                           final pesanan = controller.filteredPesanan[index];
-                          final item = pesanan["detailPesanan"][0];
+                          final List detailList =
+                              pesanan["detailPesanan"] ?? [];
+                          final item = detailList.isNotEmpty
+                              ? detailList[0]
+                              : null;
+                          final produk = item != null
+                              ? item["produk"]
+                              : null;
+
+                          final String namaProduk =
+                              produk?["namaProduk"] ?? "Produk";
+                          final String? foto = produk?["foto"];
+                          final int qty = item?["qty"] ?? 0;
+                          final int jumlahItemLain =
+                              detailList.length > 1
+                                  ? detailList.length - 1
+                                  : 0;
+
+                          final String orderId =
+                              pesanan["orderId"] ?? "-";
+                          final String statusPesanan =
+                              (pesanan["statusPesanan"] ?? "diproses")
+                                  .toString();
+                          final int totalBayar =
+                              pesanan["totalBayar"] ?? 0;
+                          final String createdAtRaw =
+                              pesanan["createdAt"] ?? "";
+
+                          String tanggalFormatted = "-";
+                          try {
+                            final date = DateTime.parse(createdAtRaw);
+                            tanggalFormatted =
+                                DateFormat("d MMM yyyy, HH:mm").format(date);
+                          } catch (_) {}
 
                           return Container(
-                            // <-- seluruh isi card yang sekarang jangan diubah
+                            margin: const EdgeInsets.only(bottom: 14),
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.04),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "Order #$orderId",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                    _statusBadge(
+                                      label: statusPesanan,
+                                      isGreen:
+                                          statusPesanan.toLowerCase() ==
+                                              "selesai",
+                                      isBlue:
+                                          statusPesanan.toLowerCase() ==
+                                                  "dikirim" ||
+                                              statusPesanan.toLowerCase() ==
+                                                  "diterima",
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 4),
+
+                                Text(
+                                  tanggalFormatted,
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+
+                                const Divider(height: 20),
+
+                                Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(10),
+                                      child: (foto != null &&
+                                              foto.isNotEmpty)
+                                          ? Image.network(
+                                              "${ApiProvider.baseUrl}${produk["foto"]}",
+                                              width: 64,
+                                              height: 64,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (context, error,
+                                                          stackTrace) =>
+                                                      Container(
+                                                width: 64,
+                                                height: 64,
+                                                color:
+                                                    const Color(0xFFF3EAE0),
+                                                child: const Icon(
+                                                  Icons.image_not_supported,
+                                                  color: Color(0xFF5A3116),
+                                                  size: 22,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(
+                                              width: 64,
+                                              height: 64,
+                                              color:
+                                                  const Color(0xFFF3EAE0),
+                                              child: const Icon(
+                                                Icons.image_outlined,
+                                                color: Color(0xFF5A3116),
+                                                size: 22,
+                                              ),
+                                            ),
+                                    ),
+
+                                    const SizedBox(width: 12),
+
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            namaProduk,
+                                            maxLines: 1,
+                                            overflow:
+                                                TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xFF3E2723),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            jumlahItemLain > 0
+                                                ? "$qty barang  •  +$jumlahItemLain produk lainnya"
+                                                : "$qty barang",
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                const Divider(height: 20),
+
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      "Total Belanja",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    Text(
+                                      NumberFormat.currency(
+                                        locale: "id_ID",
+                                        symbol: "Rp ",
+                                        decimalDigits: 0,
+                                      ).format(totalBayar),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF5A3116),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           );
                         },
                       ),
