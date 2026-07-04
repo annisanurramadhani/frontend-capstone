@@ -79,11 +79,7 @@ class MasukController extends GetxController {
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.TOP,
-      );
+      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.TOP);
     } finally {
       isLoading.value = false;
     }
@@ -94,8 +90,8 @@ class MasukController extends GetxController {
       if (isLoading.value) return;
       isLoading.value = true;
 
-      final GoogleSignInAccount account =
-          await GoogleSignIn.instance.authenticate();
+      final GoogleSignInAccount account = await GoogleSignIn.instance
+          .authenticate();
 
       final GoogleSignInAuthentication auth = account.authentication;
 
@@ -105,10 +101,7 @@ class MasukController extends GetxController {
         throw Exception("ID Token tidak ditemukan");
       }
 
-      final result = await AuthService.googleLogin(
-        idToken,
-        role: "pengguna",
-      );
+      final result = await AuthService.googleLogin(idToken, role: "pengguna");
 
       if (result["success"] == true) {
         Get.snackbar(
@@ -132,17 +125,9 @@ class MasukController extends GetxController {
         );
       }
     } on GoogleSignInException catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.TOP,
-      );
+      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.TOP);
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.TOP,
-      );
+      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.TOP);
     } finally {
       isLoading.value = false;
     }
