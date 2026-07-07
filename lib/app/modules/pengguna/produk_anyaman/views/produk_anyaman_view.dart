@@ -126,6 +126,131 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
 
                 SizedBox(height: h * 0.02),
 
+                // Produk Paling Banyak Dilihat
+                if (controller.topViewProduk.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "👀 Produk Paling Banyak Dilihat",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF5A3116),
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        SizedBox(
+                          height: 255,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: controller.topViewProduk.length,
+                            itemBuilder: (context, index) {
+                              final produk = controller.topViewProduk[index];
+
+                              print("VIEW PRODUK:");
+                              print(produk);
+
+                              return GestureDetector(
+                                onTap: () async {
+                                  await Get.toNamed(
+                                    "/detail-produk",
+                                    arguments: produk["id"],
+                                  );
+
+                                  controller.getTopViewProduk();
+                                },
+
+                                child: Container(
+                                  width: 170,
+                                  margin: const EdgeInsets.only(right: 14),
+
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(18),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        blurRadius: 6,
+                                      ),
+                                    ],
+                                  ),
+
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                              top: Radius.circular(18),
+                                            ),
+
+                                        child: Image.network(
+                                          "${ApiProvider.baseUrl}${produk["foto"]}",
+                                          height: 120,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+
+                                      Padding(
+                                        padding: const EdgeInsets.all(10),
+
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+
+                                          children: [
+                                            Text(
+                                              produk["namaProduk"],
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+
+                                            const SizedBox(height: 8),
+
+                                            Text(
+                                              "Dilihat ${produk["viewCount"]} kali",
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+
+                                            const SizedBox(height: 8),
+
+                                            Text(
+                                              "Rp ${produk["harga"]}",
+                                              style: const TextStyle(
+                                                color: Color(0xFF5A3116),
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                const SizedBox(height: 20),
+
                 // Top 3 Produk Trend
                 if (controller.topProduk.isNotEmpty)
                   Padding(
@@ -134,9 +259,9 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          "🔥 Top Trend 3 Produk Anyaman Bambu",
+                          "🔥 Top Trend 3 Produk",
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF5A3116),
                           ),

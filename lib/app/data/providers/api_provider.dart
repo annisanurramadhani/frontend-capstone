@@ -8,11 +8,10 @@ import 'package:http/http.dart' as http;
 
 class ApiProvider {
   // MOBILE
-
   static const String mobileBaseUrl = "http://10.62.136.201:3000";
+  // static const String mobileBaseUrl = "http://192.168.110.209:3000";
 
   static const String mobileAuthUrl = "$mobileBaseUrl/api/auth";
-
   static const String mobilePenggunaUrl = "$mobileBaseUrl/api/pengguna";
 
   // WEB
@@ -556,6 +555,14 @@ class ApiProvider {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
+    );
+  }
+
+  // GET TOP VIEW PRODUK
+  static Future<http.Response> getTopViewProduk() async {
+    return await http.get(
+      Uri.parse("$penggunaUrl/produk/top-view"),
+      headers: {"Content-Type": "application/json"},
     );
   }
 
