@@ -296,6 +296,36 @@ class PenggunaService {
     return jsonDecode(response.body);
   }
 
+  static Future<Map<String, dynamic>> checkoutLangsung({
+    required String produkId,
+    required int qty,
+    required String namaPenerima,
+    required String noTelpon,
+    required String alamat,
+    required String kabupaten,
+    required String kecamatan,
+    required String metodeBayar,
+  }) async {
+    final token = box.read("token");
+
+    final response = await ApiProvider.checkoutLangsung(
+      token: token,
+      data: {
+        "produkId": produkId,
+        "qty": qty,
+        "namaPenerima": namaPenerima,
+        "noTelpon": noTelpon,
+        "alamat": alamat,
+        "kabupaten": kabupaten,
+        "kecamatan": kecamatan,
+        "metodeBayar": metodeBayar,
+      },
+    );
+
+    return jsonDecode(response.body);
+  }
+
+
   //GET RIWAYAT PEMBELIAN
   static Future<Map<String, dynamic>> getRiwayatPembelian() async {
     final token = box.read("token");

@@ -386,7 +386,12 @@ class DetailProdukView extends GetView<DetailProdukController> {
                         onPressed: () {
                           Get.toNamed(
                             "/checkout",
-                            arguments: {"produkId": produk["id"], "qty": 1},
+                            arguments: {
+                              "mode": "beliLangsung",
+                              "produk":
+                                  produk, // kirim seluruh map produk (id, namaProduk, harga, foto, dll)
+                              "qty": 1,
+                            },
                           );
                         },
                         style: ElevatedButton.styleFrom(

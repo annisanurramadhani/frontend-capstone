@@ -73,13 +73,14 @@ class DaftarController extends GetxController {
         Get.snackbar(
           "Berhasil",
           response['message'],
-
           backgroundColor: Colors.green,
-
           colorText: Colors.white,
         );
 
-        Get.offNamed(Routes.MASUK);
+        Get.offNamed(
+          Routes.OTP_LOGIN,
+          arguments: {"email": emailController.text.trim()},
+        );
       } else {
         Get.snackbar("Error", response['message']);
       }

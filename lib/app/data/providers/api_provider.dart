@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class ApiProvider {
   // MOBILE
 
-  static const String mobileBaseUrl = "http://192.168.1.7:3000";
+  static const String mobileBaseUrl = "http://10.62.136.201:3000";
 
   static const String mobileAuthUrl = "$mobileBaseUrl/api/auth";
 
@@ -383,6 +383,21 @@ class ApiProvider {
   }) async {
     return await http.post(
       Uri.parse("$penggunaUrl/checkout"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode(data),
+    );
+  }
+
+  // CHECKOUT LANGSUNG (BELI SEKARANG - tanpa keranjang)
+  static Future<http.Response> checkoutLangsung({
+    required String token,
+    required Map<String, dynamic> data,
+  }) async {
+    return await http.post(
+      Uri.parse("$penggunaUrl/checkout-langsung"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",

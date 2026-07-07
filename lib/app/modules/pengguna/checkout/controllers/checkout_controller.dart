@@ -29,11 +29,38 @@ class CheckoutController extends GetxController {
 
   RxString metodeBayar = "qris".obs;
 
+  // ── STATE UNTUK MODE BELI LANGSUNG ───────────────────────
+  RxBool isBeliLangsung = false.obs;
+
+  RxString produkIdBeliLangsung = "".obs;
+
+  RxInt qtyBeliLangsung = 1.obs;
+
   @override
   void onInit() {
     super.onInit();
 
-    loadKeranjang();
+    final args = Get.arguments;
+
+    if (args != null && args["mode"] == "beliLangsung") {
+      isBeliLangsung.value = true;
+
+      produkIdBeliLangsung.value = args["produk"]["id"];
+
+      qtyBeliLangsung.value = args["qty"] ?? 1;
+
+      keranjangList.assignAll([
+        {
+          "produk": args["produk"],
+          "qty": qtyBeliLangsung.value,
+        },
+      ]);
+
+      hitungTotal();
+    } else {
+      loadKeranjang();
+    }
+
     loadKabupaten();
   }
 
@@ -101,14 +128,25 @@ class CheckoutController extends GetxController {
     try {
       isLoading.value = true;
 
-      final response = await PenggunaService.checkoutKeranjang(
-        namaPenerima: namaPenerimaC.value,
-        noTelpon: noTelponC.value,
-        alamat: alamatC.value,
-        kabupaten: kabupaten.value,
-        kecamatan: kecamatan.value,
-        metodeBayar: metodeBayar.value,
-      );
+      final response = isBeliLangsung.value
+          ? await PenggunaService.checkoutLangsung(
+              produkId: produkIdBeliLangsung.value,
+              qty: qtyBeliLangsung.value,
+              namaPenerima: namaPenerimaC.value,
+              noTelpon: noTelponC.value,
+              alamat: alamatC.value,
+              kabupaten: kabupaten.value,
+              kecamatan: kecamatan.value,
+              metodeBayar: metodeBayar.value,
+            )
+          : await PenggunaService.checkoutKeranjang(
+              namaPenerima: namaPenerimaC.value,
+              noTelpon: noTelponC.value,
+              alamat: alamatC.value,
+              kabupaten: kabupaten.value,
+              kecamatan: kecamatan.value,
+              metodeBayar: metodeBayar.value,
+            );
 
       if (response["success"] == true) {
         final result = await Get.toNamed(
@@ -119,7 +157,8 @@ class CheckoutController extends GetxController {
             "orderId": response["pesanan"]["orderId"],
           },
         );
-        //POPUOP
+
+        //POPUP
         if (result == "success") {
           Get.defaultDialog(
             title: "Pembayaran Berhasil",
