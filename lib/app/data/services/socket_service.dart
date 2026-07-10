@@ -6,10 +6,11 @@ class SocketService {
 
   static void connect() {
     socket = IO.io(
-      "http://10.62.136.201:3000",
+      "https://armory-undertone-pamperer.ngrok-free.dev",
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableAutoConnect()
+          .setExtraHeaders({'ngrok-skip-browser-warning': '69420'})
           .build(),
     );
 

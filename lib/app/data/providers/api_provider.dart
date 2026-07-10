@@ -1,30 +1,25 @@
 import 'dart:convert';
-
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
-
 import 'package:http/http.dart' as http;
 
 class ApiProvider {
-  // MOBILE
-  static const String mobileBaseUrl = "http://10.62.136.201:3000";
+  // NGROK URL
+  static const String NGROK_URL = "https://armory-undertone-pamperer.ngrok-free.dev";
   
+  // MOBILE
+  static const String mobileBaseUrl = NGROK_URL;
   static const String mobileAuthUrl = "$mobileBaseUrl/api/auth";
   static const String mobilePenggunaUrl = "$mobileBaseUrl/api/pengguna";
 
   // WEB
-  static const String webBaseUrl = "http://localhost:3000";
-
+  static const String webBaseUrl = NGROK_URL;
   static const String webAuthUrl = "$webBaseUrl/api/auth";
-
   static const String webPenggunaUrl = "$webBaseUrl/api/pengguna";
 
   // AUTO URL
   static String get baseUrl => kIsWeb ? webBaseUrl : mobileBaseUrl;
-
   static String get authUrl => kIsWeb ? webAuthUrl : mobileAuthUrl;
-
   static String get penggunaUrl => kIsWeb ? webPenggunaUrl : mobilePenggunaUrl;
 
   // Payment URL
@@ -35,9 +30,10 @@ class ApiProvider {
   static Future<http.Response> login(String email, String password) async {
     return await http.post(
       Uri.parse("$authUrl/login"),
-
-      headers: {"Content-Type": "application/json"},
-
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
       body: jsonEncode({"email": email, "password": password}),
     );
   }
@@ -49,7 +45,10 @@ class ApiProvider {
   }) async {
     return await http.post(
       Uri.parse("$authUrl/google"),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
       body: jsonEncode({"idToken": idToken, "role": role}),
     );
   }
@@ -58,9 +57,10 @@ class ApiProvider {
   static Future<http.Response> verifyOtp(String email, String otp) async {
     return await http.post(
       Uri.parse("$authUrl/verify-otp"),
-
-      headers: {"Content-Type": "application/json"},
-
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
       body: jsonEncode({"email": email, "otp": otp}),
     );
   }
@@ -69,9 +69,10 @@ class ApiProvider {
   static Future<http.Response> resendOtp(String email) async {
     return await http.post(
       Uri.parse("$authUrl/resend-otp"),
-
-      headers: {"Content-Type": "application/json"},
-
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
       body: jsonEncode({"email": email}),
     );
   }
@@ -84,9 +85,10 @@ class ApiProvider {
   ) async {
     return await http.post(
       Uri.parse("$authUrl/register"),
-
-      headers: {"Content-Type": "application/json"},
-
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
       body: jsonEncode({"name": name, "email": email, "password": password}),
     );
   }
@@ -95,9 +97,10 @@ class ApiProvider {
   static Future<http.Response> requestResetPassword(String email) async {
     return await http.post(
       Uri.parse("$authUrl/request-reset-password"),
-
-      headers: {"Content-Type": "application/json"},
-
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
       body: jsonEncode({"email": email}),
     );
   }
@@ -110,9 +113,10 @@ class ApiProvider {
   ) async {
     return await http.post(
       Uri.parse("$authUrl/reset-password"),
-
-      headers: {"Content-Type": "application/json"},
-
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
       body: jsonEncode({
         "email": email,
         "otp": otp,
@@ -125,11 +129,10 @@ class ApiProvider {
   static Future<http.Response> getProfile(String token) async {
     return await http.get(
       Uri.parse("$penggunaUrl/profile"),
-
       headers: {
         "Content-Type": "application/json",
-
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -144,14 +147,13 @@ class ApiProvider {
   }) async {
     var request = http.MultipartRequest(
       "PUT",
-
       Uri.parse("$penggunaUrl/profile"),
     );
 
     request.headers["Authorization"] = "Bearer $token";
+    request.headers["ngrok-skip-browser-warning"] = "69420";
 
     request.fields["name"] = name;
-
     request.fields["email"] = email;
 
     if (password.isNotEmpty) {
@@ -163,7 +165,6 @@ class ApiProvider {
     }
 
     final streamedResponse = await request.send();
-
     return await http.Response.fromStream(streamedResponse);
   }
 
@@ -171,8 +172,10 @@ class ApiProvider {
   static Future<http.Response> getTutorialVideos() async {
     return await http.get(
       Uri.parse("$penggunaUrl/tutorial-video"),
-
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
     );
   }
 
@@ -180,7 +183,10 @@ class ApiProvider {
   static Future<http.Response> getPengrajin() async {
     return await http.get(
       Uri.parse("$penggunaUrl/pengrajin"),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
     );
   }
 
@@ -191,6 +197,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -205,6 +212,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode(data),
     );
@@ -214,7 +222,10 @@ class ApiProvider {
   static Future<http.Response> checkStatusBayar(String orderId) async {
     return await http.get(
       Uri.parse("$baseUrl/api/payment/status/$orderId"),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
     );
   }
 
@@ -225,6 +236,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -236,6 +248,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -250,6 +263,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode(data),
     );
@@ -262,6 +276,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -270,7 +285,10 @@ class ApiProvider {
   static Future<http.Response> getProduk() async {
     return await http.get(
       Uri.parse("$penggunaUrl/produk"),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
     );
   }
 
@@ -278,7 +296,10 @@ class ApiProvider {
   static Future<http.Response> getDetailProduk(String id) async {
     return await http.get(
       Uri.parse("$penggunaUrl/produk/$id"),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
     );
   }
 
@@ -289,6 +310,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -303,6 +325,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -314,6 +337,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -325,6 +349,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -340,6 +365,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"produkId": produkId, "qty": qty}),
     );
@@ -352,6 +378,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -364,12 +391,11 @@ class ApiProvider {
   }) async {
     return await http.put(
       Uri.parse("$penggunaUrl/keranjang/$id"),
-
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
-
       body: jsonEncode({"qty": qty}),
     );
   }
@@ -384,6 +410,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode(data),
     );
@@ -399,6 +426,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode(data),
     );
@@ -411,6 +439,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -422,6 +451,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -438,6 +468,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -449,6 +480,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -460,6 +492,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -480,6 +513,7 @@ class ApiProvider {
     );
 
     request.headers["Authorization"] = "Bearer $token";
+    request.headers["ngrok-skip-browser-warning"] = "69420";
 
     request.fields["name"] = name;
     request.fields["alamat"] = alamat;
@@ -500,11 +534,10 @@ class ApiProvider {
   static Future<http.Response> getNotifikasiPengrajin(String token) async {
     return await http.get(
       Uri.parse("$pengrajinUrl/notifikasi"),
-
       headers: {
         "Content-Type": "application/json",
-
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -516,6 +549,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -527,6 +561,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -541,6 +576,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"videoId": videoId}),
     );
@@ -553,6 +589,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -561,7 +598,10 @@ class ApiProvider {
   static Future<http.Response> getTopViewProduk() async {
     return await http.get(
       Uri.parse("$penggunaUrl/produk/top-view"),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      },
     );
   }
 
@@ -572,6 +612,7 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
