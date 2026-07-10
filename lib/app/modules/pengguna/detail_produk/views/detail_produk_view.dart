@@ -125,7 +125,9 @@ class DetailProdukView extends GetView<DetailProdukController> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
                     child: Image.network(
-                      "${ApiProvider.baseUrl}${produk["foto"]}",
+                      produk["foto"].toString().startsWith("http")
+                          ? produk["foto"]
+                          : "${ApiProvider.baseUrl}${produk["foto"]}",
                       width: double.infinity,
                       height: 250,
                       fit: BoxFit.cover,
@@ -388,8 +390,7 @@ class DetailProdukView extends GetView<DetailProdukController> {
                             "/checkout",
                             arguments: {
                               "mode": "beliLangsung",
-                              "produk":
-                                  produk, // kirim seluruh map produk (id, namaProduk, harga, foto, dll)
+                              "produk": produk,
                               "qty": 1,
                             },
                           );

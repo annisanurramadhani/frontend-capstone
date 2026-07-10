@@ -102,7 +102,9 @@ class EditProfilView extends GetView<EditProfilController> {
                           return CircleAvatar(
                             radius: 55,
                             backgroundImage: NetworkImage(
-                              "${ApiProvider.baseUrl}${controller.photoUrl.value}",
+                              controller.photoUrl.value.startsWith("http")
+                                  ? controller.photoUrl.value
+                                  : "${ApiProvider.baseUrl}${controller.photoUrl.value}",
                             ),
                           );
                         }

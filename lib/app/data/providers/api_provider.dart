@@ -4,16 +4,16 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ApiProvider {
-  // NGROK URL
-  static const String NGROK_URL = "https://armory-undertone-pamperer.ngrok-free.dev";
+  // URL SERVER RENDER BARU
+  static const String SERVER_URL = "https://anyam.onrender.com";
   
   // MOBILE
-  static const String mobileBaseUrl = NGROK_URL;
+  static const String mobileBaseUrl = SERVER_URL;
   static const String mobileAuthUrl = "$mobileBaseUrl/api/auth";
   static const String mobilePenggunaUrl = "$mobileBaseUrl/api/pengguna";
 
   // WEB
-  static const String webBaseUrl = NGROK_URL;
+  static const String webBaseUrl = SERVER_URL;
   static const String webAuthUrl = "$webBaseUrl/api/auth";
   static const String webPenggunaUrl = "$webBaseUrl/api/pengguna";
 
@@ -32,7 +32,6 @@ class ApiProvider {
       Uri.parse("$authUrl/login"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"email": email, "password": password}),
     );
@@ -47,7 +46,6 @@ class ApiProvider {
       Uri.parse("$authUrl/google"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"idToken": idToken, "role": role}),
     );
@@ -59,7 +57,6 @@ class ApiProvider {
       Uri.parse("$authUrl/verify-otp"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"email": email, "otp": otp}),
     );
@@ -71,7 +68,6 @@ class ApiProvider {
       Uri.parse("$authUrl/resend-otp"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"email": email}),
     );
@@ -87,7 +83,6 @@ class ApiProvider {
       Uri.parse("$authUrl/register"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"name": name, "email": email, "password": password}),
     );
@@ -99,7 +94,6 @@ class ApiProvider {
       Uri.parse("$authUrl/request-reset-password"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"email": email}),
     );
@@ -115,7 +109,6 @@ class ApiProvider {
       Uri.parse("$authUrl/reset-password"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({
         "email": email,
@@ -132,7 +125,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -151,7 +143,6 @@ class ApiProvider {
     );
 
     request.headers["Authorization"] = "Bearer $token";
-    request.headers["ngrok-skip-browser-warning"] = "69420";
 
     request.fields["name"] = name;
     request.fields["email"] = email;
@@ -174,7 +165,6 @@ class ApiProvider {
       Uri.parse("$penggunaUrl/tutorial-video"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -185,7 +175,6 @@ class ApiProvider {
       Uri.parse("$penggunaUrl/pengrajin"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -197,7 +186,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -212,7 +200,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode(data),
     );
@@ -224,7 +211,6 @@ class ApiProvider {
       Uri.parse("$baseUrl/api/payment/status/$orderId"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -236,7 +222,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -248,7 +233,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -263,7 +247,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode(data),
     );
@@ -276,7 +259,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -287,7 +269,6 @@ class ApiProvider {
       Uri.parse("$penggunaUrl/produk"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -298,7 +279,6 @@ class ApiProvider {
       Uri.parse("$penggunaUrl/produk/$id"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -310,7 +290,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -325,7 +304,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -337,7 +315,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -349,7 +326,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -365,7 +341,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"produkId": produkId, "qty": qty}),
     );
@@ -378,7 +353,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -394,7 +368,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"qty": qty}),
     );
@@ -410,7 +383,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode(data),
     );
@@ -426,7 +398,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode(data),
     );
@@ -439,7 +410,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -451,7 +421,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -468,7 +437,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -480,7 +448,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -492,7 +459,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -513,7 +479,6 @@ class ApiProvider {
     );
 
     request.headers["Authorization"] = "Bearer $token";
-    request.headers["ngrok-skip-browser-warning"] = "69420";
 
     request.fields["name"] = name;
     request.fields["alamat"] = alamat;
@@ -537,7 +502,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -549,7 +513,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -561,7 +524,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -576,7 +538,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
       body: jsonEncode({"videoId": videoId}),
     );
@@ -589,7 +550,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -600,7 +560,6 @@ class ApiProvider {
       Uri.parse("$penggunaUrl/produk/top-view"),
       headers: {
         "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }
@@ -612,7 +571,6 @@ class ApiProvider {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        "ngrok-skip-browser-warning": "69420",
       },
     );
   }

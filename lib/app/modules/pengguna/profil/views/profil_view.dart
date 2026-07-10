@@ -104,20 +104,22 @@ class ProfilView extends GetView<ProfilController> {
                         backgroundColor: const Color(0xFFF3EAE0),
                         backgroundImage:
                             controller.user["photo"] != null &&
-                                controller.user["photo"].toString().isNotEmpty
-                            ? NetworkImage(
-                                "${ApiProvider.baseUrl}${controller.user["photo"]}",
-                              )
-                            : null,
+                                    controller.user["photo"].toString().isNotEmpty
+                                ? NetworkImage(
+                                    controller.user["photo"].toString().startsWith("http")
+                                        ? controller.user["photo"]
+                                        : "${ApiProvider.baseUrl}${controller.user["photo"]}",
+                                  )
+                                : null,
                         child:
                             controller.user["photo"] == null ||
-                                controller.user["photo"].toString().isEmpty
-                            ? const Icon(
-                                Icons.person,
-                                size: 56,
-                                color: Color(0xFF5A3116),
-                              )
-                            : null,
+                                    controller.user["photo"].toString().isEmpty
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 56,
+                                    color: Color(0xFF5A3116),
+                                  )
+                                : null,
                       ),
 
                       const SizedBox(height: 18),

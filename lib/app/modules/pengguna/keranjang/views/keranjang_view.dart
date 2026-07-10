@@ -107,7 +107,6 @@ class KeranjangView extends GetView<KeranjangController> {
                         ),
                       )
                     : ListView.builder(
-                      
                         padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                         itemCount: controller.keranjangList.length,
                         itemBuilder: (context, index) {
@@ -134,7 +133,9 @@ class KeranjangView extends GetView<KeranjangController> {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(16),
                                   child: Image.network(
-                                    "${ApiProvider.baseUrl}${produk["foto"]}",
+                                    produk["foto"].toString().startsWith("http")
+                                        ? produk["foto"]
+                                        : "${ApiProvider.baseUrl}${produk["foto"]}",
                                     width: w * 0.22,
                                     height: w * 0.22,
                                     fit: BoxFit.cover,

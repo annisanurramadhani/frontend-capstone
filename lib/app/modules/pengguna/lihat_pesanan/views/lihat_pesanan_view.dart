@@ -290,7 +290,9 @@ class LihatPesananView extends GetView<LihatPesananController> {
                                       child: (foto != null &&
                                               foto.isNotEmpty)
                                           ? Image.network(
-                                              "${ApiProvider.baseUrl}${produk["foto"]}",
+                                              produk["foto"].toString().startsWith("http")
+                                                  ? produk["foto"]
+                                                  : "${ApiProvider.baseUrl}${produk["foto"]}",
                                               width: 64,
                                               height: 64,
                                               fit: BoxFit.cover,

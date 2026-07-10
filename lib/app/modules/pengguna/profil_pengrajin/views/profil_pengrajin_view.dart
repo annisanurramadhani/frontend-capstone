@@ -93,35 +93,37 @@ class ProfilPengrajinView extends StatelessWidget {
                     ClipOval(
                       child:
                           pengrajin["photo"] != null &&
-                              pengrajin["photo"].toString().isNotEmpty
-                          ? Image.network(
-                              "${ApiProvider.baseUrl}${pengrajin["photo"]}",
-                              width: w * 0.28,
-                              height: w * 0.28,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) {
-                                return Container(
+                                  pengrajin["photo"].toString().isNotEmpty
+                              ? Image.network(
+                                  pengrajin["photo"].toString().startsWith("http")
+                                      ? pengrajin["photo"]
+                                      : "${ApiProvider.baseUrl}${pengrajin["photo"]}",
+                                  width: w * 0.28,
+                                  height: w * 0.28,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) {
+                                    return Container(
+                                      width: 110,
+                                      height: 110,
+                                      color: Color(0xFFF3EAE0),
+                                      child: Icon(
+                                        Icons.person,
+                                        size: w * 0.14,
+                                        color: Color(0xFF5A3116),
+                                      ),
+                                    );
+                                  },
+                                )
+                              : Container(
                                   width: 110,
                                   height: 110,
-                                  color: Color(0xFFF3EAE0),
-                                  child: Icon(
+                                  color: const Color(0xFFF3EAE0),
+                                  child: const Icon(
                                     Icons.person,
-                                    size: w * 0.14,
+                                    size: 55,
                                     color: Color(0xFF5A3116),
                                   ),
-                                );
-                              },
-                            )
-                          : Container(
-                              width: 110,
-                              height: 110,
-                              color: const Color(0xFFF3EAE0),
-                              child: const Icon(
-                                Icons.person,
-                                size: 55,
-                                color: Color(0xFF5A3116),
-                              ),
-                            ),
+                                ),
                     ),
 
                     const SizedBox(height: 18),

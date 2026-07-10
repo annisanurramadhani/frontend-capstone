@@ -155,18 +155,20 @@ class DaftarPengrajinView extends GetView<DaftarPengrajinController> {
                                     ),
                                     child:
                                         item["photo"] != null &&
-                                            item["photo"].toString().isNotEmpty
-                                        ? Image.network(
-                                            "${ApiProvider.baseUrl}${item["photo"]}",
-                                            width: w * 0.20,
-                                            height: w * 0.20,
-                                            fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                                  return _fotoDefault();
-                                                },
-                                          )
-                                        : _fotoDefault(),
+                                                item["photo"].toString().isNotEmpty
+                                            ? Image.network(
+                                                item["photo"].toString().startsWith("http")
+                                                    ? item["photo"]
+                                                    : "${ApiProvider.baseUrl}${item["photo"]}",
+                                                width: w * 0.20,
+                                                height: w * 0.20,
+                                                fit: BoxFit.cover,
+                                                errorBuilder:
+                                                    (context, error, stackTrace) {
+                                                      return _fotoDefault();
+                                                    },
+                                              )
+                                            : _fotoDefault(),
                                   ),
 
                                   SizedBox(width: w * 0.035),

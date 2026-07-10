@@ -6,11 +6,10 @@ class SocketService {
 
   static void connect() {
     socket = IO.io(
-      "https://armory-undertone-pamperer.ngrok-free.dev",
+      "https://anyam.onrender.com",
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableAutoConnect()
-          .setExtraHeaders({'ngrok-skip-browser-warning': '69420'})
           .build(),
     );
 

@@ -317,7 +317,9 @@ class CheckoutView extends GetView<CheckoutController> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(14),
                               child: Image.network(
-                                "${ApiProvider.baseUrl}${produk["foto"]}",
+                                produk["foto"].toString().startsWith("http")
+                                    ? produk["foto"]
+                                    : "${ApiProvider.baseUrl}${produk["foto"]}",
                                 width: 70,
                                 height: 70,
                                 fit: BoxFit.cover,

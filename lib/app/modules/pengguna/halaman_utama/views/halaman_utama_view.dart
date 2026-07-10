@@ -89,20 +89,22 @@ class _HalamanUtamaViewState extends State<HalamanUtamaView> {
                       backgroundColor: const Color(0xFFF2E7DB),
                       backgroundImage:
                           controller.user["photo"] != null &&
-                              controller.user["photo"].toString().isNotEmpty
-                          ? NetworkImage(
-                              "${ApiProvider.baseUrl}${controller.user["photo"]}",
-                            )
-                          : null,
+                                  controller.user["photo"].toString().isNotEmpty
+                              ? NetworkImage(
+                                  controller.user["photo"].toString().startsWith("http")
+                                      ? controller.user["photo"]
+                                      : "${ApiProvider.baseUrl}${controller.user["photo"]}",
+                                )
+                              : null,
                       child:
                           controller.user["photo"] == null ||
-                              controller.user["photo"].toString().isEmpty
-                          ? Icon(
-                              Icons.person,
-                              color: Color(0xFF5A3116),
-                              size: w * 0.075,
-                            )
-                          : null,
+                                  controller.user["photo"].toString().isEmpty
+                              ? Icon(
+                                  Icons.person,
+                                  color: Color(0xFF5A3116),
+                                  size: w * 0.075,
+                                )
+                              : null,
                     ),
 
                     SizedBox(width: w * 0.035),

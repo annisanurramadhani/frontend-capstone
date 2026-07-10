@@ -30,7 +30,6 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
               children: [
                 SizedBox(height: h * 0.02),
 
-                // Header (back, title, cart)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: w * 0.05),
                   child: SizedBox(
@@ -85,7 +84,6 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
                 ),
                 SizedBox(height: h * 0.004),
 
-                // Deskripsi
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: w * 0.09),
                   child: Text(
@@ -101,7 +99,6 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
 
                 SizedBox(height: h * 0.02),
 
-                // Pencarian (dipindah ke atas)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: w * 0.05),
                   child: TextField(
@@ -126,7 +123,6 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
 
                 SizedBox(height: h * 0.02),
 
-                // Produk Paling Banyak Dilihat
                 if (controller.topViewProduk.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -151,9 +147,6 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
                             itemCount: controller.topViewProduk.length,
                             itemBuilder: (context, index) {
                               final produk = controller.topViewProduk[index];
-
-                              print("VIEW PRODUK:");
-                              print(produk);
 
                               return GestureDetector(
                                 onTap: () async {
@@ -192,7 +185,9 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
                                             ),
 
                                         child: Image.network(
-                                          "${ApiProvider.baseUrl}${produk["foto"]}",
+                                          produk["foto"].toString().startsWith("http")
+                                              ? produk["foto"]
+                                              : "${ApiProvider.baseUrl}${produk["foto"]}",
                                           height: 120,
                                           fit: BoxFit.cover,
                                         ),
@@ -251,7 +246,6 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
 
                 const SizedBox(height: 20),
 
-                // Top 3 Produk Trend
                 if (controller.topProduk.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -268,8 +262,7 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
                         ),
                         const SizedBox(height: 12),
                         SizedBox(
-                          height:
-                              270, // ⬅️ dinaikkan supaya harga muat, gak overflow lagi
+                          height: 270,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: controller.topProduk.length,
@@ -313,7 +306,9 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
                                             produkDetail != null &&
                                                 produkDetail["foto"] != null
                                             ? Image.network(
-                                                "${ApiProvider.baseUrl}${produkDetail["foto"]}",
+                                                produkDetail["foto"].toString().startsWith("http")
+                                                    ? produkDetail["foto"]
+                                                    : "${ApiProvider.baseUrl}${produkDetail["foto"]}",
                                                 height: 120,
                                                 width: double.infinity,
                                                 fit: BoxFit.cover,
@@ -408,7 +403,6 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
 
                 const SizedBox(height: 18),
 
-                // setelah blok Top Trend Produk, sebelum search bar / grid
                 if (controller.topProduk.isNotEmpty) ...[
                   const SizedBox(height: 20),
                   Padding(
@@ -444,7 +438,6 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
                   const SizedBox(height: 16),
                 ],
 
-                // Grid produk atau pesan kosong
                 if (controller.produkList.isEmpty)
                   const Center(
                     child: Text(
@@ -504,7 +497,9 @@ class ProdukAnyamanView extends GetView<ProdukAnyamanController> {
                                         top: Radius.circular(18),
                                       ),
                                       child: Image.network(
-                                        "${ApiProvider.baseUrl}${produk["foto"]}",
+                                        produk["foto"].toString().startsWith("http")
+                                            ? produk["foto"]
+                                            : "${ApiProvider.baseUrl}${produk["foto"]}",
                                         width: double.infinity,
                                         height: h * 0.18,
                                         fit: BoxFit.cover,
