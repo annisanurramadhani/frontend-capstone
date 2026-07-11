@@ -55,6 +55,7 @@ dependencies:
   web_socket_channel: ^3.0.0
   image: ^4.2.0
   hand_landmarker: ^2.1.2
+  syncfusion_flutter_pdfviewer: ^34.1.30
 
 
 dev_dependencies:
