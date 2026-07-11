@@ -47,7 +47,7 @@ class SertifikatController extends GetxController {
     Get.back();
   }
 
-  Future<void> lihatSertifikat(
+Future<void> lihatSertifikat(
     dynamic data,
   ) async {
     if (data["sertifikatUrl"] == null) {
@@ -58,8 +58,12 @@ class SertifikatController extends GetxController {
       return;
     }
 
-    final url =
-        "${ApiProvider.baseUrl}${data["sertifikatUrl"]}";
+    // --- LOGIKA BARU UNTUK CEK URL ---
+    String rawUrl = data["sertifikatUrl"];
+    String url = rawUrl.startsWith("http") 
+        ? rawUrl 
+        : "${ApiProvider.baseUrl}$rawUrl";
+    // ---------------------------------
 
     await launchUrl(
       Uri.parse(
@@ -81,8 +85,12 @@ class SertifikatController extends GetxController {
         return;
       }
 
-      final url =
-          "${ApiProvider.baseUrl}${data["sertifikatUrl"]}";
+      // --- LOGIKA BARU UNTUK CEK URL ---
+      String rawUrl = data["sertifikatUrl"];
+      String url = rawUrl.startsWith("http") 
+          ? rawUrl 
+          : "${ApiProvider.baseUrl}$rawUrl";
+      // ---------------------------------
 
       final directory =
           await getApplicationDocumentsDirectory();
