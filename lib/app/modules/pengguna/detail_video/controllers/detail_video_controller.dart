@@ -38,15 +38,36 @@ class DetailVideoController extends GetxController {
     video.value = Get.arguments;
 
     final String rawVideoUrl = video["videoUrl"] ?? "";
-    
-    // PERBAIKAN: Validasi URL Video dengan aman
-    final String videoUrl = rawVideoUrl.startsWith("http")
+
+    // 1. Tentukan URL dasar
+    String videoUrl = rawVideoUrl.startsWith("http")
         ? rawVideoUrl
         : "${ApiProvider.baseUrl}${rawVideoUrl.startsWith('/') ? '' : '/'}$rawVideoUrl";
 
+    // 2. Paksa HTTPS
+    videoUrl = videoUrl.replaceFirst("http://", "https://");
+
+    // 3. 💥 PERBAIKAN FORMAT & OPTIMASI STREAMING
+    if (videoUrl.contains("cloudinary.com/video/upload/")) {
+      
+      // A. Tambahkan kompresi otomatis untuk Mobile (q_auto,vc_auto)
+      // Ini akan membuat video 50MB menjadi sekitar 5MB saja tanpa merusak visual!
+      videoUrl = videoUrl.replaceFirst(
+          "upload/", "upload/q_auto,vc_auto/");
+
+      // B. Pastikan berujung .mp4
+      int dotIndex = videoUrl.lastIndexOf(".");
+      if (dotIndex != -1) {
+        videoUrl = "${videoUrl.substring(0, dotIndex)}.mp4";
+      }
+    }
+
     try {
+      // 4. PERBAIKAN URI: Gunakan Uri.decodeFull sebelum encode agar %20 tidak dobel menjadi %2520
+      String safeUrl = Uri.encodeFull(Uri.decodeFull(videoUrl));
+
       playerController = VideoPlayerController.networkUrl(
-        Uri.parse(Uri.encodeFull(videoUrl)),
+        Uri.parse(safeUrl),
       );
       await playerController!.initialize();
       isReady.value = true;
@@ -57,7 +78,7 @@ class DetailVideoController extends GetxController {
     playerController?.addListener(() async {
       update();
       if (sudahKirimAktivitas) return;
-      if (playerController!.value.position.inSeconds >= 5) {
+      if (playerController!.value.isInitialized && playerController!.value.position.inSeconds >= 5) {
         sudahKirimAktivitas = true;
         try {
           await PenggunaService.createAktivitasVideo(video["id"]);
@@ -65,7 +86,7 @@ class DetailVideoController extends GetxController {
       }
     });
 
-    await initCamera(); 
+    await initCamera();
     initHandLandmarker();
     await startDetection();
 
@@ -131,7 +152,8 @@ class DetailVideoController extends GetxController {
   }
 
   void detectGesture() {
-    if (hands.isEmpty || playerController == null) return;
+    // PERBAIKAN: Cegah Computer Vision memutar video jika video BELUM SIAP (isReady == false)
+    if (hands.isEmpty || playerController == null || !isReady.value) return;
 
     final hand = hands.first.landmarks;
 
@@ -141,12 +163,12 @@ class DetailVideoController extends GetxController {
     if (play) {
       if (!playerController!.value.isPlaying) {
         playerController!.play();
-        debugPrint("PLAY");
+        debugPrint("PLAY VIA GESTURE");
       }
     } else if (pause) {
       if (playerController!.value.isPlaying) {
         playerController!.pause();
-        debugPrint("PAUSE");
+        debugPrint("PAUSE VIA GESTURE");
       }
     }
   }
@@ -185,7 +207,7 @@ class DetailVideoController extends GetxController {
 
   void playPause() {
     if (playerController == null) return;
-    
+
     if (playerController!.value.isPlaying) {
       playerController!.pause();
     } else {
