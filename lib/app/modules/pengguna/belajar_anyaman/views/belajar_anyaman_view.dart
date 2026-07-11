@@ -160,18 +160,17 @@ class BelajarAnyamanView extends GetView<BelajarAnyamanController> {
 
 class _VideoCard extends StatelessWidget {
   final Map<String, dynamic> video;
-
   const _VideoCard({super.key, required this.video});
 
   @override
   Widget build(BuildContext context) {
     final box = GetStorage();
-
-    final thumbnail = video["thumbnail"] ?? "";
-
-    final thumbnailUrl = thumbnail.toString().startsWith("http")
-        ? thumbnail
-        : "${ApiProvider.baseUrl}$thumbnail";
+    final String rawThumbnail = video["thumbnail"] ?? "";
+    
+    // PERBAIKAN: Validasi URL Thumbnail dengan aman
+    final String thumbnailUrl = rawThumbnail.startsWith("http")
+        ? rawThumbnail
+        : "${ApiProvider.baseUrl}${rawThumbnail.startsWith('/') ? '' : '/'}$rawThumbnail";
 
     return Material(
       color: Colors.transparent,

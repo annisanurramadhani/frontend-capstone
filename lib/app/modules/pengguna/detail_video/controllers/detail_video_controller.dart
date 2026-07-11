@@ -40,34 +40,35 @@ class DetailVideoController extends GetxController {
     debugPrint("Initialize");
     video.value = Get.arguments;
 
-    final videoUrl = "${ApiProvider.baseUrl}${video["videoUrl"]}";
+    final String rawVideoUrl = video["videoUrl"] ?? "";
+    // PERBAIKAN: Validasi URL Video dengan aman
+    final String videoUrl = rawVideoUrl.startsWith("http")
+        ? rawVideoUrl
+        : "${ApiProvider.baseUrl}${rawVideoUrl.startsWith('/') ? '' : '/'}$rawVideoUrl";
 
-    playerController = VideoPlayerController.networkUrl(
-      Uri.parse(Uri.encodeFull(videoUrl)),
-    );
-
-    await playerController.initialize();
-
-    isReady.value = true;
+    try {
+      playerController = VideoPlayerController.networkUrl(
+        Uri.parse(Uri.encodeFull(videoUrl)),
+      );
+      await playerController.initialize();
+      isReady.value = true;
+    } catch (e) {
+      debugPrint("Gagal menginisialisasi Video Player: $e");
+    }
 
     playerController.addListener(() async {
       update();
-
       if (sudahKirimAktivitas) return;
-
       if (playerController.value.position.inSeconds >= 5) {
         sudahKirimAktivitas = true;
-
         try {
           await PenggunaService.createAktivitasVideo(video["id"]);
         } catch (_) {}
       }
     });
 
-    await initCamera();
-
+    await initCamera(); // Sekarang aman karena ada try-catch
     initHandLandmarker();
-
     await startDetection();
 
     if (!isClosed) {
@@ -76,26 +77,27 @@ class DetailVideoController extends GetxController {
   }
 
   Future<void> initCamera() async {
-    final cameras = await availableCameras();
+    try {
+      final cameras = await availableCameras();
+      frontCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
 
-    frontCamera = cameras.firstWhere(
-      (camera) => camera.lensDirection == CameraLensDirection.front,
-      orElse: () => cameras.first,
-    );
+      cameraController = CameraController(
+        frontCamera,
+        ResolutionPreset.medium,
+        enableAudio: false,
+      );
 
-    cameraController = CameraController(
-      frontCamera,
-      ResolutionPreset.medium,
-      enableAudio: false,
-    );
-
-    await cameraController.initialize();
-
-    isCameraReady.value = true;
-
-    debugPrint("Camera Ready");
-
-    update();
+      await cameraController.initialize();
+      isCameraReady.value = true;
+      debugPrint("Camera Ready");
+      update();
+    } catch (e) {
+      // PERBAIKAN: Cegah aplikasi crash jika permission kamera ditolak
+      debugPrint("Gagal menginisialisasi kamera (Mungkin izin ditolak): $e");
+    }
   }
 
   void initHandLandmarker() {
