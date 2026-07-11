@@ -24,8 +24,7 @@ class SertifikatController extends GetxController {
     try {
       isLoading.value = true;
 
-      final response =
-          await PenggunaService.getSertifikat();
+      final response = await PenggunaService.getSertifikat();
 
       print("=== RESPONSE SERTIFIKAT ===");
       print(response);
@@ -47,9 +46,7 @@ class SertifikatController extends GetxController {
     Get.back();
   }
 
-  Future<void> lihatSertifikat(
-    dynamic data,
-  ) async {
+  Future<void> lihatSertifikat(dynamic data) async {
     if (data["sertifikatUrl"] == null) {
       Get.snackbar(
         "Gagal",
@@ -58,8 +55,11 @@ class SertifikatController extends GetxController {
       return;
     }
 
-    final url =
-        "${ApiProvider.baseUrl}${data["sertifikatUrl"]}";
+    // PERBAIKAN: Validasi format awalan URL
+    String url = data["sertifikatUrl"];
+    if (!url.startsWith('http')) {
+      url = "${ApiProvider.baseUrl}$url";
+    }
 
     await launchUrl(
       Uri.parse(
@@ -69,9 +69,7 @@ class SertifikatController extends GetxController {
     );
   }
 
-  Future<void> unduhPdf(
-    dynamic data,
-  ) async {
+  Future<void> unduhPdf(dynamic data) async {
     try {
       if (data["sertifikatUrl"] == null) {
         Get.snackbar(
@@ -81,22 +79,21 @@ class SertifikatController extends GetxController {
         return;
       }
 
-      final url =
-          "${ApiProvider.baseUrl}${data["sertifikatUrl"]}";
+      // PERBAIKAN: Validasi format awalan URL
+      String url = data["sertifikatUrl"];
+      if (!url.startsWith('http')) {
+        url = "${ApiProvider.baseUrl}$url";
+      }
 
-      final directory =
-          await getApplicationDocumentsDirectory();
+      final directory = await getApplicationDocumentsDirectory();
 
-      final namaFile =
-          "sertifikat_${data["id"]}.pdf";
+      final namaFile = "sertifikat_${data["id"]}.pdf";
 
-      final filePath =
-          "${directory.path}/$namaFile";
+      final filePath = "${directory.path}/$namaFile";
 
       Get.dialog(
         const Center(
-          child:
-              CircularProgressIndicator(),
+          child: CircularProgressIndicator(),
         ),
         barrierDismissible: false,
       );
@@ -106,7 +103,7 @@ class SertifikatController extends GetxController {
         filePath,
       );
 
-      Get.back();
+      Get.back(); // Tutup loading
 
       Get.snackbar(
         "Berhasil",
@@ -118,7 +115,7 @@ class SertifikatController extends GetxController {
       );
     } catch (e) {
       if (Get.isDialogOpen ?? false) {
-        Get.back();
+        Get.back(); // Tutup loading saat error
       }
 
       print(e);

@@ -95,7 +95,10 @@ class BeriRatingView extends GetView<BeriRatingController> {
                       () => ClipOval(
                         child: controller.pengrajinPhoto.value.isNotEmpty
                             ? Image.network(
-                                "${ApiProvider.baseUrl}${controller.pengrajinPhoto.value}",
+                                // PERBAIKAN: Cek apakah string URL sudah lengkap
+                                controller.pengrajinPhoto.value.startsWith('http')
+                                    ? controller.pengrajinPhoto.value
+                                    : "${ApiProvider.baseUrl}${controller.pengrajinPhoto.value}",
                                 width: w * 0.22,
                                 height: w * 0.22,
                                 fit: BoxFit.cover,
@@ -133,7 +136,7 @@ class BeriRatingView extends GetView<BeriRatingController> {
                         style: TextStyle(
                           fontSize: w * 0.05,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF3E2723),
+                          color: const Color(0xFF3E2723),
                         ),
                       ),
                     ),
