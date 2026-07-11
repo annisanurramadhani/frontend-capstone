@@ -27,12 +27,12 @@ class DetailVideoView extends GetView<DetailVideoController> {
               Container(
                 width: double.infinity,
                 color: Colors.black,
-                child: controller.isReady.value
+                child: controller.isReady.value && controller.playerController != null
                     ? AspectRatio(
                         aspectRatio: controller.isFullscreen.value
                             ? MediaQuery.of(context).size.aspectRatio
-                            : controller.playerController.value.aspectRatio,
-                        child: VideoPlayer(controller.playerController),
+                            : controller.playerController!.value.aspectRatio,
+                        child: VideoPlayer(controller.playerController!),
                       )
                     : SizedBox(
                         height: MediaQuery.of(context).size.height * 0.25,
@@ -42,7 +42,7 @@ class DetailVideoView extends GetView<DetailVideoController> {
                       ),
               ),
 
-              // if (controller.isCameraReady.value)
+              // if (controller.isCameraReady.value && controller.cameraController != null)
               //   Positioned(
               //     top: 12,
               //     right: 12,
@@ -55,7 +55,7 @@ class DetailVideoView extends GetView<DetailVideoController> {
               //         border: Border.all(color: Colors.white, width: 2),
               //       ),
               //       clipBehavior: Clip.antiAlias,
-              //       child: CameraPreview(controller.cameraController),
+              //       child: CameraPreview(controller.cameraController!),
               //     ),
               //   ),
 
@@ -77,7 +77,7 @@ class DetailVideoView extends GetView<DetailVideoController> {
                   ),
                 ),
 
-              if (controller.isReady.value && controller.showControls.value)
+              if (controller.isReady.value && controller.showControls.value && controller.playerController != null)
                 GestureDetector(
                   onTap: controller.playPause,
                   child: Container(
@@ -88,7 +88,7 @@ class DetailVideoView extends GetView<DetailVideoController> {
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      controller.playerController.value.isPlaying
+                      controller.playerController!.value.isPlaying
                           ? Icons.pause_rounded
                           : Icons.play_arrow_rounded,
                       color: Colors.white,
@@ -96,7 +96,7 @@ class DetailVideoView extends GetView<DetailVideoController> {
                     ),
                   ),
                 ),
-              if (controller.isReady.value && controller.showControls.value)
+              if (controller.isReady.value && controller.showControls.value && controller.playerController != null)
                 Positioned(
                   left: 12,
                   right: 12,
@@ -104,7 +104,7 @@ class DetailVideoView extends GetView<DetailVideoController> {
                   child: Column(
                     children: [
                       VideoProgressIndicator(
-                        controller.playerController,
+                        controller.playerController!,
                         allowScrubbing: true,
                         colors: const VideoProgressColors(
                           playedColor: Color(0xFF8B6347),
@@ -119,7 +119,7 @@ class DetailVideoView extends GetView<DetailVideoController> {
                         children: [
                           Text(
                             formatDuration(
-                              controller.playerController.value.position,
+                              controller.playerController!.value.position,
                             ),
                             style: const TextStyle(
                               color: Colors.white,
@@ -137,7 +137,7 @@ class DetailVideoView extends GetView<DetailVideoController> {
 
                           Text(
                             formatDuration(
-                              controller.playerController.value.duration,
+                              controller.playerController!.value.duration,
                             ),
                             style: const TextStyle(
                               color: Colors.white54,
@@ -202,13 +202,17 @@ class DetailVideoView extends GetView<DetailVideoController> {
 
     if (controller.isFullscreen.value) {
       return PopScope(
-        onPopInvokedWithResult: (_, __) {
+        canPop: false, // Perbaikan pop scope
+        onPopInvokedWithResult: (didPop, _) {
+          if (didPop) return;
+          
           SystemChrome.setEnabledSystemUIMode(
             SystemUiMode.manual,
             overlays: SystemUiOverlay.values,
           );
 
           SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+          controller.exitFullscreen();
         },
         child: Scaffold(
           backgroundColor: Colors.black,

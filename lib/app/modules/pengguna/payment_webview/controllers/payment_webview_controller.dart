@@ -17,7 +17,7 @@ class PaymentWebviewController extends GetxController {
     orderId = args["orderId"];
     print("ORDER ID = $orderId");
 
-    // Langsung polling status pembayaran
+    // Langsung memulai polling status pembayaran di background
     cekStatusPembayaran();
 
     webViewController = WebViewController()
@@ -33,12 +33,15 @@ class PaymentWebviewController extends GetxController {
           onNavigationRequest: (request) {
             print("URL = ${request.url}");
 
-            // PERBAIKAN: Tangkap URL success/settlement dari payment gateway
-            if (request.url.contains("success") || request.url.contains("settlement") || request.url.contains("capture")) {
+            // Menangkap callback jika pembayaran berhasil (Sukses)
+            if (request.url.contains("success") || 
+                request.url.contains("settlement") || 
+                request.url.contains("capture")) {
               Get.back(result: "success");
               return NavigationDecision.prevent;
             }
 
+            // Menangkap callback jika pembayaran dibatalkan / gagal
             if (request.url.contains("cancel") || request.url.contains("deny")) {
               Get.back(result: "cancel");
               return NavigationDecision.prevent;

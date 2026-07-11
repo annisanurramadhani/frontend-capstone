@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart'; // WAJIB TAMBAHKAN INI UNTUK WARNA & ICON
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import '../../modules/pengguna/notifikasi/controllers/notifikasi_controller.dart';
+
+// Path import menggunakan ../../ agar bisa keluar dari data/services
+import '../../modules/pengguna/notifikasi/controllers/notifikasi_controller.dart'; 
 
 class SocketService {
   static late IO.Socket socket;
@@ -28,7 +30,7 @@ class SocketService {
       (data) {
         print(data);
 
-        // PERBAIKAN: Penambahan parameter desain agar Snackbar terlihat jelas (Heads-up In App)
+        // Desain Snackbar yang kontras dan jelas (tidak transparan)
         Get.snackbar(
           data["judul"] ?? "Notifikasi Baru",
           data["pesan"] ?? "Ada pembaruan untuk pesanan Anda",
@@ -44,7 +46,7 @@ class SocketService {
           duration: const Duration(seconds: 4),
         );
 
-        // PERBAIKAN: Refresh halaman notifikasi secara realtime jika sedang dibuka
+        // Auto-refresh daftar riwayat notifikasi jika halaman sedang dibuka
         if (Get.isRegistered<NotifikasiController>()) {
           Get.find<NotifikasiController>().getNotifikasi();
         }
@@ -53,6 +55,8 @@ class SocketService {
   }
 
   static void disconnect() {
-    socket.disconnect();
+    if (socket.connected) {
+      socket.disconnect();
+    }
   }
 }

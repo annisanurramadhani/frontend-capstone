@@ -8,11 +8,10 @@ import '../../../../data/providers/api_provider.dart';
 import '../../../../data/services/pengguna_service.dart';
 
 class DetailVideoController extends GetxController {
-  late VideoPlayerController playerController;
-
-  late CameraController cameraController;
-
-  late CameraDescription frontCamera;
+  // PERBAIKAN: Mengubah "late" menjadi nullable (?) agar tidak crash saat try-catch gagal
+  VideoPlayerController? playerController;
+  CameraController? cameraController;
+  CameraDescription? frontCamera;
 
   late HandLandmarkerPlugin handLandmarker;
 
@@ -24,7 +23,6 @@ class DetailVideoController extends GetxController {
   final RxBool showControls = true.obs;
 
   bool sudahKirimAktivitas = false;
-
   bool isDetecting = false;
 
   List<Hand> hands = [];
@@ -32,7 +30,6 @@ class DetailVideoController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     initialize();
   }
 
@@ -41,6 +38,7 @@ class DetailVideoController extends GetxController {
     video.value = Get.arguments;
 
     final String rawVideoUrl = video["videoUrl"] ?? "";
+    
     // PERBAIKAN: Validasi URL Video dengan aman
     final String videoUrl = rawVideoUrl.startsWith("http")
         ? rawVideoUrl
@@ -50,16 +48,16 @@ class DetailVideoController extends GetxController {
       playerController = VideoPlayerController.networkUrl(
         Uri.parse(Uri.encodeFull(videoUrl)),
       );
-      await playerController.initialize();
+      await playerController!.initialize();
       isReady.value = true;
     } catch (e) {
       debugPrint("Gagal menginisialisasi Video Player: $e");
     }
 
-    playerController.addListener(() async {
+    playerController?.addListener(() async {
       update();
       if (sudahKirimAktivitas) return;
-      if (playerController.value.position.inSeconds >= 5) {
+      if (playerController!.value.position.inSeconds >= 5) {
         sudahKirimAktivitas = true;
         try {
           await PenggunaService.createAktivitasVideo(video["id"]);
@@ -67,7 +65,7 @@ class DetailVideoController extends GetxController {
       }
     });
 
-    await initCamera(); // Sekarang aman karena ada try-catch
+    await initCamera(); 
     initHandLandmarker();
     await startDetection();
 
@@ -85,17 +83,16 @@ class DetailVideoController extends GetxController {
       );
 
       cameraController = CameraController(
-        frontCamera,
+        frontCamera!,
         ResolutionPreset.medium,
         enableAudio: false,
       );
 
-      await cameraController.initialize();
+      await cameraController!.initialize();
       isCameraReady.value = true;
       debugPrint("Camera Ready");
       update();
     } catch (e) {
-      // PERBAIKAN: Cegah aplikasi crash jika permission kamera ditolak
       debugPrint("Gagal menginisialisasi kamera (Mungkin izin ditolak): $e");
     }
   }
@@ -111,24 +108,20 @@ class DetailVideoController extends GetxController {
   }
 
   Future<void> startDetection() async {
-    if (!isCameraReady.value) return;
+    // Pastikan controller tidak null sebelum memulai stream
+    if (!isCameraReady.value || cameraController == null) return;
 
-    await cameraController.startImageStream(processCameraImage);
-
+    await cameraController!.startImageStream(processCameraImage);
     debugPrint("Gesture Detection Started");
   }
 
   Future<void> processCameraImage(CameraImage image) async {
-    debugPrint("Frame");
-
-    if (isDetecting) return;
+    if (isDetecting || frontCamera == null) return;
 
     isDetecting = true;
 
     try {
-      hands = handLandmarker.detect(image, frontCamera.sensorOrientation);
-      debugPrint("Hands: ${hands.length}");
-
+      hands = handLandmarker.detect(image, frontCamera!.sensorOrientation);
       detectGesture();
     } catch (e) {
       debugPrint("Gesture Error : $e");
@@ -137,43 +130,22 @@ class DetailVideoController extends GetxController {
     }
   }
 
-  // void detectGesture() {
-  //   if (hands.isEmpty) return;
-
-  //   final hand = hands.first.landmarks;
-  //   debugPrint("Palm=${isOpenPalm(hand)} Thumb=${isThumbUp(hand)}");
-
-  //   if (isThumbUp(hand)) {
-  //     if (!playerController.value.isPlaying) {
-  //       playerController.play();
-  //       debugPrint("PLAY");
-  //     }
-  //   } else if (isOpenPalm(hand)) {
-  //     if (playerController.value.isPlaying) {
-  //       playerController.pause();
-  //       debugPrint("PAUSE");
-  //     }
-  //   }
-  // }
-
   void detectGesture() {
-    if (hands.isEmpty) return;
+    if (hands.isEmpty || playerController == null) return;
 
     final hand = hands.first.landmarks;
 
     final play = isThumbUp(hand);
     final pause = isOpenPalm(hand);
 
-    debugPrint("PLAY=$play PAUSE=$pause");
-
     if (play) {
-      if (!playerController.value.isPlaying) {
-        playerController.play();
+      if (!playerController!.value.isPlaying) {
+        playerController!.play();
         debugPrint("PLAY");
       }
     } else if (pause) {
-      if (playerController.value.isPlaying) {
-        playerController.pause();
+      if (playerController!.value.isPlaying) {
+        playerController!.pause();
         debugPrint("PAUSE");
       }
     }
@@ -182,15 +154,12 @@ class DetailVideoController extends GetxController {
   double distance(Landmark a, Landmark b) {
     final dx = a.x - b.x;
     final dy = a.y - b.y;
-
     return dx * dx + dy * dy;
   }
 
   bool fingerOpen(List<Landmark> hand, int tip) {
     final wrist = hand[0];
-
     final d = distance(hand[tip], wrist);
-
     return d > 0.08;
   }
 
@@ -206,7 +175,6 @@ class DetailVideoController extends GetxController {
 
   bool isThumbUp(List<Landmark> hand) {
     final thumb = fingerOpen(hand, 4);
-
     final index = !fingerOpen(hand, 8);
     final middle = !fingerOpen(hand, 12);
     final ring = !fingerOpen(hand, 16);
@@ -216,12 +184,13 @@ class DetailVideoController extends GetxController {
   }
 
   void playPause() {
-    if (playerController.value.isPlaying) {
-      playerController.pause();
+    if (playerController == null) return;
+    
+    if (playerController!.value.isPlaying) {
+      playerController!.pause();
     } else {
-      playerController.play();
+      playerController!.play();
     }
-
     update();
   }
 
@@ -242,17 +211,16 @@ class DetailVideoController extends GetxController {
 
   @override
   void onClose() {
-    if (cameraController.value.isInitialized) {
-      if (cameraController.value.isStreamingImages) {
-        cameraController.stopImageStream();
+    // PERBAIKAN: Pengecekan aman saat membuang (dispose) memory kamera
+    if (cameraController != null && cameraController!.value.isInitialized) {
+      if (cameraController!.value.isStreamingImages) {
+        cameraController!.stopImageStream();
       }
-
-      cameraController.dispose();
+      cameraController!.dispose();
     }
 
     handLandmarker.dispose();
-
-    playerController.dispose();
+    playerController?.dispose();
 
     super.onClose();
   }
