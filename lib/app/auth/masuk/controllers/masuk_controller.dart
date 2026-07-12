@@ -104,6 +104,9 @@ class MasukController extends GetxController {
       final result = await AuthService.googleLogin(idToken, role: "pengguna");
 
       if (result["success"] == true) {
+        AuthService.box.write("token", result["token"] ?? "");
+        AuthService.box.write("user", result["user"] ?? {});
+
         Get.snackbar(
           "Berhasil",
           result["message"] ?? "Login berhasil",

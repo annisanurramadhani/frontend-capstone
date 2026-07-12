@@ -32,58 +32,46 @@ class ProfilPelatihController extends GetxController {
     try {
       isLoading.value = true;
 
-      final response =
-          await PengrajinService.getProfile();
+      final response = await PengrajinService.getProfile();
 
       if (response["success"] == true) {
-        final data =
-            response["data"];
+        final data = response["data"];
 
-        final profile =
-            data["pengrajinProfile"];
+        final profile = data["pengrajinProfile"];
 
-        nama.value =
-            data["name"] ?? "";
+        nama.value = data["name"] ?? "";
 
-        email.value =
-            data["email"] ?? "";
+        email.value = data["email"] ?? "";
 
-        foto.value =
-            data["photo"] ?? "";
+        foto.value = data["photo"] ?? "";
 
-        noHp.value =
-            profile?["noTelpon"] ?? "";
+        noHp.value = profile?["noTelpon"] ?? "";
 
-        alamat.value =
-            profile?["alamat"] ?? "";
+        alamat.value = profile?["alamat"] ?? "";
 
-        pengalaman.value =
-            profile?["pengalaman"] ?? "";
+        pengalaman.value = profile?["pengalaman"] ?? "";
 
-        deskripsi.value =
-            profile?["deskripsi"] ?? "";
+        deskripsi.value = profile?["deskripsi"] ?? "";
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
+      Get.snackbar("Error", e.toString());
     } finally {
       isLoading.value = false;
     }
   }
 
-  void editProfil() {
-    Get.toNamed(
-      Routes.EDIT_PROFIL_PELATIH,
-    );
+  Future<void> editProfil() async {
+    final result = await Get.toNamed(Routes.EDIT_PROFIL_PELATIH);
+
+    if (result == true) {
+      await loadProfile();
+      update();
+    }
   }
 
   Future<void> logout() async {
     await AuthService.logout();
 
-    Get.offAllNamed(
-      Routes.MASUK,
-    );
+    Get.offAllNamed(Routes.MASUK);
   }
 }

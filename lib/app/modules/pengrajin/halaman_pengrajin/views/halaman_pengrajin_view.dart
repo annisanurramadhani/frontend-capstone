@@ -48,7 +48,9 @@ class HalamanPengrajinView extends GetView<HalamanPengrajinController> {
                         ),
                         child: controller.photo.value.isNotEmpty
                             ? Image.network(
-                                "${ApiProvider.baseUrl}/uploads/${controller.photo.value}",
+                                controller.photo.value.startsWith("http")
+                                    ? controller.photo.value
+                                    : "${ApiProvider.baseUrl}${controller.photo.value}",
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return const Icon(

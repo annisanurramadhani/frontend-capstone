@@ -66,7 +66,9 @@ class ProfilPelatihView extends GetView<ProfilPelatihController> {
                         image: photo.isNotEmpty
                             ? DecorationImage(
                                 image: NetworkImage(
-                                  "${ApiProvider.baseUrl}/uploads/$photo",
+                                  photo.startsWith("http")
+                                      ? photo
+                                      : "${ApiProvider.baseUrl}${photo}",
                                 ),
                                 fit: BoxFit.cover,
                               )

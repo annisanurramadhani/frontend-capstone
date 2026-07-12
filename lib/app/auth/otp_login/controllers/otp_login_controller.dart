@@ -101,24 +101,15 @@ class OtpLoginController extends GetxController {
       final response = await AuthService.verifyOtp(email, otp);
 
       if (response["success"] == true) {
-        box.write("token", response["token"] ?? "");
-        box.write("user", response["user"] ?? {});
-
         Get.snackbar(
           "Berhasil",
-          response["message"] ?? "Registrasi berhasil",
+          "Verifikasi OTP berhasil. Silakan login.",
           snackPosition: SnackPosition.TOP,
           backgroundColor: const Color(0xFF4CAF50),
           colorText: Colors.white,
         );
 
-        final user = response["user"];
-
-        if (user["role"] == "pengrajin") {
-          Get.offAllNamed(Routes.HALAMAN_PENGRAJIN);
-        } else {
-          Get.offAllNamed(Routes.HALAMAN_UTAMA);
-        }
+        Get.offAllNamed(Routes.MASUK, arguments: {"email": email});
       } else {
         _clearOtpFields();
 
@@ -129,11 +120,7 @@ class OtpLoginController extends GetxController {
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.TOP,
-      );
+      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.TOP);
     } finally {
       isLoading.value = false;
     }
@@ -166,11 +153,7 @@ class OtpLoginController extends GetxController {
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.TOP,
-      );
+      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.TOP);
     } finally {
       isResending.value = false;
     }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../data/services/pengrajin_service.dart';
+import '../../../../routes/app_pages.dart';
 
 class EditProfilPelatihController extends GetxController {
   RxBool isLoading = false.obs;
@@ -32,12 +33,12 @@ class EditProfilPelatihController extends GetxController {
         final data = response["data"] ?? {};
         final profile = data["pengrajinProfile"] ?? {};
 
-        namaC.text       = (data["name"] ?? "").toString();
-        alamatC.text     = (profile["alamat"] ?? "").toString();
-        noHpC.text       = (profile["noTelpon"] ?? "").toString();
+        namaC.text = (data["name"] ?? "").toString();
+        alamatC.text = (profile["alamat"] ?? "").toString();
+        noHpC.text = (profile["noTelpon"] ?? "").toString();
         pengalamanC.text = (profile["pengalaman"] ?? "").toString();
-        deskripsiC.text  = (profile["deskripsi"] ?? "").toString();
-        fotoUrl.value    = (profile["photo"] ?? "").toString();
+        deskripsiC.text = (profile["deskripsi"] ?? "").toString();
+        fotoUrl.value = (profile["photo"] ?? "").toString();
       }
     } catch (e) {
       Get.snackbar("Error", e.toString());
@@ -63,6 +64,7 @@ class EditProfilPelatihController extends GetxController {
         Get.snackbar("Peringatan", "Nama wajib diisi");
         return;
       }
+
       if (alamatC.text.trim().isEmpty) {
         Get.snackbar("Peringatan", "Alamat wajib diisi");
         return;
@@ -71,36 +73,43 @@ class EditProfilPelatihController extends GetxController {
       isLoading.value = true;
 
       final response = await PengrajinService.updateProfile(
-        name:       namaC.text.trim(),
-        alamat:     alamatC.text.trim(),
-        noTelpon:   noHpC.text.trim(),
+        name: namaC.text.trim(),
+        alamat: alamatC.text.trim(),
+        noTelpon: noHpC.text.trim(),
         pengalaman: pengalamanC.text.trim(),
-        deskripsi:  deskripsiC.text.trim(),
-        photo:      selectedImage.value,
+        deskripsi: deskripsiC.text.trim(),
+        photo: selectedImage.value,
       );
 
       if (response["success"] == true) {
-        Get.snackbar(
-          "Berhasil",
-          response["message"] ?? "Profil berhasil diperbarui",
-          backgroundColor: const Color(0xFF3E2723),
-          colorText: Colors.white,
-          borderRadius: 14,
-          margin: const EdgeInsets.all(16),
+        Get.defaultDialog(
+          title: "Berhasil",
+          middleText: response["message"] ?? "Profil berhasil diperbarui",
+          barrierDismissible: false,
+          textConfirm: "OK",
+          confirmTextColor: Colors.white,
+          buttonColor: const Color(0xFF5A3116),
+          onConfirm: () {
+            Get.back();
+
+            Get.offNamed(Routes.PROFIL_PELATIH);
+          },
         );
-        Get.back(result: true);
       } else {
         Get.snackbar(
           "Gagal",
           response["message"] ?? "Gagal memperbarui profil",
-          backgroundColor: const Color(0xFF3E2723),
+          backgroundColor: Colors.red,
           colorText: Colors.white,
-          borderRadius: 14,
-          margin: const EdgeInsets.all(16),
         );
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading.value = false;
     }

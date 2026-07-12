@@ -57,7 +57,7 @@ class OtpLoginView extends GetView<OtpLoginController> {
                           ),
 
                           Text(
-                            "OTP Login",
+                            "OTP Daftar",
                             style: TextStyle(
                               fontSize: w * 0.065,
                               fontWeight: FontWeight.bold,
